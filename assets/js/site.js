@@ -135,7 +135,7 @@
   const programs = window.HMEDI_PROGRAMS || [];
   const grid = $("#programGrid");
   const badges = (p) => p.badges.map((b) => `<span class="badge ${b.cls}">${b.text}</span>`).join("");
-  const priceHtml = (p) => p.price == null ? `<span class="p kr">별도 문의</span>` : `<span class="p">${fmt(p.price)}<small>원 / ${p.unit}</small></span>`;
+  const priceHtml = (p) => p.price == null ? `<span class="p kr">별도 문의</span>` : p.priceFrom ? `<span class="p">${fmt(p.price)}<small>원부터</small></span>` : `<span class="p">${fmt(p.price)}<small>원 / ${p.unit}</small></span>`;
   const renderPrograms = (filter) => {
     if (!grid) return;
     const list = programs.filter((p) => filter === "all" || p.group === filter);
@@ -149,7 +149,7 @@
         </div>
         <div class="pcard-body">
           <ul>${p.highlights.map((h) => typeof h === "string" ? `<li>${h}</li>` : `<li class="${h.isNew ? "plus" : ""}">${h.text}</li>`).join("")}</ul>
-          <div class="pcard-price"><div>${priceHtml(p)}<span class="vat">${p.price == null ? "병원 규모·예산에 맞춰 견적" : "VAT 별도 · 최소 계약 3개월"}</span></div></div>
+          <div class="pcard-price"><div>${priceHtml(p)}<span class="vat">${p.priceNote || (p.price == null ? "병원 규모·예산에 맞춰 견적" : "VAT 별도 · 최소 계약 3개월")}</span></div></div>
           <div class="pcard-actions">
             <button class="btn btn-line btn-sm js-detail" type="button">상세 보기</button>
             <a class="btn btn-ink btn-sm js-inquiry" href="contact.html?program=${encodeURIComponent(p.name)}" data-program="${p.name}">상담 신청</a>
@@ -179,7 +179,7 @@
         ${p.logo ? `<img class="plogo" src="${p.logo}" alt="">` : ""}
         <h2 class="${p.nameKr ? "kr" : ""}">${p.name}</h2>
         <p>${sent(p.desc)}</p>
-        <div class="price">${p.price == null ? `<b>별도 문의</b><span>병원 규모·예산에 맞춰 견적을 드립니다</span>` : `<b>${fmt(p.price)}원</b><span>/ ${p.unit} · VAT 별도 · 최소 계약 3개월</span>`}</div>
+        <div class="price">${p.price == null ? `<b>별도 문의</b><span>병원 규모·예산에 맞춰 견적을 드립니다</span>` : p.priceFrom ? `<b>${fmt(p.price)}원~</b><span>${p.priceNote || ""} · VAT 별도</span>` : `<b>${fmt(p.price)}원</b><span>/ ${p.unit} · VAT 별도 · 최소 계약 3개월</span>`}</div>
       </div>
       <div class="modal-body">
         ${aiBox}
@@ -211,7 +211,7 @@
   $$("[data-open-program]").forEach((el) => el.addEventListener("click", (e) => { e.preventDefault(); openModal(el.dataset.openProgram); }));
   if (modal) {
     modal.addEventListener("click", (e) => { if (e.target.closest(".modal-close") || e.target.classList.contains("modal-bg")) closeModal(); });
-    const h = (location.hash.match(/^#program-([a-z]+)$/) || [])[1];
+    const h = (location.hash.match(/^#program-([a-z0-9-]+)$/) || [])[1];
     if (h) setTimeout(() => openModal(h), 350);
   }
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeModal(); setMenu(false); } });

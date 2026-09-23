@@ -393,10 +393,14 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 .pcard-top.t-ai { background: radial-gradient(circle at 85% 15%, rgba(124,92,255,.7), transparent 45%), radial-gradient(circle at 10% 90%, rgba(31,209,193,.5), transparent 40%), linear-gradient(160deg, #0a1020, #0f1b3d 60%, #0b3b7a); }
 .pcard-top.t-standard { background: radial-gradient(circle at 80% 10%, rgba(111,191,255,.55), transparent 45%), linear-gradient(160deg, #0a5fc4, #0690fc); }
 .pcard-top.t-premium { background: radial-gradient(circle at 80% 10%, rgba(140,150,255,.5), transparent 45%), linear-gradient(160deg, #1d2a6e, #3648a8); }
+.pcard-top.t-web { background: radial-gradient(circle at 85% 15%, rgba(31,209,193,.55), transparent 45%), radial-gradient(circle at 10% 90%, rgba(6,144,252,.45), transparent 42%), linear-gradient(160deg, #0a1020, #0d2a4a 60%, #0b4d7a); }
+.pcard-top.t-video { background: radial-gradient(circle at 85% 15%, rgba(255,90,140,.55), transparent 45%), radial-gradient(circle at 10% 90%, rgba(124,92,255,.5), transparent 42%), linear-gradient(160deg, #0a1020, #1b1740 60%, #3a1f6e); }
 .pcard-top.t-addon { background: radial-gradient(circle at 80% 10%, rgba(255,255,255,.14), transparent 45%), linear-gradient(160deg, #141b2e, #26304f); }
 .pcard-top .badges { position: absolute; top: 20px; left: 26px; display: flex; gap: 6px; }
 .badge { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: .1em; padding: 6px 10px; border-radius: 6px; background: rgba(255,255,255,.16); color: #fff; backdrop-filter: blur(6px); }
 .badge.new { background: #ffe14d; color: #3d2f00; }
+.badge.silver { background: linear-gradient(135deg, #e9edf3, #b9c2cf); color: #2a3340; }
+.badge.gold { background: linear-gradient(135deg, #ffe08a, #e0a927); color: #3d2a00; }
 .badge.hot { background: #ffd23f; color: #3d2a00; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 4px 14px rgba(255,210,63,.35); }
 .badge.hot::before { content: ""; width: 13px; height: 13px; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233d2a00'><path d='M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8z'/><rect x='5' y='19.5' width='14' height='2' rx='1'/></svg>") center/contain no-repeat; }
 .pcard-top .pname { font-family: var(--font-display); font-size: 30px; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
