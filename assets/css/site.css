@@ -90,6 +90,12 @@ strong { font-weight: 700; }
 }
 .section--ink .ghost-word, .section--navy .ghost-word { color: #fff; opacity: .05; }
 
+/* 줄바꿈 제어: 제목은 균형 줄바꿈, 강조 구절은 끊기지 않게, 문단은 고아 단어 방지 */
+.title, .title-en, .slide-title, .cta h2, .concept-text .big, .site-footer .statement, .feature-case h3, .case h3, .svc h3, .point h3, .form h3, .office h3, .panel h3 { text-wrap: balance; }
+.title .a, .slide-title .a, .concept-text .big .a, .title-en .a { white-space: nowrap; }
+.lead, .slide-sub, .cta p, .concept-text p, .svc p, .point p, .case li, .pcard-body li, .checklist label span, .fail-list li, .faq-a p, .stat .s, .stat .l, .ptag, .tile-cap p, .foot-brand p, .form > p, .form .hint, .notes span, .callout, .office p, .step p, .pillar p { text-wrap: pretty; }
+.checklist label span { line-height: 1.5; }
+
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 28px; border-radius: 10px;
@@ -388,7 +394,7 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 .pcard-top .pname { font-family: var(--font-display); font-size: 30px; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
 .pcard-top .pname.kr { font-family: var(--font-body); font-weight: 800; font-size: 26px; letter-spacing: -.03em; }
 .pcard-top .ptag { margin-top: 10px; font-size: 13.5px; color: rgba(255,255,255,.78); }
-.pcard-top .plogo { height: 26px; width: auto; background: #fff; padding: 5px 9px; border-radius: 8px; margin-bottom: 14px; }
+.pcard-top .plogo { height: 26px; width: auto; max-width: 160px; object-fit: contain; align-self: flex-start; background: #fff; padding: 5px 9px; border-radius: 8px; margin-bottom: 14px; }
 .pcard-body { padding: 24px 30px 28px; display: flex; flex-direction: column; flex: 1; }
 .pcard-body ul { display: grid; gap: 9px; }
 .pcard-body li { font-size: 14px; color: var(--text); display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; }
@@ -446,6 +452,7 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 .case { border-radius: 24px; background: #fff; border: 1px solid var(--line); padding: 30px 30px 28px; display: flex; flex-direction: column; transition: all .45s var(--ease); position: relative; overflow: hidden; }
 .case:hover { transform: translateY(-8px); box-shadow: var(--shadow-2); border-color: transparent; }
 .case .where { font-family: var(--font-display); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--sky-deep); font-weight: 600; }
+.case h3 .cn { display: block; font-size: 15px; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
 .case h3 { font-size: 22px; font-weight: 800; letter-spacing: -.03em; line-height: 1.3; margin-top: 12px; color: var(--ink); }
 .case .delta { margin-top: 22px; display: flex; align-items: baseline; gap: 10px; }
 .case .delta b { font-family: var(--font-display); font-size: 54px; font-weight: 700; letter-spacing: -.03em; line-height: 1; color: var(--ink); }
@@ -849,7 +856,7 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
   .svc h3 { font-size: 19px; }
   .feature-case { padding: 26px 20px; gap: 30px; }
   .feature-case .facts { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .feature-case .fact { padding: 12px 12px; } .feature-case .fact b { font-size: 16px; }
+  .feature-case .fact { padding: 12px 12px; } .feature-case .fact b { font-size: 15px; text-wrap: balance; }
   .case-tabs button, .pf-filters button { padding: 10px 14px; font-size: 13px; }
   .program-tabs { width: 100%; } .program-tabs button { flex: 1; padding: 10px 6px; font-size: 13px; }
   .pcard-top { padding: 24px 22px 20px; min-height: 170px; }
@@ -875,7 +882,10 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
   .logic { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .lg { padding: 10px; }
   .lg .k { display: none; } .lg b { font-size: 13px; margin-top: 0; } .lg span { display: none; }
-  .checklist label { font-size: 14px; padding: 12px 14px; }
+  .checklist label { font-size: 14px; padding: 12px 14px; gap: 10px; }
+  .head.center .lead { text-align: left; }
+  .head.center { text-align: left; }
+  .head.center .kicker { justify-content: flex-start; }
   .panel { padding: 24px 20px; }
   .form-grid { grid-template-columns: 1fr; }
   .form { padding: 24px 20px; }
