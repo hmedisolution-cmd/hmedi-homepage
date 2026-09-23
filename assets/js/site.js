@@ -295,5 +295,28 @@
     });
   }
 
+  /* ---------- 포트폴리오 갤러리 (라이트박스) ---------- */
+  (() => {
+    const G = window.HMEDI_GALLERIES; const tiles = $$("[data-gallery]"); if (!G || !tiles.length) return;
+    const ICON_L = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
+    const ICON_R = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+    const lb = document.createElement("div"); lb.className = "lb"; lb.setAttribute("role", "dialog"); lb.setAttribute("aria-modal", "true"); lb.setAttribute("aria-label", "포트폴리오 사진");
+    lb.innerHTML = `<div class="lb-top"><b></b><span class="n"></span><button class="lb-close" type="button" aria-label="닫기">${ICON_X}</button></div><div class="lb-stage"><button class="lb-btn prev" type="button" aria-label="이전">${ICON_L}</button><img alt=""><button class="lb-btn next" type="button" aria-label="다음">${ICON_R}</button></div><div class="lb-cap"></div><div class="lb-dots"></div>`;
+    document.body.appendChild(lb);
+    const img = $("img", lb), cap = $(".lb-cap", lb), dots = $(".lb-dots", lb), ttl = $(".lb-top b", lb), num = $(".lb-top .n", lb);
+    let items = [], idx = 0, lastFocus = null;
+    const show = (i) => { idx = (i + items.length) % items.length; const it = items[idx]; img.src = it.src; img.alt = it.cap || ""; cap.textContent = it.cap || ""; num.textContent = `${idx + 1} / ${items.length}`; dots.innerHTML = items.length > 1 ? items.map((_, k) => `<i class="${k === idx ? "on" : ""}"></i>`).join("") : ""; $$(".lb-btn", lb).forEach((b) => (b.style.display = items.length > 1 ? "" : "none")); const pre = new Image(); pre.src = items[(idx + 1) % items.length].src; };
+    const open = (id) => { const g = G[id]; if (!g || !g.items.length) return; items = g.items; ttl.textContent = g.title || ""; lastFocus = document.activeElement; lb.classList.add("is-open"); document.body.classList.add("is-locked"); show(0); $(".lb-close", lb).focus(); };
+    const close = () => { lb.classList.remove("is-open"); document.body.classList.remove("is-locked"); if (lastFocus) lastFocus.focus(); };
+    tiles.forEach((t) => { t.addEventListener("click", () => open(t.dataset.gallery)); t.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(t.dataset.gallery); } }); });
+    $(".lb-close", lb).addEventListener("click", close);
+    $(".lb-btn.prev", lb).addEventListener("click", () => show(idx - 1));
+    $(".lb-btn.next", lb).addEventListener("click", () => show(idx + 1));
+    lb.addEventListener("click", (e) => { if (e.target === lb || e.target.classList.contains("lb-stage")) close(); });
+    document.addEventListener("keydown", (e) => { if (!lb.classList.contains("is-open")) return; if (e.key === "Escape") close(); if (e.key === "ArrowLeft") show(idx - 1); if (e.key === "ArrowRight") show(idx + 1); });
+    let sx = 0; lb.addEventListener("touchstart", (e) => (sx = e.touches[0].clientX), { passive: true });
+    lb.addEventListener("touchend", (e) => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 40) show(dx < 0 ? idx + 1 : idx - 1); });
+  })();
+
   const y = $("#year"); if (y) y.textContent = new Date().getFullYear();
 })();

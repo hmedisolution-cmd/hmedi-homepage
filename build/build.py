@@ -65,7 +65,7 @@ HEAD = """<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="stylesheet" href="assets/css/site.css?v={ver}">
   <script type="application/ld+json">{jsonld}</script>
 </head>
 <body data-page="{page}">
@@ -170,12 +170,12 @@ FOOTER = """
 </div>
 <div class="modal" id="programModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="마케팅 프로그램 상세"><div class="modal-bg"></div><div class="modal-panel"></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="assets/js/config.js"></script>
-<script src="assets/js/store.js"></script>
-<script src="assets/js/programs.js"></script>
-<script src="assets/js/site.js"></script>
-<script src="assets/js/track.js"></script>
-<script src="assets/js/popup.js"></script>
+<script src="assets/js/config.js?v={ver}"></script>
+<script src="assets/js/store.js?v={ver}"></script>
+<script src="assets/js/programs.js?v={ver}"></script>
+<script src="assets/js/site.js?v={ver}"></script>
+<script src="assets/js/track.js?v={ver}"></script>
+<script src="assets/js/popup.js?v={ver}"></script>
 </body>
 </html>
 """
@@ -278,6 +278,7 @@ def offers_ld(programs):
 
 PROGRAMS = load_programs()
 TODAY = datetime.date.today().isoformat()
+VER = datetime.datetime.now().strftime("%Y%m%d%H%M")
 
 def build_jsonld(page, title, desc, body, crumb, service):
     url = page_url(page)
@@ -304,13 +305,13 @@ def korean_h1(body, h1):
 ALL_FAQ = {}
 for page, (title, desc, keywords, h1, crumb, service) in PAGES.items():
     body = open(os.path.join(SRC, page + ".html"), encoding="utf-8").read()
-    body = body.replace("{{ARROW}}", ARROW)
+    body = body.replace("{{ARROW}}", ARROW).replace("{ver}", VER)
     body = korean_h1(body, h1)
     ALL_FAQ[page] = extract_faq(body)
     jsonld = build_jsonld(page, title, desc, body, crumb, service)
     body = wrap_sentences(body)
     verify = "".join('  <meta name="%s" content="%s">\n' % (k, v) for k, v in VERIFY.items() if v) + "".join("  %s\n" % x for x in VERIFY_EXTRA)
-    html = HEAD.format(title=title, desc=desc, keywords=keywords, canonical=page_url(page), site=SITE_URL, verify=verify, jsonld=jsonld, page=page) + wrap_sentences(HEADER) + '<main id="top">\n' + body + '\n</main>\n' + wrap_sentences(FOOTER)
+    html = HEAD.format(title=title, desc=desc, keywords=keywords, canonical=page_url(page), site=SITE_URL, verify=verify, jsonld=jsonld, page=page, ver=VER) + wrap_sentences(HEADER) + '<main id="top">\n' + body + '\n</main>\n' + wrap_sentences(FOOTER).replace('{ver}', VER)
     with open(os.path.join(OUT, page + ".html"), "w", encoding="utf-8") as f:
         f.write(html)
     print("wrote", page + ".html", len(html))
