@@ -295,27 +295,31 @@
     });
   }
 
-  /* ---------- 포트폴리오 갤러리 (라이트박스) ---------- */
+  /* ---------- 포트폴리오 케이스 상세 ---------- */
   (() => {
-    const G = window.HMEDI_GALLERIES; const tiles = $$("[data-gallery]"); if (!G || !tiles.length) return;
-    const ICON_L = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
-    const ICON_R = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
-    const lb = document.createElement("div"); lb.className = "lb"; lb.setAttribute("role", "dialog"); lb.setAttribute("aria-modal", "true"); lb.setAttribute("aria-label", "포트폴리오 사진");
-    lb.innerHTML = `<div class="lb-top"><b></b><span class="n"></span><button class="lb-close" type="button" aria-label="닫기">${ICON_X}</button></div><div class="lb-stage"><button class="lb-btn prev" type="button" aria-label="이전">${ICON_L}</button><img alt=""><button class="lb-btn next" type="button" aria-label="다음">${ICON_R}</button></div><div class="lb-cap"></div><div class="lb-dots"></div>`;
-    document.body.appendChild(lb);
-    const img = $("img", lb), cap = $(".lb-cap", lb), dots = $(".lb-dots", lb), ttl = $(".lb-top b", lb), num = $(".lb-top .n", lb);
-    let items = [], idx = 0, lastFocus = null;
-    const show = (i) => { idx = (i + items.length) % items.length; const it = items[idx]; img.src = it.src; img.alt = it.cap || ""; cap.textContent = it.cap || ""; num.textContent = `${idx + 1} / ${items.length}`; dots.innerHTML = items.length > 1 ? items.map((_, k) => `<i class="${k === idx ? "on" : ""}"></i>`).join("") : ""; $$(".lb-btn", lb).forEach((b) => (b.style.display = items.length > 1 ? "" : "none")); const pre = new Image(); pre.src = items[(idx + 1) % items.length].src; };
-    const open = (id) => { const g = G[id]; if (!g || !g.items.length) return; items = g.items; ttl.textContent = g.title || ""; lastFocus = document.activeElement; lb.classList.add("is-open"); document.body.classList.add("is-locked"); show(0); $(".lb-close", lb).focus(); };
-    const close = () => { lb.classList.remove("is-open"); document.body.classList.remove("is-locked"); if (lastFocus) lastFocus.focus(); };
-    tiles.forEach((t) => { t.addEventListener("click", () => open(t.dataset.gallery)); t.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(t.dataset.gallery); } }); });
-    $(".lb-close", lb).addEventListener("click", close);
-    $(".lb-btn.prev", lb).addEventListener("click", () => show(idx - 1));
-    $(".lb-btn.next", lb).addEventListener("click", () => show(idx + 1));
-    lb.addEventListener("click", (e) => { if (e.target === lb || e.target.classList.contains("lb-stage")) close(); });
-    document.addEventListener("keydown", (e) => { if (!lb.classList.contains("is-open")) return; if (e.key === "Escape") close(); if (e.key === "ArrowLeft") show(idx - 1); if (e.key === "ArrowRight") show(idx + 1); });
-    let sx = 0; lb.addEventListener("touchstart", (e) => (sx = e.touches[0].clientX), { passive: true });
-    lb.addEventListener("touchend", (e) => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 40) show(dx < 0 ? idx + 1 : idx - 1); });
+    const C = window.HMEDI_CASES; const tiles = $$("[data-case]"); if (!C || !tiles.length) return;
+    const m = document.createElement("div"); m.className = "modal"; m.id = "caseModal"; m.setAttribute("aria-hidden", "true"); m.setAttribute("role", "dialog"); m.setAttribute("aria-modal", "true"); m.setAttribute("aria-label", "포트폴리오 상세");
+    m.innerHTML = '<div class="modal-bg"></div><div class="modal-panel"></div>'; document.body.appendChild(m);
+    const panel = $(".modal-panel", m); let lastFocus = null;
+    const open = (id) => {
+      const c = C[id]; if (!c) return;
+      panel.innerHTML = `
+        <button class="modal-close" type="button" aria-label="닫기">${ICON_X}</button>
+        <div class="cm-hero ${c.theme || ""}"><span class="kicker">${c.kicker}</span><h2>${c.title}</h2><p>${sent(c.summary)}</p>
+          ${c.facts ? `<div class="cm-facts">${c.facts.map(([b, s]) => `<div><b>${b}</b><small>${s}</small></div>`).join("")}</div>` : ""}</div>
+        <div class="cm-body">
+          ${c.steps ? `<section><h4>진행 과정</h4><div class="cm-steps">${c.steps.map(([t, d], i) => `<div class="cm-step"><i>${String(i + 1).padStart(2, "0")}</i><div><b>${t}</b><span>${d}</span></div></div>`).join("")}</div></section>` : ""}
+          ${c.visual ? `<section><h4>실제 작업</h4>${c.visual}</section>` : ""}
+          ${c.deliver ? `<section><h4>제공 항목</h4><div class="cm-chips">${c.deliver.map((x) => `<span>${x}</span>`).join("")}</div></section>` : ""}
+          ${c.points ? `<section><h4>포인트</h4><ul class="cm-points">${c.points.map((x) => `<li>${x}</li>`).join("")}</ul></section>` : ""}
+          <div class="cm-cta">${c.link ? `<a class="btn btn-line" href="${c.link[0]}">${c.link[1]} ${ICON_ARROW}</a>` : ""}<a class="btn btn-accent js-inquiry" href="contact.html">무료 상담 신청 ${ICON_ARROW}</a></div>
+        </div>`;
+      lastFocus = document.activeElement; m.classList.add("is-open"); m.setAttribute("aria-hidden", "false"); document.body.classList.add("is-locked"); panel.scrollTop = 0; $(".modal-close", panel).focus();
+    };
+    const close = () => { if (!m.classList.contains("is-open")) return; m.classList.remove("is-open"); m.setAttribute("aria-hidden", "true"); document.body.classList.remove("is-locked"); if (lastFocus) lastFocus.focus(); };
+    tiles.forEach((t) => { t.addEventListener("click", () => open(t.dataset.case)); t.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(t.dataset.case); } }); });
+    m.addEventListener("click", (e) => { if (e.target.closest(".modal-close") || e.target.classList.contains("modal-bg")) close(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
   })();
 
   const y = $("#year"); if (y) y.textContent = new Date().getFullYear();
