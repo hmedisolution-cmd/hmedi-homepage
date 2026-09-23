@@ -198,6 +198,8 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 .slide-title {
   margin-top: 24px; font-size: clamp(40px, 6.2vw, 84px); font-weight: 800; letter-spacing: -.045em; line-height: 1.04; color: #fff;
 }
+.slide-title.md { font-size: clamp(30px, 4.4vw, 62px); }
+.slide-title .nw { white-space: nowrap; }
 .slide-title .en { font-family: var(--font-display); font-weight: 700; }
 .slide-title .a { color: #38a9ff; }
 .slide-sub { margin-top: 26px; font-size: clamp(16px, 1.4vw, 20px); color: rgba(255,255,255,.78); max-width: 560px; line-height: 1.7; }
@@ -1309,3 +1311,64 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 .hpop-bar button { flex: 1; font-size: 16px; font-weight: 600; color: #222; }
 .hpop-bar button + button { border-left: 1px solid #e5e7eb; }
 @media (min-width: 641px) { .hpop { align-items: center; } .hpop-card { border-radius: 26px; } .hpop-slide { max-height: 60vh; } }
+
+/* ---------- 크몽 Prime 전문가 : 히어로 카드 ---------- */
+.kcard { width: min(100%, 460px); background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 24px; padding: 24px 26px; color: #fff; box-shadow: 0 30px 80px rgba(0,0,0,.45); backdrop-filter: blur(14px); }
+.kc-head { display: flex; align-items: center; gap: 10px; }
+.kc-prime { font-family: var(--font-display); font-size: 10px; letter-spacing: .16em; font-weight: 700; padding: 5px 9px; border-radius: 6px; background: #ffd400; color: #2b2300; }
+.kc-cat { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.85); }
+.kc-rating { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+.kc-stars { display: inline-flex; gap: 3px; }
+.kc-stars i { width: 20px; height: 20px; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffd400'><path d='M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z'/></svg>") center/contain no-repeat; }
+.kc-rating b { font-family: var(--font-display); font-size: 34px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+.kc-rating span { font-size: 14px; color: rgba(255,255,255,.7); padding-left: 12px; border-left: 1px solid rgba(255,255,255,.2); }
+.kc-note { margin-top: 10px; font-size: 12.5px; color: rgba(255,255,255,.55); }
+.kc-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+.kc-stats div { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 12px 12px; }
+.kc-stats small { display: block; font-size: 11px; color: rgba(255,255,255,.55); }
+.kc-stats b { display: block; font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-top: 4px; line-height: 1; letter-spacing: -.02em; }
+.kc-stats b i { font-style: normal; font-family: var(--font-body); font-size: 11px; font-weight: 700; color: #8fd0ff; margin-left: 2px; }
+.kc-reviews { margin-top: 14px; display: grid; gap: 8px; }
+.kc-review { display: flex; gap: 10px; align-items: flex-start; background: rgba(255,255,255,.05); border-radius: 12px; padding: 11px 13px; }
+.kc-r { flex: none; font-family: var(--font-display); font-size: 11px; font-weight: 700; color: #ffd400; padding-top: 2px; }
+.kc-review p { font-size: 12.5px; line-height: 1.55; color: rgba(255,255,255,.82); }
+
+/* ---------- 크몽 Prime 전문가 : 온라인 마케팅 섹션 ---------- */
+.kmong-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 56px; align-items: center; }
+.kmong-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 34px; }
+.kmong-stat { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 18px 14px; text-align: center; }
+.kmong-stat b { display: block; font-family: var(--font-display); font-size: clamp(26px, 2.6vw, 36px); font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+.kmong-stat b i { font-style: normal; font-family: var(--font-body); font-size: 13px; font-weight: 700; color: #8fd0ff; margin-left: 2px; }
+.kmong-stat span { display: block; margin-top: 8px; font-size: 13px; color: rgba(255,255,255,.65); white-space: nowrap; }
+.kmong-stat small { font-size: 11px; color: rgba(255,255,255,.4); }
+.kmong-reviews { display: grid; gap: 14px; }
+.kmong-review { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 18px; padding: 22px 24px; }
+.kr-head { display: flex; align-items: center; gap: 10px; }
+.kr-head .kc-stars i { width: 16px; height: 16px; }
+.kr-head b { font-family: var(--font-display); font-size: 15px; font-weight: 700; }
+.kr-head small { font-size: 12px; color: rgba(255,255,255,.5); margin-left: auto; }
+.kmong-review p { margin-top: 12px; font-size: 14.5px; line-height: 1.75; color: rgba(255,255,255,.82); }
+@media (max-width: 960px) {
+  .kcard { backdrop-filter: none; background: rgba(14,22,48,.92); width: 100%; }
+  .kmong-grid { grid-template-columns: 1fr; gap: 32px; }
+  .kmong-stats { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+}
+@media (max-width: 640px) {
+  .kcard { padding: 16px 16px 14px; border-radius: 18px; }
+  .kc-rating { margin-top: 12px; gap: 10px; }
+  .kc-stars i { width: 16px; height: 16px; }
+  .kc-rating b { font-size: 28px; }
+  .kc-rating span { font-size: 12.5px; }
+  .kc-note { display: none; }
+  .kc-stats { margin-top: 12px; gap: 6px; }
+  .kc-stats div { padding: 9px 10px; }
+  .kc-stats b { font-size: 19px; }
+  .kc-reviews { margin-top: 10px; }
+  .kc-review:nth-child(2) { display: none; }
+  .kc-review p { font-size: 12px; }
+  .kmong-stats { grid-template-columns: repeat(2, 1fr); margin-top: 24px; }
+  .kmong-stat { padding: 14px 10px; }
+  .kmong-review { padding: 18px 18px; }
+  .kmong-review p { font-size: 14px; line-height: 1.7; }
+  .kr-head small { font-size: 11px; }
+}
