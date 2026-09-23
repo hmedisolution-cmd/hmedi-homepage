@@ -36,6 +36,7 @@
     const href = a.getAttribute("href") || "";
     if (href.startsWith("tel:")) return log("conversion", { meta: { kind: "tel", label: href.slice(4) } });
     if (href.startsWith("mailto:")) return log("conversion", { meta: { kind: "mail" } });
+    if (href.includes("pf.kakao.com")) return log("conversion", { meta: { kind: "kakao" } });
     if (a.classList.contains("js-inquiry") || /contact\.html/.test(href)) return log("click", { meta: { kind: "contact_link", label: (a.textContent || "").trim().slice(0, 40) } });
     if (a.classList.contains("js-detail")) return log("click", { meta: { kind: "program_detail", label: (a.closest(".pcard") || {}).dataset ? a.closest(".pcard").dataset.id : "" } });
   }, true);

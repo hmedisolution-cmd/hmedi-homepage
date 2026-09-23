@@ -39,11 +39,11 @@
     $("#modeBox").innerHTML = S.configured ? "<b>Connected</b>Supabase 서버 연결됨" : "<b>Demo mode</b>이 브라우저에만 저장됩니다.<br>실제 연결은 설정 탭 참고";
     loginView.classList.add("hidden"); appView.classList.remove("hidden");
     if (!S.configured) { const seeded = await S.seedDemo(); if (seeded) toast("데모 데이터를 채웠습니다 (설정에서 삭제 가능)"); }
-    await loadPopups(); await loadDash();
+    await loadPopups(); await loadDash(); try { inqList = await S.listInquiries(); updateInqBadge(); } catch (e) {}
   };
 
   /* ---------- 내비 ---------- */
-  $$(".nav-btn[data-panel]").forEach((b) => b.addEventListener("click", () => { $$(".nav-btn").forEach((x) => x.classList.remove("is-active")); b.classList.add("is-active"); $$(".panel").forEach((p) => p.classList.toggle("is-active", p.id === "panel-" + b.dataset.panel)); $("#side").classList.remove("open"); if (b.dataset.panel === "conv") renderConv(); if (b.dataset.panel === "set") renderSettings(); }));
+  $$(".nav-btn[data-panel]").forEach((b) => b.addEventListener("click", () => { $$(".nav-btn").forEach((x) => x.classList.remove("is-active")); b.classList.add("is-active"); $$(".panel").forEach((p) => p.classList.toggle("is-active", p.id === "panel-" + b.dataset.panel)); $("#side").classList.remove("open"); if (b.dataset.panel === "conv") renderConv(); if (b.dataset.panel === "set") renderSettings(); if (b.dataset.panel === "inq") loadInquiries(); }));
   $("#mobMenu").addEventListener("click", () => $("#side").classList.toggle("open"));
 
   /* ---------- 기간 ---------- */
@@ -163,14 +163,54 @@
   function hookTips(root) { const tip = $("#tip"); $$("[data-tip]", root).forEach((el) => { el.addEventListener("mouseenter", (e) => { tip.innerHTML = el.dataset.tip; tip.classList.add("on"); }); el.addEventListener("mousemove", (e) => { tip.style.left = e.clientX + 12 + "px"; tip.style.top = e.clientY - 36 + "px"; }); el.addEventListener("mouseleave", () => tip.classList.remove("on")); }); }
 
   /* ---------- 상담 · 전환 ---------- */
+  /* ---------- 상담 신청 접수함 ---------- */
+  let inqList = [], inqFilter = "all";
+  const stName = { new: "신규", contacted: "연락함", done: "완료" };
+  async function loadInquiries() {
+    const body = $("#inqBody"); body.innerHTML = '<div class="loading">불러오는 중…</div>';
+    try { inqList = await S.listInquiries(); } catch (e) { body.innerHTML = `<div class="empty">불러오지 못했습니다: ${esc(e.message)}</div>`; return; }
+    renderInquiries(); updateInqBadge();
+  }
+  function updateInqBadge() { const n = inqList.filter((x) => (x.status || "new") === "new").length; const b = $("#inqBadge"); b.textContent = n; b.classList.toggle("hidden", !n); }
+  function renderInquiries() {
+    const body = $("#inqBody");
+    const list = inqList.filter((x) => inqFilter === "all" || (x.status || "new") === inqFilter);
+    const note = S.configured ? "" : '<p class="inq-note">데모 모드: 이 브라우저에서 제출한 신청만 보입니다. 다른 기기에서 들어온 신청을 보려면 설정 탭의 서버 연결이 필요합니다.</p>';
+    if (!list.length) { body.innerHTML = note + '<div class="empty">상담 신청이 없습니다.</div>'; return; }
+    body.innerHTML = note + `<div class="inq-list">${list.map((q) => { const st = q.status || "new"; return `
+      <div class="inq ${st === "new" ? "is-new" : ""}" data-id="${esc(q.id)}">
+        <div class="inq-head"><span class="nm">${esc(q.name)}</span>${q.type ? `<span class="tp">${esc(q.type)}</span>` : ""}${q.program ? `<span class="tp" style="background:#fff3c4;color:#7a4b00">${esc(q.program)}</span>` : ""}<span class="tm">${new Date(q.created_at).toLocaleString("ko-KR", { dateStyle: "medium", timeStyle: "short" })}</span></div>
+        <div class="inq-meta"><span><b>연락처</b><a href="tel:${esc(q.phone)}">${esc(q.phone)}</a></span>${q.hospital ? `<span><b>병원</b>${esc(q.hospital)}</span>` : ""}${q.region ? `<span><b>지역</b>${esc(q.region)}</span>` : ""}${q.situation ? `<span><b>현재 상황</b>${esc(q.situation)}</span>` : ""}</div>
+        ${q.message ? `<div class="inq-msg">${esc(q.message)}</div>` : ""}
+        <div class="inq-foot">
+          <select class="st st-${st}" data-act="status">${Object.keys(stName).map((k) => `<option value="${k}" ${k === st ? "selected" : ""}>${stName[k]}</option>`).join("")}</select>
+          <input type="text" data-act="memo" placeholder="메모 (예: 9/25 통화, 10월 개원 예정)" value="${esc(q.memo || "")}">
+          <button type="button" class="del" data-act="del">삭제</button>
+        </div>
+      </div>`; }).join("")}</div>`;
+  }
+  $("#inqSeg").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; $$("#inqSeg button").forEach((x) => x.classList.toggle("is-active", x === b)); inqFilter = b.dataset.f; renderInquiries(); });
+  $("#inqBody").addEventListener("change", async (e) => {
+    const el = e.target, card = el.closest(".inq"); if (!card) return; const id = card.dataset.id;
+    try {
+      if (el.dataset.act === "status") { await S.updateInquiry(id, { status: el.value }); const it = inqList.find((x) => x.id === id); if (it) it.status = el.value; el.className = "st st-" + el.value; card.classList.toggle("is-new", el.value === "new"); updateInqBadge(); toast("상태를 바꿨습니다"); }
+      if (el.dataset.act === "memo") { await S.updateInquiry(id, { memo: el.value }); const it = inqList.find((x) => x.id === id); if (it) it.memo = el.value; toast("메모를 저장했습니다"); }
+    } catch (err) { toast(err.message, true); }
+  });
+  $("#inqBody").addEventListener("click", async (e) => {
+    const b = e.target.closest('[data-act="del"]'); if (!b) return; const id = b.closest(".inq").dataset.id;
+    if (!confirm("이 상담 신청을 삭제할까요?")) return;
+    try { await S.deleteInquiry(id); inqList = inqList.filter((x) => x.id !== id); renderInquiries(); updateInqBadge(); toast("삭제했습니다"); } catch (err) { toast(err.message, true); }
+  });
+
   function renderConv() {
     const body = $("#convBody"); if (!cur) { body.innerHTML = '<div class="loading">대시보드를 먼저 불러옵니다…</div>'; return; }
     const kinds = {}; cur.convList.forEach((e) => { const k = (e.meta && e.meta.kind) || "기타"; kinds[k] = (kinds[k] || 0) + 1; });
-    const kn = { tel: "전화 걸기", mail: "이메일", form: "문의 폼 제출" };
+    const kn = { tel: "전화 걸기", mail: "이메일", form: "문의 폼 제출", kakao: "카카오톡 채널" };
     const list = [...cur.convList].reverse().slice(0, 60);
     const pn = { ai: "AI 실속 패키지", standard: "스탠다드 패키지", premium: "프리미엄 패키지", daangn: "당근 광고", instagram: "인스타그램 광고", meta: "Meta 광고" }; const clicks = {}; cur.clicks.forEach((e) => { const m = e.meta || {}; const k = m.kind === "program_detail" ? (pn[m.label] || m.label || "프로그램") + " 상세" : m.kind === "contact_link" ? "상담 신청 버튼" : m.label || m.kind || "-"; clicks[k] = (clicks[k] || 0) + 1; });
     body.innerHTML = `
-      <div class="kpis" style="grid-template-columns:repeat(4,1fr)">${kpi("상담 전환 합계", fmt(cur.conv), "건", delta(cur.conv, prev.conv))}${["tel", "form", "mail"].map((k) => kpi(kn[k], fmt(kinds[k] || 0), "건", "")).join("")}</div>
+      <div class="kpis" style="grid-template-columns:repeat(4,1fr)">${kpi("상담 전환 합계", fmt(cur.conv), "건", delta(cur.conv, prev.conv))}${["tel", "form", "kakao"].map((k) => kpi(kn[k], fmt(kinds[k] || 0), "건", "")).join("")}</div>
       <div class="grid">
         <div class="card c-7" style="grid-column:span 7"><h3>최근 상담 전환 <small>최근 60건</small></h3>${list.length ? `<table class="tbl"><thead><tr><th>일시</th><th>종류</th><th>페이지</th><th>상세</th><th>기기</th></tr></thead><tbody>${list.map((e) => `<tr><td>${esc(new Date(e.created_at).toLocaleString("ko-KR", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }))}</td><td><span class="badge">${esc(kn[(e.meta || {}).kind] || (e.meta || {}).kind || "-")}</span></td><td>${esc(pageName(e.path))}</td><td>${esc((e.meta || {}).type || (e.meta || {}).program || (e.meta || {}).label || "")}</td><td>${e.device === "mobile" ? "모바일" : "PC"}</td></tr>`).join("")}</tbody></table>` : `<div class="empty">이 기간 상담 전환이 없습니다</div>`}</div>
         <div class="card" style="grid-column:span 5"><h3>관심 버튼 클릭 <small>상담 신청 · 상세 보기</small></h3><p class="help">전환 전 단계에서 어떤 버튼을 눌렀는지</p>${bars(Object.entries(clicks).sort((a, b) => b[1] - a[1]), cur.clicks.length)}</div>

@@ -28,6 +28,26 @@ assets/img/                # 로고 · 파비콘 · 채널 로고 (사진 없이
 assets/docs/hmedisolution-company-profile.pdf   # 회사소개서 (다운로드용, 압축본)
 ```
 
+## 페이지 수정 · 빌드
+
+페이지 본문은 `build/src/*.html` 에 있고, `build/build.py` 가 공통 head(SEO 메타 · JSON-LD) · 헤더 · 푸터를 붙여 저장소 루트에 출력합니다.
+본문을 고친 뒤 아래를 실행하면 `index.html` 등과 `robots.txt` · `sitemap.xml` · `llms.txt` 가 함께 갱신됩니다.
+
+```
+python3 build/build.py
+```
+
+## SEO · GEO · AEO
+
+- **검색엔진(SEO)**: 페이지별 제목 · 설명 · 키워드, canonical, Open Graph · Twitter 카드(`assets/img/og.jpg`), 한국어 키워드 `h1`, `robots.txt`, `sitemap.xml`
+- **구조화 데이터(JSON-LD)**: Organization(ProfessionalService · 주소 2곳 · 연락처 · 서비스 지역), WebSite, WebPage, BreadcrumbList, Service, 마케팅 프로그램 OfferCatalog(가격), FAQPage
+- **AI 검색(GEO · AEO)**: `llms.txt`(회사 · 서비스 · 가격 · FAQ 요약), 각 페이지의 FAQ 직접 답변, `robots.txt` 에서 GPTBot · ClaudeBot · PerplexityBot 등 AI 크롤러 허용
+- **직접 해야 하는 등록** (한 번만):
+  1. [네이버 서치어드바이저](https://searchadvisor.naver.com) → 사이트 등록 → HTML 태그 값을 `build/build.py` 의 `VERIFY["naver-site-verification"]` 에 넣고 빌드 → 사이트맵 제출(`/sitemap.xml`), RSS 없음
+  2. [구글 서치콘솔](https://search.google.com/search-console) → URL 접두어로 등록 → HTML 태그 값을 `VERIFY["google-site-verification"]` 에 → 사이트맵 제출
+  3. 커스텀 도메인 연결 후 `build/build.py` 의 `SITE_URL` 을 `https://hmedisolution.com` 으로 바꾸고 다시 빌드 · 푸시
+  4. 네이버 플레이스(스마트플레이스) · 구글 비즈니스 프로필에 회사 등록 후 홈페이지 주소 연결
+
 ## 로컬에서 보기
 
 ```
@@ -40,11 +60,13 @@ python3 -m http.server 8000
 - **프로그램 가격·포함 구성**: `assets/js/programs.js`의 `price`, `items`, `highlights` 값을 수정하면 카드와 상세 모달에 모두 반영됩니다. `price: null`이면 "별도 문의"로 표시됩니다.
 - **연락처·주소**: 각 페이지 푸터와 `contact.html`, `company.html`의 오시는 길.
 - **포트폴리오 항목**: `portfolio.html`의 `.tile` 블록 (제목, 설명, 네이버 블로그 링크).
-- **문의 폼**: 백엔드 없이 메일 작성 창(mailto)을 여는 방식입니다. 수신 주소는 `assets/js/site.js`의 `CONTACT_EMAIL`.
+- **문의 폼**: 제출 내용은 관리자 페이지 → 상담 신청 탭에 쌓입니다. 서버(Supabase) 연결 전 데모 모드에서는 제출한 브라우저에만 저장되므로, 실제 운영은 `admin/README.md` 의 연결 절차가 필요합니다. 서버에 연결할 수 없을 때만 메일 작성 창(mailto)으로 대체됩니다.
+- **카카오톡 채널**: `https://pf.kakao.com/_xmhxgvb` — 플로팅 버튼 · 문의 페이지 · 푸터 · 메뉴에 연결되어 있습니다.
 
 ## 관리자 모드
 
 - 주소: `/admin.html` (사이트 메뉴에는 없고 검색엔진에도 노출되지 않습니다)
+- 상담 신청 탭: 문의 폼 접수함 (신규 · 연락함 · 완료 상태, 메모)
 - 기본 상태는 **데모 모드**로, 데이터가 접속한 브라우저에만 저장됩니다. 데모 비밀번호 `hmedi1234`
 - 실제 운영은 Supabase(무료)를 연결합니다. 절차는 `admin/README.md` 또는 관리자 화면의 설정 탭 참고.
 - `assets/js/config.js`에는 **anon public 키만** 넣습니다. service_role 키는 절대 넣지 마세요.

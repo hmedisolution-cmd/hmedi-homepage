@@ -211,3 +211,24 @@ table.tbl { width: 100%; border-collapse: collapse; margin-top: 12px; font-size:
   .phone-frame { width: 260px; height: 520px; }
   .topbar h1 { font-size: 20px; }
 }
+
+/* 상담 신청 접수함 */
+.nav-badge { margin-left: auto; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #ff5a5f; color: #fff; font-size: 11px; font-weight: 800; display: grid; place-items: center; }
+.inq-list { display: grid; gap: 10px; }
+.inq { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+.inq.is-new { border-color: rgba(6,144,252,.5); box-shadow: 0 0 0 2px rgba(6,144,252,.12); }
+.inq-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.inq-head .nm { font-size: 16px; font-weight: 800; }
+.inq-head .tp { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; background: var(--sky-soft); color: var(--sky-deep); }
+.inq-head .tm { font-size: 12px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+.inq-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px; font-size: 13px; color: var(--text); }
+.inq-meta a { color: var(--sky-deep); font-weight: 700; }
+.inq-meta span b { color: var(--muted); font-weight: 600; margin-right: 4px; }
+.inq-msg { margin-top: 10px; padding: 12px 14px; background: var(--paper-2); border-radius: 10px; font-size: 13.5px; line-height: 1.6; white-space: pre-wrap; }
+.inq-foot { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.inq-foot select { padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; font-weight: 700; }
+.inq-foot select.st-new { color: var(--sky-deep); } .inq-foot select.st-contacted { color: #b26f00; } .inq-foot select.st-done { color: #16a34a; }
+.inq-foot input { flex: 1; min-width: 200px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; }
+.inq-foot .del { color: #d33; background: none; border: 1px solid var(--line); padding: 8px 12px; border-radius: 8px; font-size: 12px; }
+.inq-note { font-size: 12.5px; color: var(--muted); margin-bottom: 12px; }
+@media (max-width: 760px) { .inq-head .tm { margin-left: 0; width: 100%; } }

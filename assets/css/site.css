@@ -1372,3 +1372,18 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
   .kmong-review p { font-size: 14px; line-height: 1.7; }
   .kr-head small { font-size: 11px; }
 }
+
+/* ---------- SEO: 페이지 히어로 한국어 h1 ---------- */
+.page-hero .ph-h1 { margin-top: 18px; font-size: clamp(19px, 1.9vw, 25px); font-weight: 800; letter-spacing: -.025em; line-height: 1.35; color: var(--ink); }
+.page-hero .ph-h1 + .lead { margin-top: 10px; }
+
+/* ---------- 카카오톡 채널 ---------- */
+.quick a.kakao { background: #fae100; color: #3c1e1e; }
+.quick a.kakao:hover { background: #ffd400; }
+.ccard .i.kakao { background: #fae100; color: #3c1e1e; }
+.menu-aside a { color: #8fd0ff; font-weight: 700; }
+.foot-kakao { display: inline-block; margin-top: 10px; color: #8fd0ff; font-weight: 700; font-size: 14px; }
+.form-done { text-align: center; padding: 40px 20px; display: grid; gap: 12px; justify-items: center; }
+.form-done b { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+.form-done span { color: var(--muted); font-size: 15px; line-height: 1.6; }
+.form-done div { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }

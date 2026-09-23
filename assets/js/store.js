@@ -7,7 +7,7 @@
   "use strict";
   const cfg = window.HMEDI_CONFIG || {};
   const configured = !!(cfg.supabaseUrl && cfg.supabaseKey);
-  const LS = { popups: "hmedi_popups", events: "hmedi_events", auth: "hmedi_admin_session", pw: "hmedi_admin_pw", demoSeeded: "hmedi_demo_seeded" };
+  const LS = { popups: "hmedi_popups", events: "hmedi_events", inquiries: "hmedi_inquiries", auth: "hmedi_admin_session", pw: "hmedi_admin_pw", demoSeeded: "hmedi_demo_seeded" };
   const MAX_LOCAL_EVENTS = 8000;
 
   const uid = () => (crypto.randomUUID ? crypto.randomUUID() : "id-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8));
@@ -63,6 +63,10 @@
     },
     async queryEvents(from, to) { const f = +new Date(from), t = +new Date(to); return lsGet(LS.events, []).filter((e) => { const ts = +new Date(e.created_at); return ts >= f && ts <= t; }); },
     async countEventsAll() { return lsGet(LS.events, []).length; },
+    async saveInquiry(d) { const list = lsGet(LS.inquiries, []); const row = Object.assign({ id: uid(), created_at: new Date().toISOString(), status: "new", memo: "" }, d); list.unshift(row); lsSet(LS.inquiries, list.slice(0, 500)); return row; },
+    async listInquiries() { return lsGet(LS.inquiries, []); },
+    async updateInquiry(id, patch) { const list = lsGet(LS.inquiries, []); const i = list.findIndex((x) => x.id === id); if (i >= 0) { list[i] = Object.assign({}, list[i], patch, { updated_at: new Date().toISOString() }); lsSet(LS.inquiries, list); return list[i]; } },
+    async deleteInquiry(id) { lsSet(LS.inquiries, lsGet(LS.inquiries, []).filter((x) => x.id !== id)); },
     auth: {
       async session() { return sessionStorage.getItem(LS.auth) === "1" ? { user: { email: "admin (demo)" } } : null; },
       async signIn(email, password) {
@@ -101,6 +105,10 @@
       return out;
     },
     async countEventsAll() { await loadSupabase(); const { count } = await sb.from("events").select("*", { count: "exact", head: true }); return count || 0; },
+    async saveInquiry(d) { await loadSupabase(); const { data, error } = await sb.from("inquiries").insert(d).select().single(); if (error) throw error; return data; },
+    async listInquiries() { await loadSupabase(); const { data, error } = await sb.from("inquiries").select("*").order("created_at", { ascending: false }).limit(500); if (error) throw error; return data || []; },
+    async updateInquiry(id, patch) { await loadSupabase(); const { data, error } = await sb.from("inquiries").update(Object.assign({}, patch, { updated_at: new Date().toISOString() })).eq("id", id).select().single(); if (error) throw error; return data; },
+    async deleteInquiry(id) { await loadSupabase(); const { error } = await sb.from("inquiries").delete().eq("id", id); if (error) throw error; },
     auth: {
       async session() { await loadSupabase(); const { data } = await sb.auth.getSession(); return data.session; },
       async signIn(email, password) { await loadSupabase(); const { data, error } = await sb.auth.signInWithPassword({ email, password }); if (error) throw new Error("이메일 또는 비밀번호가 올바르지 않습니다."); return data; },

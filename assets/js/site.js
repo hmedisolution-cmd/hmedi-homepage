@@ -270,14 +270,26 @@
     if (type) { const map = { marketing: "온라인 마케팅", consulting: "개원 컨설팅 · MSO" }; const r = form.querySelector(`input[name="type"][value="${map[type] || ""}"]`); if (r) r.checked = true; }
     const sel = $("#f-program");
     if (pre && sel && Array.from(sel.options).some((o) => o.value === pre)) sel.value = pre;
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const d = Object.fromEntries(new FormData(form).entries());
       if (!d.name || !d.phone) { showToast("성함과 연락처를 입력해 주세요."); return; }
-      const subject = `[홈페이지 문의 · ${d.type || "일반"}] ${d.hospital || d.name} · ${d.program || "프로그램 미정"}`;
-      const body = [`상담 분야: ${d.type || "-"}`, `성함: ${d.name}`, `병원명: ${d.hospital || "-"}`, `연락처: ${d.phone}`, `지역: ${d.region || "-"}`, `관심 프로그램: ${d.program || "-"}`, `현재 상황: ${d.status || "-"}`, "", "문의 내용:", d.message || "-"].join("\n");
-      location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      showToast("메일 작성 창을 열었습니다. 보내기를 눌러 주세요.");
+      const btn = form.querySelector('[type="submit"]'); if (btn) { btn.disabled = true; btn.style.opacity = ".7"; }
+      const row = { type: d.type || "", name: d.name.trim(), phone: d.phone.trim(), hospital: (d.hospital || "").trim(), region: (d.region || "").trim(), program: d.program || "", situation: d.status || "", message: (d.message || "").trim(), page: location.pathname.replace(/^.*\//, "") };
+      try {
+        const S = window.HmediStore; if (!S) throw new Error("no store");
+        await S.ready(); await S.saveInquiry(row);
+        form.reset();
+        form.innerHTML = '<div class="form-done"><b>상담 신청이 접수되었습니다.</b><span>빠르게 확인하고 연락드리겠습니다. 급하시면 전화나 카카오톡 채널로 주세요.</span><div><a class="btn btn-accent" href="tel:01082630982">010-8263-0982</a><a class="btn btn-line" href="https://pf.kakao.com/_xmhxgvb" target="_blank" rel="noopener">카카오톡 채널</a></div></div>';
+        form.scrollIntoView({ behavior: "smooth", block: "center" });
+        showToast("상담 신청이 접수되었습니다.");
+      } catch (err) {
+        const subject = `[홈페이지 문의 · ${row.type || "일반"}] ${row.hospital || row.name} · ${row.program || "프로그램 미정"}`;
+        const body = [`상담 분야: ${row.type || "-"}`, `성함: ${row.name}`, `병원명: ${row.hospital || "-"}`, `연락처: ${row.phone}`, `지역: ${row.region || "-"}`, `관심 프로그램: ${row.program || "-"}`, `현재 상황: ${row.situation || "-"}`, "", "문의 내용:", row.message || "-"].join("\n");
+        location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        showToast("접수 서버에 연결할 수 없어 메일 작성 창을 열었습니다.");
+        if (btn) { btn.disabled = false; btn.style.opacity = ""; }
+      }
     });
   }
 

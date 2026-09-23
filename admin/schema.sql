@@ -54,3 +54,19 @@ create policy "popup images admin write" on storage.objects for all to authentic
 
 -- 5) 관리자 계정: Authentication → Users → "Add user" 로 이메일/비밀번호 생성
 --    (Authentication → Providers → Email 에서 "Confirm email" 을 끄면 바로 로그인 가능)
+
+-- 4) 상담 신청 (문의 폼) — 방문자는 넣기만, 관리자만 보기 · 수정 · 삭제
+create table if not exists public.inquiries (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz default now(),
+  updated_at timestamptz,
+  type text, name text, phone text, hospital text, region text, program text, situation text, message text,
+  page text, status text default 'new',   -- new · contacted · done
+  memo text default ''
+);
+create index if not exists inquiries_created_idx on public.inquiries (created_at desc);
+alter table public.inquiries enable row level security;
+create policy "inquiries public insert" on public.inquiries for insert to anon, authenticated with check (true);
+create policy "inquiries admin read" on public.inquiries for select to authenticated using (true);
+create policy "inquiries admin update" on public.inquiries for update to authenticated using (true) with check (true);
+create policy "inquiries admin delete" on public.inquiries for delete to authenticated using (true);
