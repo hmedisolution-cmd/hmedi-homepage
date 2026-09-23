@@ -22,8 +22,12 @@
     header.classList.toggle("on-dark", onDark);
     if (topBtn) topBtn.classList.toggle("is-visible", y > 700);
   };
-  window.addEventListener("scroll", syncHeader, { passive: true });
+  let ticking = false;
+  window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { syncHeader(); ticking = false; }); } }, { passive: true });
   syncHeader();
+  if (heroDark && "IntersectionObserver" in window) {
+    new IntersectionObserver((es) => es.forEach((e) => heroDark.classList.toggle("is-offscreen", !e.isIntersecting)), { threshold: 0 }).observe(heroDark);
+  }
 
   const page = document.body.dataset.page;
   $$(".site-nav a, .menu-links a").forEach((a) => {
