@@ -26,9 +26,16 @@
 
 > 스키마에는 `popups` · `events` · `inquiries`(상담 신청) 테이블이 포함됩니다. 이미 이전 버전 스키마를 실행했다면 `admin/schema.sql` 의 4) 상담 신청 부분만 다시 실행하면 됩니다.
 
-## 상담 접수 문자 알림 (010-8263-0982)
+## 상담 접수 알림 — 이메일(fgfg0982@naver.com) · 문자(010-8263-0982)
 
-문의 폼이 접수되면 담당자 휴대폰으로 문자가 갑니다. Supabase 연결이 끝난 뒤 한 번만 설정하면 됩니다. (약 20분)
+문의 폼이 접수되면 담당자에게 이메일과 문자가 갑니다. 같은 함수 하나가 두 채널을 처리하며, 시크릿을 넣은 채널만 동작합니다. (이메일만 쓰려면 솔라피 단계는 건너뜀)
+
+**이메일 (Brevo, 무료 하루 300통)**
+1. [brevo.com](https://www.brevo.com) 가입 → Senders & IP → Senders → "Add a sender" 에 발신 이메일(예: hmedisolution@gmail.com) 등록 → 받은 인증 메일의 링크 클릭.
+2. 오른쪽 위 프로필 → SMTP & API → API Keys → "Generate a new API key" → 키 복사 (`xkeysib-...`).
+3. Supabase → Edge Functions → Secrets 에 `BREVO_API_KEY`, `MAIL_FROM`(1번에서 인증한 이메일), `MAIL_TO`(받을 주소, 쉼표로 여러 개 가능) 추가.
+
+**문자 (솔라피)**
 
 1. **문자 발송 계정**: [솔라피 solapi.com](https://solapi.com) 가입 → 발신번호 등록에서 `010-8263-0982` 본인 인증 → API Key · API Secret 발급. 문자는 건당 약 20원(LMS 약 50원)으로 선불 충전합니다.
 2. **함수 배포** (PC에 Supabase CLI 설치 후, 저장소 폴더에서):
