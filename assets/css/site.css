@@ -215,7 +215,6 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
   animation: floorMove 6s linear infinite;
 }
 @keyframes floorMove { to { background-position: 0 80px, 0 0; } }
-.bg-grid .horizon { position: absolute; left: 0; right: 0; bottom: 38%; height: 2px; background: linear-gradient(90deg, transparent, #38a9ff 30%, #9fd8ff 50%, #38a9ff 70%, transparent); filter: blur(1px); opacity: .9; }
 .bg-grid .stars { position: absolute; inset: 0; background-image: radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.6) 50%, transparent 51%), radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,.5) 50%, transparent 51%), radial-gradient(1.5px 1.5px at 40% 60%, rgba(255,255,255,.4) 50%, transparent 51%), radial-gradient(1px 1px at 85% 45%, rgba(255,255,255,.5) 50%, transparent 51%), radial-gradient(1px 1px at 10% 70%, rgba(255,255,255,.35) 50%, transparent 51%), radial-gradient(1.5px 1.5px at 60% 10%, rgba(255,255,255,.5) 50%, transparent 51%); }
 
 .bg-aurora { background: #070c19; }
