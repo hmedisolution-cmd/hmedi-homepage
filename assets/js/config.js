@@ -23,7 +23,7 @@ window.HMEDI_CONFIG = {
       link_url: "contact.html",
       bg_color: "#0a1020",
       text_align: "left",
-      show_on: "all",
+      show_on: "index",
       sort: 0,
       active: true,
     },

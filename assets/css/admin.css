@@ -170,7 +170,7 @@ table.tbl { width: 100%; border-collapse: collapse; margin-top: 12px; font-size:
 .phone-scr .fake::before { content: "HMEDISOLUTION"; position: absolute; top: 22px; left: 0; right: 0; text-align: center; font-family: var(--display); font-size: 11px; font-weight: 700; color: #0a1020; letter-spacing: .04em; }
 .phone-scr .hpop { position: absolute; inset: 0; z-index: 2; opacity: 1; pointer-events: none; align-items: flex-end; }
 .phone-scr .hpop-card { transform: none; border-radius: 22px 22px 0 0; max-width: none; }
-.phone-scr .hpop-slide { aspect-ratio: 4/5; max-height: none; }
+.phone-scr .hpop-slide { aspect-ratio: 4/3; max-height: none; }
 .phone-scr .hpop-text { padding: 18px 16px 20px; }
 .phone-scr .hpop-brand { font-size: 10px; margin-bottom: 6px; }
 .phone-scr .hpop-title { font-size: 24px; }

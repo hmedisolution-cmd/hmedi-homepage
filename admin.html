@@ -78,7 +78,7 @@
         <form class="pop-form" id="popForm" novalidate>
           <h3 id="popFormTitle">새 팝업</h3>
           <input type="hidden" id="p-id">
-          <div class="field"><label>이미지 <span class="hint">세로형 4:5 권장 · 자동 압축 · 최대 1080px</span></label>
+          <div class="field"><label>이미지 <span class="hint">가로형 4:3 권장 (예: 1200×900) · 자동 압축 · 최대 1080px</span></label>
             <label class="upload" id="uploadBox"><input type="file" id="p-file" accept="image/*"><img id="p-preview" alt="" class="hidden"><span id="uploadText">클릭 또는 드래그해서 이미지 올리기</span></label>
             <input id="p-image" type="url" placeholder="또는 이미지 URL 직접 입력" style="margin-top:6px">
           </div>
@@ -94,7 +94,7 @@
             <div class="field"><label for="p-end">종료일 <span class="hint">비우면 계속</span></label><input id="p-end" type="date"></div>
           </div>
           <div class="row2">
-            <div class="field"><label for="p-show">노출 페이지</label><select id="p-show"><option value="all">모든 페이지</option><option value="index">메인만</option><option value="index,marketing">메인 + 온라인 마케팅</option><option value="index,consulting">메인 + 개원 컨설팅</option><option value="marketing">온라인 마케팅만</option><option value="consulting">개원 컨설팅만</option></select></div>
+            <input type="hidden" id="p-show" value="index">
             <div class="field"><label for="p-sort">순서 <span class="hint">작을수록 먼저</span></label><input id="p-sort" type="number" value="0"></div>
           </div>
           <div class="row2">

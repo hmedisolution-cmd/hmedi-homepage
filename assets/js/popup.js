@@ -8,6 +8,7 @@
   const S = window.HmediStore; if (!S) return;
   const path = location.pathname.replace(/\/$/, "/index.html").replace(/^.*\//, "/");
   const page = path.replace(/^\//, "").replace(/\.html$/, "") || "index";
+  if (page !== "index") return; // 팝업은 메인 페이지에서만 표시
   const today = new Date().toISOString().slice(0, 10);
   const hidden = (id) => { try { return localStorage.getItem("hmedi_popup_hide_" + id) === today; } catch (e) { return false; } };
 
@@ -52,7 +53,7 @@
       await S.ready();
       const all = await S.listPopups();
       const now = Date.now();
-      const list = all.filter((p) => p.active && !hidden(p.id) && (!p.starts_at || +new Date(p.starts_at) <= now) && (!p.ends_at || +new Date(p.ends_at) >= now) && (!p.show_on || p.show_on === "all" || p.show_on.split(",").map((x) => x.trim()).includes(page)));
+      const list = all.filter((p) => p.active && !hidden(p.id) && (!p.starts_at || +new Date(p.starts_at) <= now) && (!p.ends_at || +new Date(p.ends_at) >= now));
       if (list.length) render(list);
     } catch (e) { /* 팝업 실패는 사이트 이용에 영향 없음 */ }
   };
