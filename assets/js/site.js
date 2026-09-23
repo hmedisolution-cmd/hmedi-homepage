@@ -92,7 +92,7 @@
       slides.forEach((s, i) => s.classList.toggle("is-active", i === idx));
       $$(".slider-dot", dots).forEach((d, i) => { d.classList.remove("is-active"); if (i === idx) { void d.offsetWidth; d.classList.add("is-active"); } });
       if (count) count.innerHTML = `<b>0${idx + 1}</b> / 0${slides.length}`;
-      clearTimeout(timer); timer = setTimeout(() => go(idx + 1), DUR);
+      const dur = idx === 0 ? DUR * 1.6 : DUR; slider.style.setProperty("--dur", dur + "ms"); clearTimeout(timer); timer = setTimeout(() => go(idx + 1), dur);
     };
     $(".slider-btn.prev", slider).addEventListener("click", () => go(idx - 1));
     $(".slider-btn.next", slider).addEventListener("click", () => go(idx + 1));
