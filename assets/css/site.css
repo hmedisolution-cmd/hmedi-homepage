@@ -942,7 +942,8 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 
 /* ---------- 모바일 히어로: 한 화면에 맞추기 ---------- */
 @media (max-width: 640px) {
-  .hero-slider { height: 100svh; min-height: 600px; max-height: 960px; padding-bottom: 0; overflow: hidden; }
+  /* 높이는 JS 가 첫 진입 시 한 번 고정 (--hero-h). 주소창이 나타나고 사라져도 크기가 변하지 않음 */
+  .hero-slider { height: var(--hero-h, 100svh); min-height: 600px; max-height: 960px; padding-bottom: 0; overflow: hidden; }
   .slide { height: 100%; }
   .slide-inner { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 14px; height: 100%; padding: 90px 0 78px; }
   .slide-copy .kicker { font-size: 11px; }

@@ -5,6 +5,17 @@
    ========================================================================== */
 (function () {
   "use strict";
+
+  /* ---------- 모바일 히어로 높이 고정 ----------
+     모바일 브라우저는 스크롤 중 주소창이 접히며 뷰포트 높이가 계속 바뀐다.
+     첫 진입 시의 높이를 한 번만 기억해 두고, 화면 너비(회전)가 바뀔 때만 다시 잰다. */
+  const heroH = () => {
+    if (window.innerWidth > 640) { document.documentElement.style.removeProperty("--hero-h"); return; }
+    document.documentElement.style.setProperty("--hero-h", window.innerHeight + "px");
+  };
+  let heroW = window.innerWidth; heroH();
+  window.addEventListener("resize", () => { if (window.innerWidth !== heroW) { heroW = window.innerWidth; heroH(); } });
+  window.addEventListener("orientationchange", () => setTimeout(() => { heroW = window.innerWidth; heroH(); }, 350));
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
   const fmt = (n) => n.toLocaleString("ko-KR");
