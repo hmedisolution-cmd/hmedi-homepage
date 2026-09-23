@@ -9,6 +9,7 @@
   const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
   const fmt = (n) => n.toLocaleString("ko-KR");
   const sent = (t) => { const parts = String(t).split(/(?<=[.!?])\s+(?=\S)/).filter(Boolean); return parts.length < 2 ? t : parts.map((x) => `<span class="sn">${x}</span>`).join(" "); };
+  $$(".faq-item.is-open .faq-a").forEach((a) => (a.style.maxHeight = "none"));
   const CONTACT_EMAIL = "hmedi@hmedisolution.com";
   const ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 
@@ -253,15 +254,18 @@
   const toast = $("#toast");
   const showToast = (m) => { if (!toast) return; toast.textContent = m; toast.classList.add("is-visible"); clearTimeout(showToast.t); showToast.t = setTimeout(() => toast.classList.remove("is-visible"), 3200); };
   if (form) {
-    const pre = new URLSearchParams(location.search).get("program");
+    const qs = new URLSearchParams(location.search);
+    const pre = qs.get("program");
+    const type = qs.get("type");
+    if (type) { const map = { marketing: "온라인 마케팅", consulting: "개원 컨설팅 · MSO" }; const r = form.querySelector(`input[name="type"][value="${map[type] || ""}"]`); if (r) r.checked = true; }
     const sel = $("#f-program");
     if (pre && sel && Array.from(sel.options).some((o) => o.value === pre)) sel.value = pre;
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const d = Object.fromEntries(new FormData(form).entries());
       if (!d.name || !d.phone) { showToast("성함과 연락처를 입력해 주세요."); return; }
-      const subject = `[홈페이지 문의] ${d.hospital || d.name} · ${d.program || "프로그램 미정"}`;
-      const body = [`성함: ${d.name}`, `병원명: ${d.hospital || "-"}`, `연락처: ${d.phone}`, `지역: ${d.region || "-"}`, `관심 프로그램: ${d.program || "-"}`, `현재 상황: ${d.status || "-"}`, "", "문의 내용:", d.message || "-"].join("\n");
+      const subject = `[홈페이지 문의 · ${d.type || "일반"}] ${d.hospital || d.name} · ${d.program || "프로그램 미정"}`;
+      const body = [`상담 분야: ${d.type || "-"}`, `성함: ${d.name}`, `병원명: ${d.hospital || "-"}`, `연락처: ${d.phone}`, `지역: ${d.region || "-"}`, `관심 프로그램: ${d.program || "-"}`, `현재 상황: ${d.status || "-"}`, "", "문의 내용:", d.message || "-"].join("\n");
       location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       showToast("메일 작성 창을 열었습니다. 보내기를 눌러 주세요.");
     });
