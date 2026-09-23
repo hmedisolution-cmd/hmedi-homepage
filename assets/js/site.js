@@ -8,6 +8,7 @@
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
   const fmt = (n) => n.toLocaleString("ko-KR");
+  const sent = (t) => { const parts = String(t).split(/(?<=[.!?])\s+(?=\S)/).filter(Boolean); return parts.length < 2 ? t : parts.map((x) => `<span class="sn">${x}</span>`).join(" "); };
   const CONTACT_EMAIL = "hmedi@hmedisolution.com";
   const ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 
@@ -133,7 +134,7 @@
           <div class="badges">${badges(p)}</div>
           ${p.logo ? `<img class="plogo" src="${p.logo}" alt="${p.name}">` : ""}
           <div class="pname ${p.nameKr ? "kr" : ""}">${p.name}</div>
-          <div class="ptag">${p.tagline}</div>
+          <div class="ptag">${sent(p.tagline)}</div>
         </div>
         <div class="pcard-body">
           <ul>${p.highlights.map((h) => typeof h === "string" ? `<li>${h}</li>` : `<li class="${h.isNew ? "plus" : ""}">${h.text}</li>`).join("")}</ul>
@@ -159,14 +160,14 @@
     if (!p || !panel) return;
     const rows = p.items.map((it) => `<tr class="${it.cls || ""}"><th>${it.name}</th><td>${it.desc}</td><td class="q">${it.qty}</td></tr>`).join("");
     const notes = p.notes.map((n) => typeof n === "string" ? `<li>${n}</li>` : `<li class="${n.hl ? "hl" : ""}">${n.text}</li>`).join("");
-    const aiBox = p.aiBox ? `<div class="ai-box">${p.aiBox.map((r) => `<div class="row"><i>${r.icon}</i><div><b>${r.title}</b><span>${r.text}</span></div></div>`).join("")}</div>` : "";
+    const aiBox = p.aiBox ? `<div class="ai-box">${p.aiBox.map((r) => `<div class="row"><i>${r.icon}</i><div><b>${r.title}</b><span>${sent(r.text)}</span></div></div>`).join("")}</div>` : "";
     panel.innerHTML = `
       <button class="modal-close" type="button" aria-label="닫기">${ICON_X}</button>
       <div class="modal-hero pcard-top ${p.theme}" style="min-height:0;display:block">
         <div class="badges">${badges(p)}</div>
         ${p.logo ? `<img class="plogo" src="${p.logo}" alt="">` : ""}
         <h2 class="${p.nameKr ? "kr" : ""}">${p.name}</h2>
-        <p>${p.desc}</p>
+        <p>${sent(p.desc)}</p>
         <div class="price">${p.price == null ? `<b>별도 문의</b><span>병원 규모·예산에 맞춰 견적을 드립니다</span>` : `<b>${fmt(p.price)}원</b><span>/ ${p.unit} · VAT 별도 · 최소 계약 3개월</span>`}</div>
       </div>
       <div class="modal-body">

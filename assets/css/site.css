@@ -95,6 +95,7 @@ strong { font-weight: 700; }
 .title .a, .slide-title .a, .concept-text .big .a, .title-en .a { white-space: nowrap; }
 .lead, .slide-sub, .cta p, .concept-text p, .svc p, .point p, .case li, .pcard-body li, .checklist label span, .fail-list li, .faq-a p, .stat .s, .stat .l, .ptag, .tile-cap p, .foot-brand p, .form > p, .form .hint, .notes span, .callout, .office p, .step p, .pillar p { text-wrap: pretty; }
 .checklist label span { line-height: 1.5; }
+.sn { display: inline-block; max-width: 100%; }
 
 /* ---------- Buttons ---------- */
 .btn {
@@ -416,7 +417,7 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 .pcard-actions { display: flex; gap: 8px; margin-top: 18px; }
 .pcard-actions .btn { flex: 1; padding: 13px 10px; font-size: 14px; }
 .notes { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 8px 26px; font-size: 13.5px; color: var(--muted); }
-.notes span { display: inline-flex; align-items: center; gap: 8px; }
+.notes span { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
 .notes span::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--sky); }
 
 /* Compare table */
@@ -788,7 +789,6 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
   .slide.is-active { display: block; }
   .slide-inner { grid-template-columns: 1fr; align-content: start; gap: 40px; padding: 120px 0 10px; height: auto; }
   .slide-visual { min-height: 0; transform: none; margin: 0; }
-  .slide-sub br { display: none; }
   .slide-tags { gap: 8px; }
   .slide-tags span::before { display: none; }
   .slide-tags span { padding: 7px 11px; border: 1px solid rgba(255,255,255,.2); border-radius: 999px; font-size: 11px; letter-spacing: .08em; }
