@@ -6,11 +6,15 @@
 ## 구조
 
 ```
-index.html                 # 단일 페이지 (모든 섹션)
-assets/css/style.css       # 스타일 · 반응형 · 모션
+index.html                 # 메인 (히어로 슬라이더 · 요약)
+company.html               # 회사소개 · 플레이스 로직 · 자가진단 · 오시는 길
+service.html               # 마케팅 프로그램 (카드 + 상세 모달 · 비교표 · 프로세스 · FAQ)
+portfolio.html             # 성공사례 · 포트폴리오
+contact.html               # 문의 (무료 진단 신청 폼)
+assets/css/site.css        # 디자인 시스템 · 반응형 · 모션
 assets/js/programs.js      # 마케팅 프로그램 데이터 (가격·구성 수정은 여기서)
-assets/js/main.js          # 스크롤 리빌, 카운터, 프로그램 모달, 포트폴리오, 문의 폼
-assets/img/                # 로고 · 서비스 사진 · 포트폴리오 이미지 (회사소개서에서 추출)
+assets/js/site.js          # 헤더 · 메뉴 · 슬라이더 · 리빌 · 차트 · 모달 · 폼
+assets/img/                # 로고 · 파비콘 · 채널 로고 (사진 없이 CSS/SVG로 비주얼 구성)
 assets/docs/hmedisolution-company-profile.pdf   # 회사소개서 (다운로드용, 압축본)
 ```
 
@@ -24,12 +28,12 @@ python3 -m http.server 8000
 ## 자주 수정하는 항목
 
 - **프로그램 가격·포함 구성**: `assets/js/programs.js`의 `price`, `items`, `highlights` 값을 수정하면 카드와 상세 모달에 모두 반영됩니다. `price: null`이면 "별도 문의"로 표시됩니다.
-- **연락처·주소**: `index.html`의 문의 섹션(`#contact`)과 푸터.
-- **포트폴리오 항목**: `assets/js/main.js`의 `PORTFOLIO` 객체 (이미지 경로, 제목, 네이버 블로그 링크).
-- **문의 폼**: 백엔드 없이 메일 작성 창(mailto)을 여는 방식입니다. 수신 주소는 `assets/js/main.js`의 `CONTACT_EMAIL`.
+- **연락처·주소**: 각 페이지 푸터와 `contact.html`, `company.html`의 오시는 길.
+- **포트폴리오 항목**: `portfolio.html`의 `.tile` 블록 (제목, 설명, 네이버 블로그 링크).
+- **문의 폼**: 백엔드 없이 메일 작성 창(mailto)을 여는 방식입니다. 수신 주소는 `assets/js/site.js`의 `CONTACT_EMAIL`.
 
 ## 브랜드 컬러
 
 - 스카이블루 `#0690FC` (로고 포인트)
 - 인디고 `#3648A8` (로고 본문)
-- 화이트 배경, 네이비 `#14203F` 텍스트
+- 잉크 네이비 `#0A1020` (다크 섹션·텍스트), 화이트 배경
