@@ -1280,3 +1280,27 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
   .chips { gap: 6px; }
   .contact-grid .lead br { display: none; }
 }
+
+/* ---------- 메인 팝업 (관리자 등록) ---------- */
+.hpop { position: fixed; inset: 0; z-index: 400; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .35s; }
+.hpop.is-open { opacity: 1; pointer-events: auto; }
+.hpop-bg { position: absolute; inset: 0; background: rgba(5,8,18,.72); }
+.hpop-card { position: relative; width: 100%; max-width: 480px; background: #fff; border-radius: 26px 26px 0 0; overflow: hidden; transform: translateY(40px); transition: transform .45s var(--ease); box-shadow: 0 -20px 60px rgba(0,0,0,.4); }
+.hpop.is-open .hpop-card { transform: none; }
+.hpop-track { display: flex; transition: transform .5s var(--ease); }
+.hpop-slide { position: relative; flex: 0 0 100%; aspect-ratio: 4/5; max-height: 72vh; display: block; overflow: hidden; color: #fff; }
+.hpop-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hpop-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,.62) 100%); }
+.hpop-text { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 26px 30px; }
+.hpop-text.center { text-align: center; }
+.hpop-brand { display: block; font-size: 14px; font-weight: 700; opacity: .9; margin-bottom: 10px; }
+.hpop-title { display: block; font-size: clamp(30px, 8.6vw, 40px); font-weight: 800; letter-spacing: -.04em; line-height: 1.12; text-shadow: 0 2px 16px rgba(0,0,0,.35); }
+.hpop-sub { display: block; font-size: 16px; margin-top: 12px; opacity: .95; }
+.hpop-btn { display: inline-block; margin-top: 16px; padding: 10px 18px; border-radius: 999px; background: #fff; color: #111; font-size: 14px; font-weight: 800; }
+.hpop-dots { position: absolute; left: 0; right: 0; bottom: 66px; display: flex; justify-content: center; gap: 6px; }
+.hpop-dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.45); }
+.hpop-dots i.on { background: #fff; }
+.hpop-bar { display: flex; height: 56px; background: #fff; }
+.hpop-bar button { flex: 1; font-size: 16px; font-weight: 600; color: #222; }
+.hpop-bar button + button { border-left: 1px solid #e5e7eb; }
+@media (min-width: 641px) { .hpop { align-items: center; } .hpop-card { border-radius: 26px; } .hpop-slide { max-height: 66vh; } }

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>관리자 · 에이치메디솔루션</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+
+<!-- ===== 로그인 ===== -->
+<section class="login" id="loginView">
+  <form class="login-card" id="loginForm" novalidate>
+    <img src="assets/img/logo.png" alt="HMEDISOLUTION">
+    <h1>관리자 로그인</h1>
+    <p>팝업 관리와 방문 통계는 관리자만 볼 수 있습니다.</p>
+    <div class="field" id="emailField"><label for="l-email">이메일</label><input id="l-email" type="email" autocomplete="username" placeholder="admin@hmedisolution.com"></div>
+    <div class="field"><label for="l-pw">비밀번호</label><input id="l-pw" type="password" autocomplete="current-password" required></div>
+    <div class="login-err" id="loginErr"></div>
+    <button class="btn btn-primary btn-block" type="submit" id="loginBtn">로그인</button>
+    <div class="login-mode" id="loginMode"></div>
+  </form>
+</section>
+
+<!-- ===== 앱 ===== -->
+<div class="app hidden" id="appView">
+  <div class="mob-top"><img src="assets/img/logo-white.png" alt=""><button type="button" id="mobMenu" aria-label="메뉴">☰</button></div>
+  <aside class="side" id="side">
+    <div class="brand"><img src="assets/img/logo-white.png" alt="HMEDISOLUTION"><span>Admin</span></div>
+    <button class="nav-btn is-active" data-panel="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-5 4 3 5-7"/></svg>대시보드</button>
+    <button class="nav-btn" data-panel="pop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 17h8M8 7h8v6H8z"/></svg>팝업 관리</button>
+    <button class="nav-btn" data-panel="conv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4l2.7.7a2 2 0 0 1 1.7 2z"/></svg>상담 · 전환</button>
+    <button class="nav-btn" data-panel="set"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>설정</button>
+    <a class="nav-btn" href="index.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>사이트 보기</a>
+    <div class="spacer"></div>
+    <div class="mode" id="modeBox"></div>
+    <div class="user" id="userBox"></div>
+    <button class="nav-btn" id="logoutBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>로그아웃</button>
+  </aside>
+
+  <main class="main">
+    <!-- 대시보드 -->
+    <section class="panel is-active" id="panel-dash">
+      <div class="topbar">
+        <div><h1>대시보드</h1><p id="dashSub">방문 · 유입 · 전환 현황</p></div>
+        <div class="tools">
+          <div class="seg" id="rangeSeg"><button data-days="1">오늘</button><button data-days="7" class="is-active">7일</button><button data-days="30">30일</button><button data-days="90">90일</button></div>
+          <input class="date-in" type="date" id="dFrom"><span style="color:var(--muted)">~</span><input class="date-in" type="date" id="dTo">
+          <button class="btn btn-line btn-sm" id="refreshBtn">새로고침</button>
+          <button class="btn btn-line btn-sm" id="csvBtn">CSV 내보내기</button>
+        </div>
+      </div>
+      <div id="dashBody"><div class="loading">불러오는 중…</div></div>
+    </section>
+
+    <!-- 팝업 관리 -->
+    <section class="panel" id="panel-pop">
+      <div class="topbar">
+        <div><h1>팝업 관리</h1><p>메인 화면에 뜨는 팝업을 등록하고 기간 · 순서 · 노출 여부를 관리합니다.</p></div>
+        <div class="tools"><button class="btn btn-primary" id="newPopBtn">+ 새 팝업</button></div>
+      </div>
+      <div class="pop-layout">
+        <div>
+          <div class="pop-list" id="popList"></div>
+          <div class="preview">
+            <div class="card" style="margin-top:14px"><h3>미리보기 <small>실제 모바일 화면과 같은 비율</small></h3>
+              <div class="phone-frame"><div class="phone-scr"><div class="fake"></div><div id="previewHost"></div></div></div>
+            </div>
+          </div>
+        </div>
+        <form class="pop-form" id="popForm" novalidate>
+          <h3 id="popFormTitle">새 팝업</h3>
+          <input type="hidden" id="p-id">
+          <div class="field"><label>이미지 <span class="hint">세로형 4:5 권장 · 자동 압축 · 최대 1080px</span></label>
+            <label class="upload" id="uploadBox"><input type="file" id="p-file" accept="image/*"><img id="p-preview" alt="" class="hidden"><span id="uploadText">클릭 또는 드래그해서 이미지 올리기</span></label>
+            <input id="p-image" type="url" placeholder="또는 이미지 URL 직접 입력" style="margin-top:6px">
+          </div>
+          <div class="field"><label for="p-brand">상단 소제목</label><input id="p-brand" type="text" placeholder="예) 개원 컨설팅 | 온라인 마케팅"></div>
+          <div class="field"><label for="p-title">제목 <span class="hint">줄바꿈은 Enter</span></label><textarea id="p-title" placeholder="예) 개원 컨설팅&#10;무료 상담 OPEN" style="min-height:64px"></textarea></div>
+          <div class="field"><label for="p-sub">부제목</label><input id="p-sub" type="text" placeholder="예) 상권분석부터 마케팅까지 첫 상담 무료"></div>
+          <div class="row2">
+            <div class="field"><label for="p-btn">버튼 문구 <span class="hint">비우면 숨김</span></label><input id="p-btn" type="text" placeholder="자세히 보기"></div>
+            <div class="field"><label for="p-link">클릭 시 이동 주소</label><input id="p-link" type="text" placeholder="consulting.html 또는 https://…"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="p-start">시작일</label><input id="p-start" type="date"></div>
+            <div class="field"><label for="p-end">종료일 <span class="hint">비우면 계속</span></label><input id="p-end" type="date"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="p-show">노출 페이지</label><select id="p-show"><option value="all">모든 페이지</option><option value="index">메인만</option><option value="index,marketing">메인 + 온라인 마케팅</option><option value="index,consulting">메인 + 개원 컨설팅</option><option value="marketing">온라인 마케팅만</option><option value="consulting">개원 컨설팅만</option></select></div>
+            <div class="field"><label for="p-sort">순서 <span class="hint">작을수록 먼저</span></label><input id="p-sort" type="number" value="0"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>배경색 <span class="hint">이미지 없을 때</span></label><div class="color-row"><input id="p-color" type="color" value="#0a1020"><input id="p-color-t" type="text" value="#0a1020" style="flex:1"></div></div>
+            <div class="field"><label for="p-align">글자 정렬</label><select id="p-align"><option value="left">왼쪽</option><option value="center">가운데</option></select></div>
+          </div>
+          <label class="chk"><input type="checkbox" id="p-active" checked>노출 (활성)</label>
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit" id="saveBtn">저장</button>
+            <button class="btn btn-line" type="button" id="dupBtn">복제</button>
+            <button class="btn btn-danger" type="button" id="delBtn">삭제</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 상담 · 전환 -->
+    <section class="panel" id="panel-conv">
+      <div class="topbar"><div><h1>상담 · 전환</h1><p>전화 · 메일 · 상담 신청 버튼 클릭과 문의 폼 제출 기록입니다. 기간은 대시보드 설정을 따릅니다.</p></div></div>
+      <div id="convBody"></div>
+    </section>
+
+    <!-- 설정 -->
+    <section class="panel" id="panel-set">
+      <div class="topbar"><div><h1>설정</h1><p>계정 · 데이터 연결 · 데모 데이터</p></div></div>
+      <div class="set-grid">
+        <div class="card"><h3>비밀번호 변경</h3>
+          <form id="pwForm" novalidate>
+            <div class="field"><label for="s-pw1">새 비밀번호 <span class="hint">8자 이상</span></label><input id="s-pw1" type="password" autocomplete="new-password"></div>
+            <div class="field"><label for="s-pw2">새 비밀번호 확인</label><input id="s-pw2" type="password" autocomplete="new-password"></div>
+            <button class="btn btn-ink" type="submit" style="margin-top:14px">변경</button>
+          </form>
+        </div>
+        <div class="card"><h3>데이터 · 통계</h3>
+          <p class="help" id="dataInfo"></p>
+          <div class="form-actions">
+            <button class="btn btn-line" type="button" id="seedBtn">데모 데이터 채우기</button>
+            <button class="btn btn-danger" type="button" id="clearBtn">통계 데이터 비우기</button>
+          </div>
+          <p class="help" style="margin-top:12px">관리자로 로그인한 브라우저의 방문은 통계에서 제외됩니다. 개인정보(이름·전화번호 등)는 수집하지 않습니다.</p>
+        </div>
+        <div class="card c-12" style="grid-column:1/-1"><h3>실제 서버 연결 가이드 <small>Supabase 무료 플랜 · 약 10분</small></h3>
+          <ol class="steps">
+            <li><span>supabase.com 가입 후 <b>New project</b> 생성 (Region: Northeast Asia · Seoul)</span></li>
+            <li><span><b>SQL Editor</b>에 아래 스키마를 붙여넣고 <b>Run</b></span></li>
+            <li><span><b>Authentication → Providers → Email</b>에서 <code>Confirm email</code> 끄기</span></li>
+            <li><span><b>Authentication → Users → Add user</b>로 관리자 이메일 · 비밀번호 생성</span></li>
+            <li><span><b>Project Settings → API</b>의 <code>Project URL</code>, <code>anon public</code> 키를 <code>assets/js/config.js</code>에 입력 후 GitHub 반영</span></li>
+          </ol>
+          <div class="code" id="schemaBox">불러오는 중…</div>
+          <div class="form-actions"><button class="btn btn-line btn-sm" type="button" id="copySchema">스키마 복사</button><a class="btn btn-line btn-sm" href="admin/README.md" target="_blank" rel="noopener">가이드 문서</a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="tip" id="tip"></div>
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>
