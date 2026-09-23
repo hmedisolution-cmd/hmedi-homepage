@@ -276,9 +276,11 @@
       if (!d.name || !d.phone) { showToast("성함과 연락처를 입력해 주세요."); return; }
       const btn = form.querySelector('[type="submit"]'); if (btn) { btn.disabled = true; btn.style.opacity = ".7"; }
       const row = { type: d.type || "", name: d.name.trim(), phone: d.phone.trim(), hospital: (d.hospital || "").trim(), region: (d.region || "").trim(), program: d.program || "", situation: d.status || "", message: (d.message || "").trim(), page: location.pathname.replace(/^.*\//, "") };
+      const notify = () => { const key = (window.HMEDI_CONFIG || {}).notifyKey; if (!key) return Promise.resolve();
+        return fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify({ access_key: key, subject: `[상담신청] ${row.name}${row.hospital ? " · " + row.hospital : ""}${row.type ? " · " + row.type : ""}`, from_name: "에이치메디솔루션 홈페이지", "성함": row.name, "연락처": row.phone, "상담 분야": row.type, "병원명": row.hospital, "지역": row.region, "관심 프로그램": row.program, "현재 상황": row.situation, "문의 내용": row.message, "관리자 페이지": location.origin + location.pathname.replace(/[^/]*$/, "") + "admin.html", botcheck: "" }) }).catch(() => {}); };
       try {
         const S = window.HmediStore; if (!S) throw new Error("no store");
-        await S.ready(); await S.saveInquiry(row);
+        await S.ready(); await S.saveInquiry(row); notify();
         form.reset();
         form.innerHTML = '<div class="form-done"><b>상담 신청이 접수되었습니다.</b><span>빠르게 확인하고 연락드리겠습니다. 급하시면 전화나 카카오톡 채널로 주세요.</span><div><a class="btn btn-accent" href="tel:01082630982">010-8263-0982</a><a class="btn btn-line" href="https://pf.kakao.com/_xmhxgvb" target="_blank" rel="noopener">카카오톡 채널</a></div></div>';
         form.scrollIntoView({ behavior: "smooth", block: "center" });

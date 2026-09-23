@@ -10,6 +10,9 @@ window.HMEDI_CONFIG = {
   supabaseKey: "sb_publishable_8VkhnMOUw6gTf2HWNUnCuw_sAFtfPZ-",   // publishable(공개) 키 — secret 키는 절대 넣지 말 것
   storageBucket: "popups",
   trackAdminVisits: false, // true 면 관리자 로그인 상태의 방문도 통계에 포함
+  /* 상담 신청 이메일 알림 (Web3Forms, 무료 · 서버 불필요)
+     web3forms.com 에서 받을 이메일을 입력해 발급받은 Access Key 를 넣으면, 문의 폼 접수 시 그 이메일로 바로 알림이 갑니다. */
+  notifyKey: "",
   /* 기본 팝업: 데모 모드에서 팝업이 하나도 없을 때 처음 한 번 채워집니다.
      관리자 페이지에서 수정 · 삭제할 수 있습니다. (서버 연결 후에는 사용되지 않음) */
   defaultPopups: [
