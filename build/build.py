@@ -14,9 +14,10 @@ OUT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE_URL = "https://hmedisolution-cmd.github.io/hmedi-homepage"
 SITE_NAME = "에이치메디솔루션"
 VERIFY = {
-  "naver-site-verification": "",   # 네이버 서치어드바이저 → 사이트 등록 → HTML 태그 값
-  "google-site-verification": "",  # 구글 서치콘솔 → HTML 태그 값
+  "naver-site-verification": "40b84969275516de7391b2e5b76f6ba93af65bce",   # 네이버 서치어드바이저 (기존 아임웹 설정에서 이전)
+  "google-site-verification": "D22YwkbVlXo0pCYqEknLPD5Iuasn8qno40CcnwMVZf8",  # 구글 서치콘솔 (기존 아임웹 설정에서 이전)
 }
+VERIFY_EXTRA = ['<meta name="google-site-verification" content="Hu6dVbtX4-fJMoVhIbT6oc4QSHpVhOFqQL443lvIFlU">']  # 두 번째 구글 계정 코드
 ORG = {
   "name": "에이치메디솔루션", "alt": ["HMEDISOLUTION", "H MEDI SOLUTION", "에이치메디"],
   "slogan": "마케팅 잘하는 개원 컨설턴트",
@@ -183,7 +184,7 @@ PAGES = {
   # page: (title, description, keywords, 한국어 h1(페이지 히어로), 빵부스러기 이름, 서비스 타입)
   "index": ("병원 마케팅 · 개원 컨설팅 전문 에이치메디솔루션 | 마케팅 잘하는 개원 컨설턴트",
             "병원 온라인 마케팅과 개원 컨설팅·MSO를 한 팀이 실행합니다. 네이버 플레이스 상위노출, 병원 블로그, 영수증 리뷰, 입지분석부터 개원 준비, 개원 후 병원경영까지. 부천 본사 · 부산 지사, 전국 병의원 지원.",
-            "병원 마케팅, 개원 컨설팅, 병원 MSO, 네이버 플레이스 마케팅, 플레이스 상위노출, 병원 블로그 마케팅, 메디컬 마케팅, 개원 준비, 상권분석, 에이치메디솔루션",
+            "병원 마케팅, 개원 마케팅, 병원 개원 마케팅, 병원 온라인 마케팅, 개원 컨설팅, 병원 MSO, 네이버 플레이스 마케팅, 플레이스 상위노출, 병원 블로그 마케팅, 병원 바이럴 마케팅, 병원 브랜딩, 피부과 마케팅, 정형외과 마케팅, 메디컬 마케팅, 개원 준비, 상권분석, 에이치메디솔루션",
             None, None, None),
   "company": ("회사소개 | 병원 마케팅 · 개원 컨설팅 전문 에이치메디솔루션",
               "에이치메디솔루션은 온라인 마케팅 회사로 출발해 입지분석, 부동산 계약, 온·오프라인 마케팅, 개원 절차, 병원경영까지 ALL IN ONE으로 운영하는 메디컬 솔루션 회사입니다. 크몽 마케팅 카테고리 Prime 전문가.",
@@ -191,11 +192,11 @@ PAGES = {
               "병원 마케팅 · 개원 컨설팅 전문 메디컬 솔루션 회사", "회사소개", None),
   "marketing": ("병원 마케팅 프로그램 · 네이버 플레이스 마케팅 | 에이치메디솔루션",
                 "네이버 플레이스 로직 기반 병원 마케팅 프로그램. Standard(월 150만원), Premium(월 180만원), AI 실속 패키지(월 99만원)와 홈페이지 제작, 숏폼 영상, 당근·인스타그램·Meta 광고 대행. 크몽 Prime 전문가, 만족도 100%.",
-                "병원 마케팅, 네이버 플레이스 마케팅, 플레이스 상위노출, 병원 블로그 마케팅, 영수증 리뷰, 병원 마케팅 비용, 병원 마케팅 대행, 병원 홈페이지 제작, 병원 숏폼, 당근 광고 대행, 의료광고심의",
+                "병원 마케팅, 병원 온라인 마케팅, 네이버 플레이스 마케팅, 플레이스 상위노출, 병원 블로그 마케팅, 병원 바이럴 마케팅, 피부과 마케팅, 정형외과 마케팅, 영수증 리뷰, 병원 마케팅 비용, 병원 마케팅 대행, 병원 홈페이지 제작, 병원 숏폼, 당근 광고 대행, 의료광고심의",
                 "네이버 플레이스 기반 병원 마케팅 프로그램", "온라인 마케팅", "병원 온라인 마케팅"),
   "consulting": ("개원 컨설팅 · 병원 MSO | 마케팅 잘하는 개원 컨설턴트 에이치메디솔루션",
                  "상권분석과 입지 선정, 개원 준비, 진료 준비, 오프라인 마케팅, 개원 후 경영까지 ALL IN ONE 개원 컨설팅. 마케팅 전문성을 갖춘 개원 컨설턴트와 MSO 서비스. 개원 첫 달 일환자 150명 사례.",
-                 "개원 컨설팅, 병원 개원 준비, 병원 MSO, 상권분석, 병원 입지 선정, 개원 절차, 병원 경영 컨설팅, 의약품 CSO, 개원 컨설팅 비용, 부산 개원 컨설팅, 수도권 개원 컨설팅",
+                 "개원 컨설팅, 개원 마케팅, 병원 개원 마케팅, 피부과 개원 마케팅, 병원 개원 준비, 병원 MSO, 상권분석, 병원 입지 선정, 개원 절차, 병원 경영 컨설팅, 의약품 CSO, 개원 컨설팅 비용, 부산 개원 컨설팅, 수도권 개원 컨설팅",
                  "마케팅 잘하는 개원 컨설팅 · 병원 MSO", "개원 컨설팅 · MSO", "병원 개원 컨설팅 · MSO"),
   "portfolio": ("병원 마케팅 · 개원 컨설팅 성공사례 | 에이치메디솔루션",
                 "포항 정형외과 개원 컨설팅(개원 첫 달 일환자 150명), 부산 H피부과 플레이스 20위→3위, 인천 S외과, 광교 G피부과 등 병원 마케팅과 개원 컨설팅 성공사례 · 포트폴리오.",
@@ -308,7 +309,7 @@ for page, (title, desc, keywords, h1, crumb, service) in PAGES.items():
     ALL_FAQ[page] = extract_faq(body)
     jsonld = build_jsonld(page, title, desc, body, crumb, service)
     body = wrap_sentences(body)
-    verify = "".join('  <meta name="%s" content="%s">\n' % (k, v) for k, v in VERIFY.items() if v)
+    verify = "".join('  <meta name="%s" content="%s">\n' % (k, v) for k, v in VERIFY.items() if v) + "".join("  %s\n" % x for x in VERIFY_EXTRA)
     html = HEAD.format(title=title, desc=desc, keywords=keywords, canonical=page_url(page), site=SITE_URL, verify=verify, jsonld=jsonld, page=page) + wrap_sentences(HEADER) + '<main id="top">\n' + body + '\n</main>\n' + wrap_sentences(FOOTER)
     with open(os.path.join(OUT, page + ".html"), "w", encoding="utf-8") as f:
         f.write(html)
