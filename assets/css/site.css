@@ -1172,7 +1172,13 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
   .site-card { backdrop-filter: none; background: rgba(14,22,48,.9); }
 }
 @media (max-width: 640px) {
-  .phases { grid-template-columns: 1fr; }
+  .phases { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .phase { padding: 18px 16px 20px; border-radius: 16px; }
+  .phase .no { font-size: 26px; }
+  .phase h3 { font-size: 16px; margin-top: 10px; }
+  .phase ul { margin-top: 10px; gap: 6px; }
+  .phase li { font-size: 12.5px; padding-left: 11px; line-height: 1.45; }
+  .phase li::before { top: 7px; width: 4px; height: 4px; }
   .duo { flex-direction: column; gap: 8px; }
   .duo-card { width: 100%; padding: 16px 18px; animation: none; }
   .duo-card .n { font-size: 26px; margin-top: 10px; }
