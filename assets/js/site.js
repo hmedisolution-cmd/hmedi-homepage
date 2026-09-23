@@ -305,14 +305,12 @@
       const c = C[id]; if (!c) return;
       panel.innerHTML = `
         <button class="modal-close" type="button" aria-label="닫기">${ICON_X}</button>
-        <div class="cm-hero ${c.theme || ""}"><span class="kicker">${c.kicker}</span><h2>${c.title}</h2><p>${sent(c.summary)}</p>
-          ${c.facts ? `<div class="cm-facts">${c.facts.map(([b, s]) => `<div><b>${b}</b><small>${s}</small></div>`).join("")}</div>` : ""}</div>
-        <div class="cm-body">
-          ${c.steps ? `<section><h4>진행 과정</h4><div class="cm-steps">${c.steps.map(([t, d], i) => `<div class="cm-step"><i>${String(i + 1).padStart(2, "0")}</i><div><b>${t}</b><span>${d}</span></div></div>`).join("")}</div></section>` : ""}
-          ${c.visual ? `<section><h4>실제 작업</h4>${c.visual}</section>` : ""}
-          ${c.deliver ? `<section><h4>제공 항목</h4><div class="cm-chips">${c.deliver.map((x) => `<span>${x}</span>`).join("")}</div></section>` : ""}
-          ${c.points ? `<section><h4>포인트</h4><ul class="cm-points">${c.points.map((x) => `<li>${x}</li>`).join("")}</ul></section>` : ""}
-          <div class="cm-cta">${c.link ? `<a class="btn btn-line" href="${c.link[0]}">${c.link[1]} ${ICON_ARROW}</a>` : ""}<a class="btn btn-accent js-inquiry" href="contact.html">무료 상담 신청 ${ICON_ARROW}</a></div>
+        <div class="cs">
+          <div class="cs-head"><div><div class="cs-idx"><b>${c.no}</b><span>${c.cat}</span></div><h2>${c.title}</h2><p>${c.lead}</p></div>
+            <div class="cs-spec">${c.spec.map(([k, v]) => `<div><small>${k}</small><b>${v}</b></div>`).join("")}</div></div>
+          <div class="cs-vis">${c.visual}</div>
+          <ul class="cs-keys">${c.keys.map((k, i) => `<li><i>${String(i + 1).padStart(2, "0")}</i>${k}</li>`).join("")}</ul>
+          <div class="cs-foot"><a class="btn btn-accent js-inquiry" href="contact.html">무료 상담 신청 ${ICON_ARROW}</a><a class="btn btn-line" href="${c.link[0]}">${c.link[1]} ${ICON_ARROW}</a></div>
         </div>`;
       lastFocus = document.activeElement; m.classList.add("is-open"); m.setAttribute("aria-hidden", "false"); document.body.classList.add("is-locked"); panel.scrollTop = 0; $(".modal-close", panel).focus();
     };
