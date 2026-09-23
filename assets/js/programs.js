@@ -52,7 +52,6 @@ window.HMEDI_PROGRAMS = [
     theme: "t-standard",
     badges: [{ text: "BEST SELLER", cls: "hot" }],
     featured: true,
-    ribbon: "가장 많이 선택하는 프로그램",
     tagline: "가장 많은 병원이 선택한 표준 프로그램",
     desc: "플레이스 최적화, 블로그, 영수증 리뷰, 광고, 디자인까지. 디자이너와 마케터가 직접 제작합니다.",
     price: 1500000,
