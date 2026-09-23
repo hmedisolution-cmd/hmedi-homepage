@@ -128,6 +128,7 @@
     const list = programs.filter((p) => filter === "all" || p.group === filter);
     grid.innerHTML = list.map((p, i) => `
       <article class="pcard ${p.featured ? "is-featured" : ""}" data-id="${p.id}" style="animation-delay:${i * 0.07}s" tabindex="0" role="button" aria-label="${p.name} 상세 보기">
+        ${p.ribbon ? `<div class="pcard-ribbon">${p.ribbon}</div>` : ""}
         <div class="pcard-top ${p.theme}">
           <div class="badges">${badges(p)}</div>
           ${p.logo ? `<img class="plogo" src="${p.logo}" alt="${p.name}">` : ""}
