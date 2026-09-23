@@ -6,8 +6,8 @@
    - 설정 방법: 관리자 페이지 → 설정 탭 → "연결 가이드" 또는 admin/README.md
    ========================================================================== */
 window.HMEDI_CONFIG = {
-  supabaseUrl: "",   // 예: "https://abcdefghijk.supabase.co"
-  supabaseKey: "",   // 예: "eyJhbGciOi..." (anon public key)
+  supabaseUrl: "https://rcrpisjwmiorhocgxjcw.supabase.co",
+  supabaseKey: "sb_publishable_8VkhnMOUw6gTf2HWNUnCuw_sAFtfPZ-",   // publishable(공개) 키 — secret 키는 절대 넣지 말 것
   storageBucket: "popups",
   trackAdminVisits: false, // true 면 관리자 로그인 상태의 방문도 통계에 포함
   /* 기본 팝업: 데모 모드에서 팝업이 하나도 없을 때 처음 한 번 채워집니다.
