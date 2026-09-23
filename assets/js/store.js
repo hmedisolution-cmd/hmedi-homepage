@@ -46,7 +46,11 @@
   const local = {
     mode: "local",
     async ready() { return true; },
-    async listPopups() { return lsGet(LS.popups, []).sort((a, b) => (a.sort || 0) - (b.sort || 0)); },
+    async listPopups() {
+      let has = false; try { has = localStorage.getItem(LS.popups) !== null; } catch (e) {}
+      if (!has && Array.isArray(cfg.defaultPopups) && cfg.defaultPopups.length) { const now = new Date().toISOString(); lsSet(LS.popups, cfg.defaultPopups.map((p) => Object.assign({ created_at: now }, p))); }
+      return lsGet(LS.popups, []).sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    },
     async savePopup(p) {
       const list = lsGet(LS.popups, []); const now = new Date().toISOString();
       if (!p.id) { p.id = uid(); p.created_at = now; list.push(p); } else { const i = list.findIndex((x) => x.id === p.id); p.updated_at = now; if (i >= 0) list[i] = p; else list.push(p); }
