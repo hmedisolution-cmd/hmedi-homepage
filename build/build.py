@@ -49,16 +49,16 @@ HEAD = """<!DOCTYPE html>
   <meta property="og:site_name" content="에이치메디솔루션">
   <meta property="og:locale" content="ko_KR">
   <meta property="og:url" content="{canonical}">
-  <meta property="og:title" content="{title}">
+  <meta property="og:title" content="{og_title}">
   <meta property="og:description" content="{desc}">
-  <meta property="og:image" content="{site}/assets/img/og.jpg">
+  <meta property="og:image" content="{site}/assets/img/og.jpg?v={ver}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="에이치메디솔루션 - 병원 마케팅 · 개원 컨설팅 · MSO">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{title}">
+  <meta name="twitter:title" content="{og_title}">
   <meta name="twitter:description" content="{desc}">
-  <meta name="twitter:image" content="{site}/assets/img/og.jpg">
+  <meta name="twitter:image" content="{site}/assets/img/og.jpg?v={ver}">
 {verify}  <meta name="theme-color" content="#0a1020">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -311,7 +311,8 @@ for page, (title, desc, keywords, h1, crumb, service) in PAGES.items():
     jsonld = build_jsonld(page, title, desc, body, crumb, service)
     body = wrap_sentences(body)
     verify = "".join('  <meta name="%s" content="%s">\n' % (k, v) for k, v in VERIFY.items() if v) + "".join("  %s\n" % x for x in VERIFY_EXTRA)
-    html = HEAD.format(title=title, desc=desc, keywords=keywords, canonical=page_url(page), site=SITE_URL, verify=verify, jsonld=jsonld, page=page, ver=VER) + wrap_sentences(HEADER) + '<main id="top">\n' + body + '\n</main>\n' + wrap_sentences(FOOTER).replace('{ver}', VER)
+    og_title = ("%s | 에이치메디솔루션" % crumb) if crumb else "에이치메디솔루션 | 마케팅 잘하는 개원 컨설턴트"
+    html = HEAD.format(title=title, desc=desc, keywords=keywords, canonical=page_url(page), site=SITE_URL, verify=verify, jsonld=jsonld, page=page, ver=VER, og_title=og_title) + wrap_sentences(HEADER) + '<main id="top">\n' + body + '\n</main>\n' + wrap_sentences(FOOTER).replace('{ver}', VER)
     with open(os.path.join(OUT, page + ".html"), "w", encoding="utf-8") as f:
         f.write(html)
     print("wrote", page + ".html", len(html))
