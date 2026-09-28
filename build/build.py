@@ -11,7 +11,7 @@ OUT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #  - SITE_URL: 커스텀 도메인 연결 후 "https://hmedisolution.com" 으로 바꾸고 다시 빌드 (canonical · sitemap · og:url 에 사용)
 #  - 검색엔진 소유 확인 코드는 발급받은 값을 넣으면 <meta> 로 출력됩니다. (비우면 출력 안 함)
 # ==========================================================================
-SITE_URL = "https://hmedisolution-cmd.github.io/hmedi-homepage"
+SITE_URL = "https://hmedisolution.com"
 SITE_NAME = "에이치메디솔루션"
 VERIFY = {
   "naver-site-verification": "40b84969275516de7391b2e5b76f6ba93af65bce",   # 네이버 서치어드바이저 (기존 아임웹 설정에서 이전)

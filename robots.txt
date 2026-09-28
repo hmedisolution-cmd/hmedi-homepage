@@ -38,4 +38,4 @@ Allow: /
 User-agent: meta-externalagent
 Allow: /
 
-Sitemap: https://hmedisolution-cmd.github.io/hmedi-homepage/sitemap.xml
+Sitemap: https://hmedisolution.com/sitemap.xml
