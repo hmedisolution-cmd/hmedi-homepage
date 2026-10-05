@@ -65,6 +65,8 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------- KPI ---------- */
 .kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.kpis-4 { grid-template-columns: repeat(4, 1fr); }
+.c-7 { grid-column: span 7; } .c-5 { grid-column: span 5; }
 .kpi { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 18px 18px 16px; }
 .kpi .l { font-size: 12.5px; color: var(--muted); font-weight: 600; }
 .kpi .n { font-family: var(--display); font-size: 28px; font-weight: 700; letter-spacing: -.02em; margin-top: 6px; line-height: 1; }
@@ -194,7 +196,7 @@ table.tbl { width: 100%; border-collapse: collapse; margin-top: 12px; font-size:
 
 /* ---------- 모바일 ---------- */
 .mob-top { display: none; }
-@media (max-width: 1100px) { .kpis { grid-template-columns: repeat(3, 1fr); } .c-8, .c-6, .c-4 { grid-column: span 12; } .pop-layout { grid-template-columns: 1fr; } .preview { position: static; } .set-grid { grid-template-columns: 1fr; } }
+@media (max-width: 1100px) { .kpis { grid-template-columns: repeat(3, 1fr); } .c-8, .c-7, .c-6, .c-5, .c-4 { grid-column: span 12; } .pop-layout { grid-template-columns: 1fr; } .preview { position: static; } .set-grid { grid-template-columns: 1fr; } }
 @media (max-width: 860px) {
   .app { grid-template-columns: 1fr; }
   .side { position: fixed; inset: 0 auto 0 0; width: 260px; z-index: 60; transform: translateX(-100%); transition: transform .35s var(--ease); height: 100vh; }
@@ -208,8 +210,50 @@ table.tbl { width: 100%; border-collapse: collapse; margin-top: 12px; font-size:
   .insights { grid-template-columns: 1fr; }
   .heat { min-width: 620px; grid-template-columns: 30px repeat(24, 1fr); gap: 3px; font-size: 10px; padding-bottom: 6px; }
   .row2 { grid-template-columns: 1fr; }
-  .phone-frame { width: 260px; height: 520px; }
+  .phone-frame { width: 220px; height: 440px; border-radius: 32px; padding: 8px; }
+  .phone-scr { border-radius: 26px; }
+  .phone-scr .hpop-title { font-size: 19px; } .phone-scr .hpop-text { padding: 14px 14px 16px; } .phone-scr .hpop-bar { height: 34px; } .phone-scr .hpop-bar button { font-size: 11px; } .phone-scr .hpop-dots { bottom: 42px; }
+  .topbar { gap: 10px; margin-bottom: 16px; }
   .topbar h1 { font-size: 20px; }
+  .topbar p { font-size: 12.5px; line-height: 1.5; word-break: keep-all; }
+  .topbar .tools { width: 100%; }
+  .seg { width: 100%; display: flex; } .seg button { flex: 1; padding: 8px 4px; font-size: 12.5px; }
+  .tools .btn, .tools input[type="date"] { font-size: 12.5px; }
+  .kpis, .kpis-4 { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .kpi .l { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kpi .d { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .grid { gap: 10px; margin-top: 10px; }
+  .grid > .card { grid-column: 1 / -1 !important; }
+  .card { padding: 16px; border-radius: 14px; }
+  .card h3 { font-size: 14px; flex-wrap: wrap; } .card h3 small { font-size: 11.5px; }
+  .card .help { font-size: 12px; }
+  .insights { padding: 16px; } .insights li { font-size: 13.5px; } .insights li b { word-break: keep-all; }
+  .bar { grid-template-columns: minmax(78px, 30%) 1fr auto; gap: 8px; font-size: 12.5px; }
+  .bar .v small { display: none; }
+  .tbl { font-size: 12.5px; } .tbl th, .tbl td { padding: 9px 6px; }
+  .tbl .hm { display: none; }
+  .tbl .dt { white-space: nowrap; font-family: var(--display); font-size: 12px; }
+  .tbl .badge { white-space: nowrap; padding: 3px 7px; font-size: 11px; }
+  .pop-layout { display: flex; flex-direction: column; align-items: stretch; }
+  .pop-layout > div:first-child { display: contents; }
+  .pop-list { order: 1; } .pop-form { order: 2; margin-top: 14px; } .preview { order: 3; position: static; }
+  .pop-form { padding: 16px; }
+  .pop-item { grid-template-columns: 52px 1fr auto; gap: 10px; padding: 10px 12px; }
+  .pop-item .th { width: 52px; height: 64px; }
+  .pop-item b { font-size: 13.5px; } .pop-item small { font-size: 11.5px; }
+  .field { margin-top: 12px; } .field label { font-size: 12.5px; } .field .hint { font-size: 11px; display: block; margin-top: 2px; font-weight: 500; }
+  .field input, .field select, .field textarea { padding: 11px 12px; font-size: 14px; }
+  .form-actions { display: flex; gap: 8px; flex-wrap: wrap; } .form-actions .btn { flex: 1; min-width: 90px; }
+  .inq { padding: 14px; }
+  .inq-head .nm { font-size: 15px; }
+  .inq-meta { gap: 4px 12px; font-size: 12.5px; }
+  .inq-msg { font-size: 13px; padding: 10px 12px; }
+  .inq-foot { gap: 8px; } .inq-foot select { flex: 1; } .inq-foot input { flex: 1 1 100%; min-width: 0; order: 3; } .inq-foot .del { order: 2; }
+  .inq-note { font-size: 12px; line-height: 1.5; }
+  .set-grid { gap: 10px; }
+  .steps li { font-size: 13px; }
+  .code { font-size: 11px; overflow-x: auto; white-space: pre; -webkit-overflow-scrolling: touch; }
+  .login-card { padding: 28px 22px; }
 }
 
 /* 상담 신청 접수함 */
