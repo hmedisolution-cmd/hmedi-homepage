@@ -14,7 +14,7 @@ OUT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE_URL = "https://hmedisolution.com"
 SITE_NAME = "에이치메디솔루션"
 VERIFY = {
-  "naver-site-verification": "40b84969275516de7391b2e5b76f6ba93af65bce",   # 네이버 서치어드바이저 (기존 아임웹 설정에서 이전)
+  "naver-site-verification": "f20b6018ba6607ab3304346f78b105c0b0797721",   # 네이버 서치어드바이저 (hmedisolution.com 신규 등록)
   "google-site-verification": "D22YwkbVlXo0pCYqEknLPD5Iuasn8qno40CcnwMVZf8",  # 구글 서치콘솔 (기존 아임웹 설정에서 이전)
 }
 VERIFY_EXTRA = ['<meta name="google-site-verification" content="Hu6dVbtX4-fJMoVhIbT6oc4QSHpVhOFqQL443lvIFlU">']  # 두 번째 구글 계정 코드
