@@ -168,6 +168,7 @@
   const stName = { new: "신규", contacted: "연락함", done: "완료" };
   async function loadInquiries() {
     const body = $("#inqBody"); body.innerHTML = '<div class="loading">불러오는 중…</div>';
+    inqFilter = "all"; $$("#inqSeg button").forEach((x) => x.classList.toggle("is-active", x.dataset.f === "all"));
     try { inqList = await S.listInquiries(); } catch (e) { body.innerHTML = `<div class="empty">불러오지 못했습니다: ${esc(e.message)}</div>`; return; }
     renderInquiries(); updateInqBadge();
   }
@@ -175,8 +176,10 @@
   function renderInquiries() {
     const body = $("#inqBody");
     const list = inqList.filter((x) => inqFilter === "all" || (x.status || "new") === inqFilter);
+    const cnt = { all: inqList.length }; inqList.forEach((x) => { const k = x.status || "new"; cnt[k] = (cnt[k] || 0) + 1; });
+    $$("#inqSeg button").forEach((b) => { const base = b.textContent.replace(/\s*\d+$/, ""); b.textContent = cnt[b.dataset.f] ? `${base} ${cnt[b.dataset.f]}` : base; });
     const note = S.configured ? "" : '<p class="inq-note">데모 모드: 이 브라우저에서 제출한 신청만 보입니다. 다른 기기에서 들어온 신청을 보려면 설정 탭의 서버 연결이 필요합니다.</p>';
-    if (!list.length) { body.innerHTML = note + '<div class="empty">상담 신청이 없습니다.</div>'; return; }
+    if (!list.length) { body.innerHTML = note + (inqList.length ? `<div class="empty">${stName[inqFilter] || ""} 상태인 신청이 없습니다. <a href="#" class="inq-all" style="color:var(--sky-deep);font-weight:700;margin-left:4px">전체 보기 →</a></div>` : '<div class="empty">아직 접수된 상담 신청이 없습니다.</div>'); const a = $(".inq-all", body); if (a) a.addEventListener("click", (e) => { e.preventDefault(); $("#inqSeg button[data-f=all]").click(); }); return; }
     body.innerHTML = note + `<div class="inq-list">${list.map((q) => { const st = q.status || "new"; return `
       <div class="inq ${st === "new" ? "is-new" : ""}" data-id="${esc(q.id)}">
         <div class="inq-head"><span class="nm">${esc(q.name)}</span>${q.type ? `<span class="tp">${esc(q.type)}</span>` : ""}${q.program ? `<span class="tp" style="background:#fff3c4;color:#7a4b00">${esc(q.program)}</span>` : ""}<span class="tm">${new Date(q.created_at).toLocaleString("ko-KR", { dateStyle: "medium", timeStyle: "short" })}</span></div>
