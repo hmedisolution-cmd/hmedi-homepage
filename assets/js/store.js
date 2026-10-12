@@ -105,7 +105,7 @@
       return out;
     },
     async countEventsAll() { await loadSupabase(); const { count } = await sb.from("events").select("*", { count: "exact", head: true }); return count || 0; },
-    async saveInquiry(d) { await loadSupabase(); const { data, error } = await sb.from("inquiries").insert(d).select().single(); if (error) throw error; return data; },
+    async saveInquiry(d) { await loadSupabase(); const { error } = await sb.from("inquiries").insert(d); if (error) throw error; return Object.assign({ status: "new", created_at: new Date().toISOString() }, d); },
     async listInquiries() { await loadSupabase(); const { data, error } = await sb.from("inquiries").select("*").order("created_at", { ascending: false }).limit(500); if (error) throw error; return data || []; },
     async updateInquiry(id, patch) { await loadSupabase(); const { data, error } = await sb.from("inquiries").update(Object.assign({}, patch, { updated_at: new Date().toISOString() })).eq("id", id).select().single(); if (error) throw error; return data; },
     async deleteInquiry(id) { await loadSupabase(); const { error } = await sb.from("inquiries").delete().eq("id", id); if (error) throw error; },

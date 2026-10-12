@@ -289,7 +289,7 @@
         const subject = `[홈페이지 문의 · ${row.type || "일반"}] ${row.hospital || row.name} · ${row.program || "프로그램 미정"}`;
         const body = [`상담 분야: ${row.type || "-"}`, `성함: ${row.name}`, `병원명: ${row.hospital || "-"}`, `연락처: ${row.phone}`, `지역: ${row.region || "-"}`, `관심 프로그램: ${row.program || "-"}`, `현재 상황: ${row.situation || "-"}`, "", "문의 내용:", row.message || "-"].join("\n");
         location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        showToast("접수 서버에 연결할 수 없어 메일 작성 창을 열었습니다.");
+        console.error("inquiry save failed:", err); showToast("접수 서버 오류(" + ((err && err.message) || "연결 실패") + "). 메일 작성 창을 열었습니다.");
         if (btn) { btn.disabled = false; btn.style.opacity = ""; }
       }
     });
