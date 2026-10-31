@@ -267,7 +267,7 @@
     const qs = new URLSearchParams(location.search);
     const pre = qs.get("program");
     const type = qs.get("type");
-    if (type) { const map = { marketing: "온라인 마케팅", consulting: "개원 컨설팅 · MSO" }; const r = form.querySelector(`input[name="type"][value="${map[type] || ""}"]`); if (r) r.checked = true; }
+    if (type) { const map = { marketing: "온라인 마케팅", consulting: "개원 컨설팅 · MSO", ai: "AI 마케팅 (AEO)" }; const r = form.querySelector(`input[name="type"][value="${map[type] || ""}"]`); if (r) r.checked = true; }
     const sel = $("#f-program");
     if (pre && sel && Array.from(sel.options).some((o) => o.value === pre)) sel.value = pre;
     form.addEventListener("submit", async (e) => {

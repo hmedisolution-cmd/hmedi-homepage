@@ -7,7 +7,7 @@
   "use strict";
   const cfg = window.HMEDI_CONFIG || {};
   const configured = !!(cfg.supabaseUrl && cfg.supabaseKey);
-  const LS = { popups: "hmedi_popups", events: "hmedi_events", inquiries: "hmedi_inquiries", auth: "hmedi_admin_session", pw: "hmedi_admin_pw", demoSeeded: "hmedi_demo_seeded" };
+  const LS = { popups: "hmedi_popups", events: "hmedi_events", inquiries: "hmedi_inquiries", posts: "hmedi_posts", auth: "hmedi_admin_session", pw: "hmedi_admin_pw", demoSeeded: "hmedi_demo_seeded" };
   const MAX_LOCAL_EVENTS = 8000;
 
   const uid = () => (crypto.randomUUID ? crypto.randomUUID() : "id-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8));
@@ -63,6 +63,10 @@
     },
     async queryEvents(from, to) { const f = +new Date(from), t = +new Date(to); return lsGet(LS.events, []).filter((e) => { const ts = +new Date(e.created_at); return ts >= f && ts <= t; }); },
     async countEventsAll() { return lsGet(LS.events, []).length; },
+    async listPosts(opts) { const all = lsGet(LS.posts, []); const pub = !(opts && opts.all); return all.filter((x) => !pub || x.status === "published").sort((a, b) => (b.published_at || b.created_at || "") < (a.published_at || a.created_at || "") ? -1 : 1); },
+    async getPost(slug) { return lsGet(LS.posts, []).find((x) => x.slug === slug) || null; },
+    async savePost(p) { const list = lsGet(LS.posts, []); const now = new Date().toISOString(); if (!p.id) { p.id = uid(); p.created_at = now; list.push(p); } else { const i = list.findIndex((x) => x.id === p.id); p.updated_at = now; if (i >= 0) list[i] = p; else list.push(p); } lsSet(LS.posts, list); return p; },
+    async deletePost(id) { lsSet(LS.posts, lsGet(LS.posts, []).filter((x) => x.id !== id)); },
     async saveInquiry(d) { const list = lsGet(LS.inquiries, []); const row = Object.assign({ id: uid(), created_at: new Date().toISOString(), status: "new", memo: "" }, d); list.unshift(row); lsSet(LS.inquiries, list.slice(0, 500)); return row; },
     async listInquiries() { return lsGet(LS.inquiries, []); },
     async updateInquiry(id, patch) { const list = lsGet(LS.inquiries, []); const i = list.findIndex((x) => x.id === id); if (i >= 0) { list[i] = Object.assign({}, list[i], patch, { updated_at: new Date().toISOString() }); lsSet(LS.inquiries, list); return list[i]; } },
@@ -94,7 +98,7 @@
     async deletePopup(id) { await loadSupabase(); const { error } = await sb.from("popups").delete().eq("id", id); if (error) throw error; },
     async uploadImage(file) {
       await loadSupabase(); const blob = await compressImage(file, 1080, 0.82);
-      const path = `popup-${Date.now()}-${Math.random().toString(36).slice(2, 7)}.jpg`;
+      const path = `${(arguments[1] || "popup")}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}.jpg`;
       const { error } = await sb.storage.from(cfg.storageBucket || "popups").upload(path, blob, { contentType: "image/jpeg", upsert: false }); if (error) throw error;
       return sb.storage.from(cfg.storageBucket || "popups").getPublicUrl(path).data.publicUrl;
     },
@@ -105,6 +109,10 @@
       return out;
     },
     async countEventsAll() { await loadSupabase(); const { count } = await sb.from("events").select("*", { count: "exact", head: true }); return count || 0; },
+    async listPosts(opts) { await loadSupabase(); let q = sb.from("posts").select("id,slug,title,excerpt,cover_url,tags,status,published_at,created_at,author").order("published_at", { ascending: false, nullsFirst: false }).limit(300); if (!(opts && opts.all)) q = q.eq("status", "published"); const { data, error } = await q; if (error) throw error; return data || []; },
+    async getPost(slug) { await loadSupabase(); const { data, error } = await sb.from("posts").select("*").eq("slug", slug).maybeSingle(); if (error) throw error; return data; },
+    async savePost(p) { await loadSupabase(); const row = { ...p }; if (!row.id) delete row.id; const { data, error } = await sb.from("posts").upsert(row).select().single(); if (error) throw error; return data; },
+    async deletePost(id) { await loadSupabase(); const { error } = await sb.from("posts").delete().eq("id", id); if (error) throw error; },
     async saveInquiry(d) { await loadSupabase(); const { error } = await sb.from("inquiries").insert(d); if (error) throw error; return Object.assign({ status: "new", created_at: new Date().toISOString() }, d); },
     async listInquiries() { await loadSupabase(); const { data, error } = await sb.from("inquiries").select("*").order("created_at", { ascending: false }).limit(500); if (error) throw error; return data || []; },
     async updateInquiry(id, patch) { await loadSupabase(); const { data, error } = await sb.from("inquiries").update(Object.assign({}, patch, { updated_at: new Date().toISOString() })).eq("id", id).select().single(); if (error) throw error; return data; },

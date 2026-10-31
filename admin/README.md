@@ -50,3 +50,35 @@
 4. 홈페이지 문의 폼으로 테스트 접수 → 문자 수신 확인. 실패하면 Edge Functions → notify-inquiry → Logs 에서 원인을 볼 수 있습니다.
 
 > 함수 코드: `admin/functions/notify-inquiry/index.ts`. 카카오 알림톡으로 바꾸고 싶으면 솔라피의 알림톡 API(채널 · 템플릿 심사 필요)로 같은 함수에서 교체할 수 있습니다.
+
+## 인사이트(블로그) 글 · 자동 글쓰기 연동
+
+관리자 → 인사이트 탭에서 글을 쓰면 `posts` 테이블에 저장되고, 공개 상태면 홈페이지 인사이트 탭과 `post.html?slug=…` 에 바로 노출됩니다. 본문은 마크다운(또는 HTML)입니다.
+
+**외부 CMS · 자동 글쓰기(n8n · Make · 자체 스크립트)에서 글 넣기** — Supabase REST API로 바로 넣습니다. 서버 쪽(자동화 도구)에서만 `service_role` 키를 쓰고, 홈페이지 코드에는 절대 넣지 않습니다.
+
+```
+POST https://<프로젝트>.supabase.co/rest/v1/posts
+apikey: <service_role 키>
+Authorization: Bearer <service_role 키>
+Content-Type: application/json
+Prefer: return=representation
+
+{
+  "slug": "place-first-month",
+  "title": "개원 첫 달, 플레이스에서 먼저 할 3가지",
+  "excerpt": "목록에 보이는 1~2문장 요약",
+  "content": "## 소제목\n\n본문 마크다운…",
+  "cover_url": "https://…/cover.jpg",
+  "tags": ["플레이스", "개원"],
+  "author": "에이치메디솔루션",
+  "status": "published",
+  "published_at": "2026-11-01T09:00:00+09:00",
+  "source": "cms"
+}
+```
+
+- `status` 를 `draft` 로 넣으면 관리자가 검수 후 공개할 수 있습니다(권장). `source` 에 도구 이름을 넣으면 관리자 목록에 표시됩니다.
+- 같은 `slug` 로 다시 보내면 중복 오류가 나므로, 수정은 `PATCH …/posts?slug=eq.<slug>` 로 합니다.
+- 이미지는 Storage `popups` 버킷에 올리거나(공개 URL), 외부 URL을 그대로 써도 됩니다.
+- 검색엔진 참고: 글 페이지는 브라우저에서 렌더링되므로 네이버 색인이 느릴 수 있습니다. 글이 쌓이면 정적 페이지 자동 생성(GitHub Actions)으로 전환하는 것을 권장합니다.

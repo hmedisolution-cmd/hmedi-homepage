@@ -70,3 +70,24 @@ create policy "inquiries public insert" on public.inquiries for insert to anon, 
 create policy "inquiries admin read" on public.inquiries for select to authenticated using (true);
 create policy "inquiries admin update" on public.inquiries for update to authenticated using (true) with check (true);
 create policy "inquiries admin delete" on public.inquiries for delete to authenticated using (true);
+
+-- 5) 인사이트 글 (posts) — 공개 글은 누구나 읽기, 관리자(로그인)만 쓰기
+create table if not exists public.posts (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz default now(),
+  updated_at timestamptz,
+  published_at timestamptz,
+  slug text unique not null,
+  title text not null,
+  excerpt text,
+  content text,            -- 마크다운 또는 HTML
+  cover_url text,
+  tags text[] default '{}',
+  author text default '에이치메디솔루션',
+  status text default 'draft',   -- draft · published
+  source text default 'admin'    -- admin · cms · api (자동 글쓰기 연동 식별)
+);
+create index if not exists posts_pub_idx on public.posts (status, published_at desc);
+alter table public.posts enable row level security;
+create policy "posts public read" on public.posts for select using (status = 'published');
+create policy "posts admin all" on public.posts for all to authenticated using (true) with check (true);

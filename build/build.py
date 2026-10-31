@@ -42,7 +42,7 @@ HEAD = """<!DOCTYPE html>
   <title>{title}</title>
   <meta name="description" content="{desc}">
   <meta name="keywords" content="{keywords}">
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="robots" content="{robots}">
   <meta name="author" content="에이치메디솔루션">
   <link rel="canonical" href="{canonical}">
   <meta property="og:type" content="website">
@@ -86,10 +86,11 @@ HEADER = """
     </a>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="company.html" data-nav="company">회사소개</a>
+      <a href="ai.html" data-nav="ai">AI 마케팅</a>
       <a href="marketing.html" data-nav="marketing">온라인 마케팅</a>
       <a href="consulting.html" data-nav="consulting">개원 컨설팅</a>
       <a href="portfolio.html" data-nav="portfolio">성공사례</a>
-      <a href="contact.html" data-nav="contact">문의하기</a>
+      <a href="insights.html" data-nav="insights">인사이트</a>
     </nav>
     <div class="header-right">
       <span class="header-tel">Tel. 010-8263-0982</span>
@@ -103,10 +104,12 @@ HEADER = """
     <nav class="menu-links" aria-label="전체 메뉴">
       <a href="index.html" data-nav="home"><small>01</small>메인</a>
       <a href="company.html" data-nav="company"><small>02</small>회사소개</a>
-      <a href="marketing.html" data-nav="marketing"><small>03</small>온라인 마케팅</a>
-      <a href="consulting.html" data-nav="consulting"><small>04</small>개원 컨설팅 · MSO</a>
-      <a href="portfolio.html" data-nav="portfolio"><small>05</small>성공사례 · 포트폴리오</a>
-      <a href="contact.html" data-nav="contact"><small>06</small>문의하기</a>
+      <a href="ai.html" data-nav="ai"><small>03</small>AI 마케팅 · AEO</a>
+      <a href="marketing.html" data-nav="marketing"><small>04</small>온라인 마케팅</a>
+      <a href="consulting.html" data-nav="consulting"><small>05</small>개원 컨설팅 · MSO</a>
+      <a href="portfolio.html" data-nav="portfolio"><small>06</small>성공사례 · 포트폴리오</a>
+      <a href="insights.html" data-nav="insights"><small>07</small>인사이트</a>
+      <a href="contact.html" data-nav="contact"><small>08</small>문의하기</a>
     </nav>
     <aside class="menu-aside">
       <strong>마케팅 잘하는 개원 컨설턴트</strong>
@@ -132,9 +135,11 @@ FOOTER = """
         <h5>Menu</h5>
         <ul>
           <li><a href="company.html">회사소개</a></li>
+          <li><a href="ai.html">AI 마케팅 · AEO</a></li>
           <li><a href="marketing.html">온라인 마케팅</a></li>
           <li><a href="consulting.html">개원 컨설팅 · MSO</a></li>
           <li><a href="portfolio.html">성공사례 · 포트폴리오</a></li>
+          <li><a href="insights.html">인사이트</a></li>
           <li><a href="contact.html">문의하기</a></li>
         </ul>
       </div>
@@ -202,6 +207,18 @@ PAGES = {
                 "포항 정형외과 개원 컨설팅(개원 첫 달 일환자 120명), 부산 H피부과 플레이스 20위→3위, 인천 S외과, 광교 G피부과 등 병원 마케팅과 개원 컨설팅 성공사례 · 포트폴리오.",
                 "병원 마케팅 성공사례, 개원 컨설팅 사례, 플레이스 상위노출 사례, 병원 마케팅 포트폴리오, 정형외과 개원, 피부과 마케팅",
                 "병원 마케팅 · 개원 컨설팅 성공사례", "성공사례 · 포트폴리오", None),
+  "ai": ("AEO 마스터 병원 콘텐츠 운영과 AI 검색 관리 | 에이치메디솔루션",
+         "홈페이지 콘텐츠와 외부 칼럼 콘텐츠 제작·발행, SEO 점검과 AI 측정 계획을 확인하고 병원에 맞는 운영 범위를 상담하세요. 월 150만원부터, VAT 별도.",
+         "AEO, AI 검색 최적화, 병원 AI 마케팅, ChatGPT 병원 노출, 생성형 AI 검색, 병원 콘텐츠 운영, 병원 칼럼 사이트, 병원 SEO 점검, AI 답변 출처, 에이치메디솔루션",
+         "AEO 마스터 · 병원 콘텐츠 운영과 AI 검색 관리", "AI 마케팅", "AI 검색 최적화(AEO) 마케팅"),
+  "insights": ("인사이트 · 병원 마케팅 · 개원 칼럼 | 에이치메디솔루션",
+               "네이버 플레이스, AI 검색(AEO), 개원 준비와 병원 경영에 대한 에이치메디솔루션의 인사이트 칼럼.",
+               "병원 마케팅 칼럼, 개원 인사이트, 플레이스 마케팅 팁, AEO 가이드, 병원 경영 칼럼",
+               "병원 마케팅 · 개원 인사이트", "인사이트", None),
+  "post": ("인사이트 | 에이치메디솔루션",
+           "에이치메디솔루션 인사이트 칼럼.",
+           "병원 마케팅 칼럼, 개원 인사이트",
+           None, "인사이트", None),
   "contact": ("병원 마케팅 무료 진단 · 개원 상담 신청 | 에이치메디솔루션",
               "네이버 플레이스 무료 진단과 개원 컨설팅 상담 신청. 수도권 010-8263-0982(고한별 대표), 부산·경남 010-4435-4389(정대호 대표). 병원 상황에 맞는 프로그램만 제안해 드립니다.",
               "병원 마케팅 상담, 플레이스 무료 진단, 개원 상담, 병원 마케팅 문의, 개원 컨설팅 문의, 에이치메디솔루션 연락처",
@@ -312,7 +329,7 @@ for page, (title, desc, keywords, h1, crumb, service) in PAGES.items():
     body = wrap_sentences(body)
     verify = "".join('  <meta name="%s" content="%s">\n' % (k, v) for k, v in VERIFY.items() if v) + "".join("  %s\n" % x for x in VERIFY_EXTRA)
     og_title = ("%s | 에이치메디솔루션" % crumb) if crumb else "에이치메디솔루션 | 마케팅 잘하는 개원 컨설턴트"
-    html = HEAD.format(title=title, desc=desc, keywords=keywords, canonical=page_url(page), site=SITE_URL, verify=verify, jsonld=jsonld, page=page, ver=VER, og_title=og_title) + wrap_sentences(HEADER) + '<main id="top">\n' + body + '\n</main>\n' + wrap_sentences(FOOTER).replace('{ver}', VER)
+    html = HEAD.format(title=title, desc=desc, keywords=keywords, canonical=page_url(page), site=SITE_URL, verify=verify, jsonld=jsonld, page=page, ver=VER, og_title=og_title, robots=("noindex, follow" if page == "post" else "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1")) + wrap_sentences(HEADER) + '<main id="top">\n' + body + '\n</main>\n' + wrap_sentences(FOOTER).replace('{ver}', VER)
     with open(os.path.join(OUT, page + ".html"), "w", encoding="utf-8") as f:
         f.write(html)
     print("wrote", page + ".html", len(html))
@@ -361,8 +378,8 @@ Allow: /
 Sitemap: %s/sitemap.xml
 """ % SITE_URL)
 
-prio = {"index": "1.0", "marketing": "0.9", "consulting": "0.9", "contact": "0.8", "company": "0.7", "portfolio": "0.7"}
-urls = "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%s</priority></url>\n" % (page_url(p), TODAY, "weekly" if p in ("index", "marketing") else "monthly", prio[p]) for p in PAGES)
+prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3"}
+urls = "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%s</priority></url>\n" % (page_url(p), TODAY, "weekly" if p in ("index", "marketing", "insights") else "monthly", prio[p]) for p in PAGES if p != "post")
 open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
 
 def price_txt(p):
@@ -387,7 +404,14 @@ for p, (t, d, *_ ) in PAGES.items():
 lines += ["", "## 병원 마케팅 프로그램 · 가격 (marketing.html)", ""]
 for p in PROGRAMS:
     lines.append("- **%s** — %s. %s 가격: %s" % (p["name"], p.get("tagline", ""), p.get("desc", ""), price_txt(p)))
-lines += ["", "## 개원 컨설팅 · MSO (consulting.html)", "",
+lines += ["", "## AI 마케팅 · AEO 마스터 (ai.html)", "",
+  "- 병원 홈페이지와 전용 외부 칼럼 사이트를 운영하고, ChatGPT · Gemini · Claude 등 AI 검색 노출을 측정 · 개선하는 서비스",
+  "- 제공 업무: 콘텐츠 제작(홈페이지 · 외부 칼럼 신규 원고 + 대표 이미지) → 발행 → 전체 SEO 월 1회 점검 → AI 측정 · 월간 보고",
+  "- 월 운영 플랜(VAT 별도): Basic 150만원(콘텐츠 8건 · AI 질문 20개) / Standard 250만원(16건 · 40개) / Premium 400만원(24건 · 60개)",
+  "- 초기 세팅(1회, VAT 별도): A 100만원(기존 페이지 2개 개선) / B 150만원(4개) / C 200만원(6개). 월 플랜과 자유 조합",
+  "- 홈페이지 제작 옵션: 최소형 150만원 정액 / 전체형 350만원부터",
+  "- 특정 순위 · 노출 · 예약 · 매출을 보장하지 않으며, 제공 범위 · 가격 · 조건은 계약 전 확정", "",
+  "## 개원 컨설팅 · MSO (consulting.html)", "",
   "- 01 입지 선정: 상권 분석, 인구 · 세대 · 연령 통계, 경쟁병원 분포, 개원 입지 확보, 부동산 계약 조율",
   "- 02 개원 준비: 개원 절차 · 신고, 인테리어 · 장비 조율, 노무 · 세무 연결",
   "- 03 진료 준비: 진료 프로세스, 원내 게시자료, 의약품 · 심평원 업무",
@@ -395,7 +419,7 @@ lines += ["", "## 개원 컨설팅 · MSO (consulting.html)", "",
   "- 05 온라인 마케팅: 네이버 플레이스 · 블로그 · 리뷰 · 광고 (사전마케팅부터 개원 후까지)",
   "- 06 개원 후 경영: 매출 · 활동량 관리, 월별 보고, MSO 운영 지원", "",
   "## 자주 묻는 질문", ""]
-for p in ("index", "marketing", "consulting"):
+for p in ("index", "marketing", "ai", "consulting"):
     for q, a in ALL_FAQ.get(p, []):
         lines.append("- Q. %s\n  A. %s" % (q, a))
 lines += ["", "## 문의", "", "- 무료 플레이스 진단 · 개원 상담: %s/contact.html" % SITE_URL, "- 전화: 010-8263-0982 (수도권) · 010-4435-4389 (부산 · 경남)", ""]

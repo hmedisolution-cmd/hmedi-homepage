@@ -43,7 +43,7 @@
   };
 
   /* ---------- 내비 ---------- */
-  $$(".nav-btn[data-panel]").forEach((b) => b.addEventListener("click", () => { $$(".nav-btn").forEach((x) => x.classList.remove("is-active")); b.classList.add("is-active"); $$(".panel").forEach((p) => p.classList.toggle("is-active", p.id === "panel-" + b.dataset.panel)); $("#side").classList.remove("open"); if (b.dataset.panel === "conv") renderConv(); if (b.dataset.panel === "set") renderSettings(); if (b.dataset.panel === "inq") loadInquiries(); }));
+  $$(".nav-btn[data-panel]").forEach((b) => b.addEventListener("click", () => { $$(".nav-btn").forEach((x) => x.classList.remove("is-active")); b.classList.add("is-active"); $$(".panel").forEach((p) => p.classList.toggle("is-active", p.id === "panel-" + b.dataset.panel)); $("#side").classList.remove("open"); if (b.dataset.panel === "conv") renderConv(); if (b.dataset.panel === "set") renderSettings(); if (b.dataset.panel === "inq") loadInquiries(); if (b.dataset.panel === "ins") loadPosts(); }));
   $("#mobMenu").addEventListener("click", () => $("#side").classList.toggle("open"));
 
   /* ---------- 기간 ---------- */
@@ -163,6 +163,52 @@
   function hookTips(root) { const tip = $("#tip"); $$("[data-tip]", root).forEach((el) => { el.addEventListener("mouseenter", (e) => { tip.innerHTML = el.dataset.tip; tip.classList.add("on"); }); el.addEventListener("mousemove", (e) => { tip.style.left = e.clientX + 12 + "px"; tip.style.top = e.clientY - 36 + "px"; }); el.addEventListener("mouseleave", () => tip.classList.remove("on")); }); }
 
   /* ---------- 상담 · 전환 ---------- */
+  /* ---------- 인사이트 글 관리 ---------- */
+  let posts = [], postSel = null, postFilter = "all", postFile = null;
+  const Q = { id: $("#q-id"), title: $("#q-title"), slug: $("#q-slug"), tags: $("#q-tags"), excerpt: $("#q-excerpt"), file: $("#q-file"), preview: $("#q-preview"), cover: $("#q-cover"), content: $("#q-content"), author: $("#q-author"), date: $("#q-date"), pub: $("#q-published") };
+  const slugify = (t) => String(t || "").toLowerCase().trim().replace(/[^a-z0-9가-힣\s-]/g, "").replace(/[\s_]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "").slice(0, 80) || ("post-" + Date.now().toString(36));
+  const tagsArr = (v) => String(v || "").split(",").map((x) => x.trim()).filter(Boolean);
+  async function loadPosts() {
+    const box = $("#insList"); box.innerHTML = '<div class="loading">불러오는 중…</div>';
+    try { posts = await S.listPosts({ all: true }); } catch (e) { box.innerHTML = `<div class="empty">불러오지 못했습니다: ${esc(e.message)}<br><small>설정 탭의 스키마(posts 테이블)를 실행했는지 확인해 주세요.</small></div>`; return; }
+    renderPostList(); if (!postSel) blankPost();
+  }
+  function renderPostList() {
+    const box = $("#insList"); const list = posts.filter((p) => postFilter === "all" || p.status === postFilter);
+    box.innerHTML = list.length ? list.map((p) => `<button type="button" class="ins-item ${p.id === postSel ? "is-sel" : ""}" data-id="${esc(p.id)}"><div class="th">${p.cover_url ? `<img src="${esc(p.cover_url)}" alt="">` : ""}</div><div><b>${esc(p.title)}</b><small><span class="st ${p.status === "published" ? "pub" : "draft"}">${p.status === "published" ? "공개" : "초안"}</span>${esc(day(p.published_at || p.created_at))}${p.source && p.source !== "admin" ? " · " + esc(p.source) : ""}</small></div></button>`).join("") : '<div class="empty">글이 없습니다. "새 글"로 시작해 보세요.</div>';
+  }
+  function blankPost() { postSel = null; postFile = null; $("#postFormTitle").textContent = "새 글"; Q.id.value = ""; Q.title.value = ""; Q.slug.value = ""; Q.tags.value = ""; Q.excerpt.value = ""; Q.cover.value = ""; Q.content.value = ""; Q.author.value = "에이치메디솔루션"; Q.date.value = day(new Date()); Q.pub.checked = false; Q.file.value = ""; Q.preview.classList.add("hidden"); $("#postUploadText").textContent = "클릭 또는 드래그해서 이미지 올리기"; $("#delPostBtn").classList.add("hidden"); countChars(); renderPostList(); }
+  async function fillPost(id) {
+    let p = posts.find((x) => x.id === id); if (!p) return;
+    if (p.content == null) { try { p = await S.getPost(p.slug) || p; } catch (e) {} }
+    postSel = p.id; postFile = null; $("#postFormTitle").textContent = "글 수정"; Q.id.value = p.id; Q.title.value = p.title || ""; Q.slug.value = p.slug || ""; Q.tags.value = (Array.isArray(p.tags) ? p.tags : tagsArr(p.tags)).join(", "); Q.excerpt.value = p.excerpt || ""; Q.cover.value = p.cover_url && !p.cover_url.startsWith("data:") ? p.cover_url : ""; Q.content.value = p.content || ""; Q.author.value = p.author || "에이치메디솔루션"; Q.date.value = day(p.published_at || p.created_at || new Date()); Q.pub.checked = p.status === "published"; Q.file.value = "";
+    if (p.cover_url) { Q.preview.src = p.cover_url; Q.preview.classList.remove("hidden"); $("#postUploadText").textContent = "이미지 바꾸려면 클릭"; } else { Q.preview.classList.add("hidden"); $("#postUploadText").textContent = "클릭 또는 드래그해서 이미지 올리기"; }
+    $("#delPostBtn").classList.remove("hidden"); countChars(); renderPostList();
+  }
+  const countChars = () => { $("#q-count").textContent = Q.content.value.replace(/\s/g, "").length.toLocaleString("ko-KR") + "자"; };
+  Q.content.addEventListener("input", countChars);
+  Q.title.addEventListener("blur", () => { if (!Q.slug.value.trim() && !postSel) Q.slug.value = slugify(Q.title.value); });
+  $("#insSeg").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; $$("#insSeg button").forEach((x) => x.classList.toggle("is-active", x === b)); postFilter = b.dataset.f; renderPostList(); });
+  $("#insList").addEventListener("click", (e) => { const it = e.target.closest(".ins-item"); if (it) fillPost(it.dataset.id); });
+  $("#newPostBtn").addEventListener("click", () => { blankPost(); $("#postForm").scrollIntoView({ behavior: "smooth" }); Q.title.focus(); });
+  const setPostFile = (file) => { if (!file) return; postFile = file; Q.preview.src = URL.createObjectURL(file); Q.preview.classList.remove("hidden"); $("#postUploadText").textContent = file.name; };
+  Q.file.addEventListener("change", () => setPostFile(Q.file.files[0]));
+  const pub = $("#postUploadBox"); ["dragenter", "dragover"].forEach((t) => pub.addEventListener(t, (e) => { e.preventDefault(); pub.classList.add("drag"); })); ["dragleave", "drop"].forEach((t) => pub.addEventListener(t, (e) => { e.preventDefault(); pub.classList.remove("drag"); if (t === "drop") setPostFile(e.dataTransfer.files[0]); }));
+  Q.cover.addEventListener("input", () => { if (Q.cover.value.trim()) { postFile = null; Q.preview.src = Q.cover.value.trim(); Q.preview.classList.remove("hidden"); } });
+  // 에디터 도구
+  $$(".ed-tools [data-md]").forEach((b) => b.addEventListener("click", () => { const ta = Q.content, v = ta.value, a = ta.selectionStart, z = ta.selectionEnd, sel = v.slice(a, z), md = b.dataset.md; let ins; if (b.dataset.wrap) ins = md + (sel || "텍스트") + md; else if (md.includes("](")) ins = sel ? `[${sel}](https://)` : md; else ins = (a > 0 && v[a - 1] !== "\n" ? "\n" : "") + md + (sel || ""); ta.value = v.slice(0, a) + ins + v.slice(z); ta.focus(); ta.selectionStart = ta.selectionEnd = a + ins.length; countChars(); }));
+  $("#q-imgBtn").addEventListener("click", () => $("#q-imgFile").click());
+  $("#q-imgFile").addEventListener("change", async () => { const f = $("#q-imgFile").files[0]; if (!f) return; toast("이미지 올리는 중…"); try { const url = await S.uploadImage(f, "post"); const ta = Q.content, a = ta.selectionStart; const ins = `\n![${f.name.replace(/\.[^.]+$/, "")}](${url})\n`; ta.value = ta.value.slice(0, a) + ins + ta.value.slice(a); countChars(); toast("본문에 이미지를 넣었습니다"); } catch (e) { toast(e.message, true); } $("#q-imgFile").value = ""; });
+  const postData = async () => {
+    let cover = Q.preview.classList.contains("hidden") ? (Q.cover.value.trim() || null) : (Q.cover.value.trim() || Q.preview.src || null);
+    if (postFile) { toast("대표 이미지 올리는 중…"); cover = await S.uploadImage(postFile, "post"); postFile = null; }
+    const published = Q.pub.checked; const d = Q.date.value ? new Date(Q.date.value + "T09:00:00").toISOString() : new Date().toISOString();
+    return { id: Q.id.value || undefined, title: Q.title.value.trim(), slug: Q.slug.value.trim() || slugify(Q.title.value), tags: tagsArr(Q.tags.value), excerpt: Q.excerpt.value.trim(), cover_url: cover, content: Q.content.value, author: Q.author.value.trim() || "에이치메디솔루션", status: published ? "published" : "draft", published_at: published ? d : null, source: "admin" };
+  };
+  $("#postForm").addEventListener("submit", async (e) => { e.preventDefault(); if (!Q.title.value.trim()) return toast("제목을 입력해 주세요", true); try { const saved = await S.savePost(await postData()); toast(saved.status === "published" ? "저장했습니다 · 인사이트 탭에 공개됨" : "초안으로 저장했습니다"); posts = await S.listPosts({ all: true }); await fillPost(saved.id); } catch (err) { toast(err.message.includes("duplicate") ? "같은 주소(slug)의 글이 이미 있습니다" : err.message, true); } });
+  $("#previewPostBtn").addEventListener("click", async () => { try { const d = await postData(); if (!d.id) { d.status = "draft"; const saved = await S.savePost(d); posts = await S.listPosts({ all: true }); await fillPost(saved.id); d.slug = saved.slug; } else { await S.savePost(d); } window.open("post.html?slug=" + encodeURIComponent(d.slug), "_blank"); } catch (err) { toast(err.message, true); } });
+  $("#delPostBtn").addEventListener("click", async () => { if (!postSel || !confirm("이 글을 삭제할까요?")) return; try { await S.deletePost(postSel); toast("삭제했습니다"); posts = posts.filter((x) => x.id !== postSel); blankPost(); } catch (err) { toast(err.message, true); } });
+
   /* ---------- 상담 신청 접수함 ---------- */
   let inqList = [], inqFilter = "all";
   const stName = { new: "신규", contacted: "연락함", done: "완료" };

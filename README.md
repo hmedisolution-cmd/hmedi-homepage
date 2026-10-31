@@ -8,6 +8,8 @@
 ```
 index.html                 # 메인 (히어로 슬라이더 · 요약)
 company.html               # 회사소개 · 플레이스 로직 · 자가진단 · 오시는 길
+ai.html                    # AI 마케팅 · AEO 마스터 (서비스 소개 · 월 플랜 · 초기 세팅 · FAQ)
+insights.html / post.html  # 인사이트(칼럼) 목록 · 글 보기 (관리자 페이지에서 작성, posts 테이블)
 marketing.html             # 온라인 마케팅 (프로그램 카드 + 상세 모달 · 비교표 · 프로세스 · FAQ)
 consulting.html            # 개원 컨설팅 · MSO
 portfolio.html             # 성공사례 · 포트폴리오
@@ -21,7 +23,8 @@ assets/js/config.js        # Supabase 연결 정보 (비워 두면 브라우저 
 assets/js/store.js         # 데이터 계층 (팝업 · 이벤트 · 인증) — Supabase / localStorage 자동 전환
 assets/js/track.js         # 방문 · 클릭 · 상담 전환 기록 (관리자 · 봇 제외)
 assets/js/popup.js         # 메인 팝업 표시 (바텀시트 · 오늘 하루 닫기)
-assets/js/admin.js         # 관리자 대시보드 · 팝업 CRUD · 설정
+assets/js/admin.js         # 관리자 대시보드 · 팝업 · 상담 신청 · 인사이트 글 편집 · 설정
+assets/js/insights.js      # 인사이트 목록 · 글 렌더링 · 마크다운 변환
 assets/js/programs.js      # 마케팅 프로그램 데이터 (가격·구성 수정은 여기서)
 assets/js/site.js          # 헤더 · 메뉴 · 슬라이더 · 리빌 · 차트 · 모달 · 폼
 assets/img/                # 로고 · 파비콘 · 채널 로고 (사진 없이 CSS/SVG로 비주얼 구성)

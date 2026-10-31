@@ -276,3 +276,21 @@ table.tbl { width: 100%; border-collapse: collapse; margin-top: 12px; font-size:
 .inq-foot .del { color: #d33; background: none; border: 1px solid var(--line); padding: 8px 12px; border-radius: 8px; font-size: 12px; }
 .inq-note { font-size: 12.5px; color: var(--muted); margin-bottom: 12px; }
 @media (max-width: 760px) { .inq-head .tm { margin-left: 0; width: 100%; } }
+
+/* 인사이트 글 관리 */
+.ins-layout { display: grid; grid-template-columns: 360px 1fr; gap: 16px; margin-top: 14px; align-items: start; }
+.ins-list { display: grid; gap: 8px; margin-top: 10px; }
+.ins-item { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; cursor: pointer; text-align: left; }
+.ins-item:hover { border-color: var(--sky); }
+.ins-item.is-sel { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(6,144,252,.12); }
+.ins-item .th { width: 56px; height: 40px; border-radius: 8px; background: var(--ink); overflow: hidden; }
+.ins-item .th img { width: 100%; height: 100%; object-fit: cover; }
+.ins-item b { display: block; font-size: 13.5px; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ins-item small { display: block; color: var(--muted); font-size: 11.5px; margin-top: 2px; }
+.ins-item .st { display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-right: 6px; }
+.ins-item .st.pub { background: #dcfce7; color: #15803d; } .ins-item .st.draft { background: var(--paper-2); color: var(--muted); }
+.ed-tools { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 6px; }
+.ed-tools button { padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 12px; font-weight: 700; }
+.ed-tools .ed-count { margin-left: auto; font-size: 12px; color: var(--muted); font-family: var(--display); }
+.ins-form .field textarea { white-space: pre-wrap; }
+@media (max-width: 1100px) { .ins-layout { grid-template-columns: 1fr; } }
