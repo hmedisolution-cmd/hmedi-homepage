@@ -281,6 +281,7 @@
       try {
         const S = window.HmediStore; if (!S) throw new Error("no store");
         await S.ready(); await S.saveInquiry(row); notify();
+        if (window.HmediTrack) window.HmediTrack("conversion", { meta: { kind: "form", type: row.type, program: row.program } });
         form.reset();
         form.innerHTML = '<div class="form-done"><b>상담 신청이 접수되었습니다.</b><span>빠르게 확인하고 연락드리겠습니다. 급하시면 전화나 카카오톡 채널로 주세요.</span><div><a class="btn btn-accent" href="tel:01082630982">010-8263-0982</a><a class="btn btn-line" href="https://pf.kakao.com/_xmhxgvb" target="_blank" rel="noopener">카카오톡 채널</a></div></div>';
         form.scrollIntoView({ behavior: "smooth", block: "center" });

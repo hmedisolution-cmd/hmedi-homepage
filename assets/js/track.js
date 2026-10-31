@@ -40,7 +40,6 @@
     if (a.classList.contains("js-inquiry") || /contact\.html/.test(href)) return log("click", { meta: { kind: "contact_link", label: (a.textContent || "").trim().slice(0, 40) } });
     if (a.classList.contains("js-detail")) return log("click", { meta: { kind: "program_detail", label: (a.closest(".pcard") || {}).dataset ? a.closest(".pcard").dataset.id : "" } });
   }, true);
-  const form = document.getElementById("inquiryForm");
   if (form) form.addEventListener("submit", () => { const d = new FormData(form); log("conversion", { meta: { kind: "form", type: d.get("type") || "", program: d.get("program") || "" } }); });
 
   /* 체류 시간 (페이지 이탈 시) */
