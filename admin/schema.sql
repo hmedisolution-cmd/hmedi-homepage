@@ -34,21 +34,28 @@ alter table public.popups enable row level security;
 alter table public.events enable row level security;
 
 drop policy if exists "popups public read" on public.popups;
+drop policy if exists "popups public read" on public.popups;
 create policy "popups public read" on public.popups for select using (true);
+drop policy if exists "popups admin write" on public.popups;
 drop policy if exists "popups admin write" on public.popups;
 create policy "popups admin write" on public.popups for all to authenticated using (true) with check (true);
 
 drop policy if exists "events public insert" on public.events;
+drop policy if exists "events public insert" on public.events;
 create policy "events public insert" on public.events for insert to anon, authenticated with check (true);
 drop policy if exists "events admin read" on public.events;
+drop policy if exists "events admin read" on public.events;
 create policy "events admin read" on public.events for select to authenticated using (true);
+drop policy if exists "events admin delete" on public.events;
 drop policy if exists "events admin delete" on public.events;
 create policy "events admin delete" on public.events for delete to authenticated using (true);
 
 -- 4) 팝업 이미지 저장소 (공개 읽기, 로그인 사용자 업로드)
 insert into storage.buckets (id, name, public) values ('popups', 'popups', true) on conflict (id) do nothing;
 drop policy if exists "popup images public read" on storage.objects;
+drop policy if exists "popup images public read" on storage.objects;
 create policy "popup images public read" on storage.objects for select using (bucket_id = 'popups');
+drop policy if exists "popup images admin write" on storage.objects;
 drop policy if exists "popup images admin write" on storage.objects;
 create policy "popup images admin write" on storage.objects for all to authenticated using (bucket_id = 'popups') with check (bucket_id = 'popups');
 
@@ -66,9 +73,13 @@ create table if not exists public.inquiries (
 );
 create index if not exists inquiries_created_idx on public.inquiries (created_at desc);
 alter table public.inquiries enable row level security;
+drop policy if exists "inquiries public insert" on public.inquiries;
 create policy "inquiries public insert" on public.inquiries for insert to anon, authenticated with check (true);
+drop policy if exists "inquiries admin read" on public.inquiries;
 create policy "inquiries admin read" on public.inquiries for select to authenticated using (true);
+drop policy if exists "inquiries admin update" on public.inquiries;
 create policy "inquiries admin update" on public.inquiries for update to authenticated using (true) with check (true);
+drop policy if exists "inquiries admin delete" on public.inquiries;
 create policy "inquiries admin delete" on public.inquiries for delete to authenticated using (true);
 
 -- 5) 인사이트 글 (posts) — 공개 글은 누구나 읽기, 관리자(로그인)만 쓰기
@@ -89,5 +100,7 @@ create table if not exists public.posts (
 );
 create index if not exists posts_pub_idx on public.posts (status, published_at desc);
 alter table public.posts enable row level security;
+drop policy if exists "posts public read" on public.posts;
 create policy "posts public read" on public.posts for select using (status = 'published');
+drop policy if exists "posts admin all" on public.posts;
 create policy "posts admin all" on public.posts for all to authenticated using (true) with check (true);

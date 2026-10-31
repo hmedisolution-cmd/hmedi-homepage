@@ -1,0 +1,58 @@
+# 인사이트 글 정적 페이지 자동 생성
+#  - 30분마다 · 수동 실행(Actions 탭 → Run workflow) · Supabase 웹훅(repository_dispatch: posts-updated) 으로 실행
+#  - Supabase posts 테이블의 공개 글을 insights/<slug>.html 로 만들고 sitemap · llms.txt · 인사이트 목록을 갱신해 커밋
+name: 인사이트 정적 페이지 생성
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types: [posts-updated]
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: posts
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 공개 글 → 정적 페이지
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}   # 비워두면 assets/js/config.js 의 공개 값 사용
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}   # publishable(anon) 키만. service_role 금지
+        run: python3 build/posts.py
+
+      - name: 변경 사항 커밋 · 푸시
+        id: commit
+        run: |
+          git config user.name "hmedisolution"
+          git config user.email "hmedisolution@gmail.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"; echo "변경 없음"
+          else
+            git commit -m "인사이트 정적 페이지 갱신 ($(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M'))"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: GitHub Pages 재배포 요청
+        if: steps.commit.outputs.changed == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl -sS -X POST -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages/builds" -o /dev/null -w "pages build: %{http_code}\n"

@@ -45,20 +45,20 @@ HEAD = """<!DOCTYPE html>
   <meta name="robots" content="{robots}">
   <meta name="author" content="에이치메디솔루션">
   <link rel="canonical" href="{canonical}">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="{og_type}">
   <meta property="og:site_name" content="에이치메디솔루션">
   <meta property="og:locale" content="ko_KR">
   <meta property="og:url" content="{canonical}">
   <meta property="og:title" content="{og_title}">
   <meta property="og:description" content="{desc}">
-  <meta property="og:image" content="{site}/assets/img/og.jpg?v={ver}">
+  <meta property="og:image" content="{og_image}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="에이치메디솔루션 - 병원 마케팅 · 개원 컨설팅 · MSO">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{og_title}">
   <meta name="twitter:description" content="{desc}">
-  <meta name="twitter:image" content="{site}/assets/img/og.jpg?v={ver}">
+  <meta name="twitter:image" content="{og_image}">
 {verify}  <meta name="theme-color" content="#0a1020">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -319,109 +319,177 @@ def korean_h1(body, h1):
     if not h1: return body
     return re.sub(r'<h1 class="title-en split">(.*?)</h1>', lambda m: '<p class="title-en split" aria-hidden="true">%s</p>\n    <h1 class="ph-h1">%s</h1>' % (m.group(1), h1), body, count=1, flags=re.S)
 
-ALL_FAQ = {}
-for page, (title, desc, keywords, h1, crumb, service) in PAGES.items():
-    body = open(os.path.join(SRC, page + ".html"), encoding="utf-8").read()
-    body = body.replace("{{ARROW}}", ARROW).replace("{ver}", VER)
-    body = korean_h1(body, h1)
-    ALL_FAQ[page] = extract_faq(body)
-    jsonld = build_jsonld(page, title, desc, body, crumb, service)
-    body = wrap_sentences(body)
+
+# ---------- 공통 렌더 · 인사이트 정적 글 색인 ----------
+INS_DIR = os.path.join(OUT, "insights")
+DEFAULT_OG = SITE_URL + "/assets/img/og.jpg?v=" + VER
+ROBOTS_INDEX = "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+
+def absolutize(html):
+    """하위 폴더(insights/)에서 서빙되는 페이지용: 상대 경로 href/src 를 루트 절대 경로(/...)로."""
+    return re.sub(r'(href|src)="(?!https?:|//|#|mailto:|tel:|data:|javascript:|/)', r'\1="/', html)
+
+def render_page(page, title, desc, keywords, canonical, jsonld, body, robots=ROBOTS_INDEX, og_title=None, og_type="website", og_image=None, root_abs=False):
     verify = "".join('  <meta name="%s" content="%s">\n' % (k, v) for k, v in VERIFY.items() if v) + "".join("  %s\n" % x for x in VERIFY_EXTRA)
-    og_title = ("%s | 에이치메디솔루션" % crumb) if crumb else "에이치메디솔루션 | 마케팅 잘하는 개원 컨설턴트"
-    html = HEAD.format(title=title, desc=desc, keywords=keywords, canonical=page_url(page), site=SITE_URL, verify=verify, jsonld=jsonld, page=page, ver=VER, og_title=og_title, robots=("noindex, follow" if page == "post" else "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1")) + wrap_sentences(HEADER) + '<main id="top">\n' + body + '\n</main>\n' + wrap_sentences(FOOTER).replace('{ver}', VER)
-    with open(os.path.join(OUT, page + ".html"), "w", encoding="utf-8") as f:
-        f.write(html)
-    print("wrote", page + ".html", len(html))
+    html = HEAD.format(title=title, desc=desc, keywords=keywords, canonical=canonical, site=SITE_URL, verify=verify, jsonld=jsonld, page=page, ver=VER,
+                       og_title=og_title or title, robots=robots, og_type=og_type, og_image=og_image or DEFAULT_OG)
+    html += wrap_sentences(HEADER) + '<main id="top">\n' + body + '\n</main>\n' + wrap_sentences(FOOTER).replace('{ver}', VER)
+    return absolutize(html) if root_abs else html
 
-# ---------- robots.txt · sitemap.xml · llms.txt ----------
-open(os.path.join(OUT, "robots.txt"), "w", encoding="utf-8").write("""# 에이치메디솔루션 - 검색엔진 · AI 크롤러 모두 허용 (관리자 페이지 제외)
-User-agent: *
-Allow: /
-Disallow: /admin.html
-Disallow: /admin/
+def load_posts_index():
+    """build/posts.py 가 만든 insights/index.json (공개 글 목록). 없으면 빈 목록."""
+    try:
+        return json.load(open(os.path.join(INS_DIR, "index.json"), encoding="utf-8")).get("posts", [])
+    except Exception:
+        return []
 
-# 네이버 · 구글 · 빙
-User-agent: Yeti
-Allow: /
-User-agent: Googlebot
-Allow: /
-User-agent: Bingbot
-Allow: /
+def post_url(p):
+    return "%s/insights/%s.html" % (SITE_URL, p["slug"])
 
-# AI 검색 · LLM 크롤러 (GEO / AEO)
-User-agent: GPTBot
-Allow: /
-User-agent: OAI-SearchBot
-Allow: /
-User-agent: ChatGPT-User
-Allow: /
-User-agent: ClaudeBot
-Allow: /
-User-agent: Claude-SearchBot
-Allow: /
-User-agent: anthropic-ai
-Allow: /
-User-agent: PerplexityBot
-Allow: /
-User-agent: Google-Extended
-Allow: /
-User-agent: Applebot-Extended
-Allow: /
-User-agent: CCBot
-Allow: /
-User-agent: Amazonbot
-Allow: /
-User-agent: meta-externalagent
-Allow: /
+def fmt_date(d):
+    return (d or "")[:10].replace("-", ".")
 
-Sitemap: %s/sitemap.xml
-""" % SITE_URL)
+def tags_of(p):
+    t = p.get("tags") or []
+    return t if isinstance(t, list) else [x.strip() for x in str(t).split(",") if x.strip()]
 
-prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3"}
-urls = "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%s</priority></url>\n" % (page_url(p), TODAY, "weekly" if p in ("index", "marketing", "insights") else "monthly", prio[p]) for p in PAGES if p != "post")
-open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
+def post_card(p, root_abs=False):
+    """insights.js 의 card() 와 같은 마크업 (정적 목록 · 관련 글)."""
+    e = htmlmod.escape
+    href = ("/insights/%s.html" if root_abs else "insights/%s.html") % p["slug"]
+    tags = tags_of(p)
+    cover = p.get("cover_url") or ""
+    thumb = '<div class="ins-thumb" style="background-image:url(\'%s\')"></div>' % e(cover, quote=True) if cover else '<div class="ins-thumb"><span>%s</span></div>' % e(tags[0] if tags else "Insight")
+    meta = '<span>%s</span>' % fmt_date(p.get("published_at") or p.get("created_at")) + ('<span>%s</span>' % e(p["author"]) if p.get("author") else "")
+    return ('<a class="ins-card" href="%s">%s<div class="ins-body"><div class="ins-tagline">%s</div><h3>%s</h3><p>%s</p><div class="ins-meta">%s</div></div></a>'
+            % (href, thumb, "".join('<span>%s</span>' % e(t) for t in tags[:2]), e(p.get("title", "")), e(p.get("excerpt") or ""), meta))
 
-def price_txt(p):
-    if not p.get("price"): return "별도 문의 (병원 규모 · 예산에 맞춰 견적)"
-    n = "{:,}".format(p["price"])
-    if p.get("priceFrom"): return "%s원부터 (%s, VAT 별도)" % (n, p.get("priceNote", ""))
-    return "월 %s원 (VAT 별도 · 최소 계약 3개월)" % n
+def inject_posts(body, posts):
+    """insights.html: 공개 글 카드 · 태그 버튼을 미리 채워 JS 없이도(검색엔진 · AI 크롤러) 목록이 보이게."""
+    if not posts: return body
+    tags = {}
+    for p in posts:
+        for t in tags_of(p): tags[t] = tags.get(t, 0) + 1
+    e = htmlmod.escape
+    tag_html = '<button type="button" class="is-active" data-t="">전체 %d</button>' % len(posts) + "".join('<button type="button" data-t="%s">%s %d</button>' % (e(t, quote=True), e(t), n) for t, n in sorted(tags.items(), key=lambda x: -x[1]))
+    body = body.replace('<div class="ins-tags" id="insTags"></div>', '<div class="ins-tags" id="insTags">%s</div>' % tag_html)
+    return body.replace('<div class="ins-grid" id="insGrid"><div class="ins-empty">불러오는 중…</div></div>', '<div class="ins-grid" id="insGrid">%s</div>' % "".join(post_card(p) for p in posts))
 
-lines = ["# 에이치메디솔루션 (HMEDISOLUTION)", "",
-  "> " + ORG["desc"], "",
-  "- 슬로건: " + ORG["slogan"],
-  "- 사업 영역: ① 병원 온라인 마케팅 (네이버 플레이스 · 병원 블로그 · 영수증 리뷰 · CPC 광고 · 당근 · 인스타그램 · Meta) ② 개원 컨설팅 · MSO (입지분석 · 개원 준비 · 진료 준비 · 오프라인 마케팅 · 개원 후 경영 · 의약품 CSO) ③ 병원 홈페이지 제작 · 숏폼 영상 제작",
-  "- 검증: 프리랜서 마켓 크몽 마케팅 카테고리 Prime 전문가 · 평점 5.0 (109개 평가) · 총 작업 171개 · 만족도 100%",
-  "- 성과 예시: 포항 정형외과 개원 첫 달 일환자 120명 (성공사례 페이지), 부산 서면 피부과 플레이스 20위→3위, 운영 병원 50+, 누적 마케팅 계약 300건+, 재계약률 97%, 평균 매출 30%+ 증가",
-  "- 대표: 고한별 (수도권, 010-8263-0982), 정대호 (부산 · 경남, 010-4435-4389)",
-  "- 이메일: " + ORG["email"] + " · 사업자등록번호 " + ORG["biz"],
-  "- 주소: 부천 본사 경기도 부천시 소향로 13번길 28-14 403-1호 / 부산 지사 부산 부산진구 서면로 10 데시앙 2616호",
-  "- 서비스 지역: 수도권 · 부산 · 경남을 중심으로 전국 병의원", "",
-  "## 페이지", ""]
-for p, (t, d, *_ ) in PAGES.items():
-    lines.append("- [%s](%s): %s" % (t.split(" | ")[0], page_url(p), d))
-lines += ["", "## 병원 마케팅 프로그램 · 가격 (marketing.html)", ""]
-for p in PROGRAMS:
-    lines.append("- **%s** — %s. %s 가격: %s" % (p["name"], p.get("tagline", ""), p.get("desc", ""), price_txt(p)))
-lines += ["", "## AI 마케팅 · AEO 마스터 (ai.html)", "",
-  "- 병원 홈페이지와 전용 외부 칼럼 사이트를 운영하고, ChatGPT · Gemini · Claude 등 AI 검색 노출을 측정 · 개선하는 서비스",
-  "- 제공 업무: 콘텐츠 제작(홈페이지 · 외부 칼럼 신규 원고 + 대표 이미지) → 발행 → 전체 SEO 월 1회 점검 → AI 측정 · 월간 보고",
-  "- 월 운영 플랜(VAT 별도): Basic 150만원(콘텐츠 8건 · AI 질문 20개) / Standard 250만원(16건 · 40개) / Premium 400만원(24건 · 60개)",
-  "- 초기 세팅(1회, VAT 별도): A 100만원(기존 페이지 2개 개선) / B 150만원(4개) / C 200만원(6개). 월 플랜과 자유 조합",
-  "- 홈페이지 제작 옵션: 최소형 150만원 정액 / 전체형 350만원부터",
-  "- 특정 순위 · 노출 · 예약 · 매출을 보장하지 않으며, 제공 범위 · 가격 · 조건은 계약 전 확정", "",
-  "## 개원 컨설팅 · MSO (consulting.html)", "",
-  "- 01 입지 선정: 상권 분석, 인구 · 세대 · 연령 통계, 경쟁병원 분포, 개원 입지 확보, 부동산 계약 조율",
-  "- 02 개원 준비: 개원 절차 · 신고, 인테리어 · 장비 조율, 노무 · 세무 연결",
-  "- 03 진료 준비: 진료 프로세스, 원내 게시자료, 의약품 · 심평원 업무",
-  "- 04 오프라인 마케팅: 현수막 · 전단 · 의료광고심의, 지역 홍보",
-  "- 05 온라인 마케팅: 네이버 플레이스 · 블로그 · 리뷰 · 광고 (사전마케팅부터 개원 후까지)",
-  "- 06 개원 후 경영: 매출 · 활동량 관리, 월별 보고, MSO 운영 지원", "",
-  "## 자주 묻는 질문", ""]
-for p in ("index", "marketing", "ai", "consulting"):
-    for q, a in ALL_FAQ.get(p, []):
-        lines.append("- Q. %s\n  A. %s" % (q, a))
-lines += ["", "## 문의", "", "- 무료 플레이스 진단 · 개원 상담: %s/contact.html" % SITE_URL, "- 전화: 010-8263-0982 (수도권) · 010-4435-4389 (부산 · 경남)", ""]
-open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8").write("\n".join(lines))
-print("wrote robots.txt, sitemap.xml, llms.txt")
+def main():
+    POSTS = load_posts_index()
+    ALL_FAQ = {}
+    for page, (title, desc, keywords, h1, crumb, service) in PAGES.items():
+        body = open(os.path.join(SRC, page + ".html"), encoding="utf-8").read()
+        body = body.replace("{{ARROW}}", ARROW).replace("{ver}", VER)
+        body = korean_h1(body, h1)
+        ALL_FAQ[page] = extract_faq(body)
+        jsonld = build_jsonld(page, title, desc, body, crumb, service)
+        body = wrap_sentences(body)
+        if page == "insights": body = inject_posts(body, POSTS)
+        og_title = ("%s | 에이치메디솔루션" % crumb) if crumb else "에이치메디솔루션 | 마케팅 잘하는 개원 컨설턴트"
+        html = render_page(page, title, desc, keywords, page_url(page), jsonld, body, robots=("noindex, follow" if page == "post" else ROBOTS_INDEX), og_title=og_title)
+        with open(os.path.join(OUT, page + ".html"), "w", encoding="utf-8") as f:
+            f.write(html)
+        print("wrote", page + ".html", len(html))
+
+    # ---------- robots.txt · sitemap.xml · llms.txt ----------
+    open(os.path.join(OUT, "robots.txt"), "w", encoding="utf-8").write("""# 에이치메디솔루션 - 검색엔진 · AI 크롤러 모두 허용 (관리자 페이지 제외)
+    User-agent: *
+    Allow: /
+    Disallow: /admin.html
+    Disallow: /admin/
+
+    # 네이버 · 구글 · 빙
+    User-agent: Yeti
+    Allow: /
+    User-agent: Googlebot
+    Allow: /
+    User-agent: Bingbot
+    Allow: /
+
+    # AI 검색 · LLM 크롤러 (GEO / AEO)
+    User-agent: GPTBot
+    Allow: /
+    User-agent: OAI-SearchBot
+    Allow: /
+    User-agent: ChatGPT-User
+    Allow: /
+    User-agent: ClaudeBot
+    Allow: /
+    User-agent: Claude-SearchBot
+    Allow: /
+    User-agent: anthropic-ai
+    Allow: /
+    User-agent: PerplexityBot
+    Allow: /
+    User-agent: Google-Extended
+    Allow: /
+    User-agent: Applebot-Extended
+    Allow: /
+    User-agent: CCBot
+    Allow: /
+    User-agent: Amazonbot
+    Allow: /
+    User-agent: meta-externalagent
+    Allow: /
+
+    Sitemap: %s/sitemap.xml
+    """ % SITE_URL)
+
+    prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3"}
+    urls = "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%s</priority></url>\n" % (page_url(p), TODAY, "weekly" if p in ("index", "marketing", "insights") else "monthly", prio[p]) for p in PAGES if p != "post")
+    urls += "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>\n" % (post_url(p), (p.get("updated_at") or p.get("published_at") or TODAY)[:10]) for p in POSTS)
+    open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
+
+    def price_txt(p):
+        if not p.get("price"): return "별도 문의 (병원 규모 · 예산에 맞춰 견적)"
+        n = "{:,}".format(p["price"])
+        if p.get("priceFrom"): return "%s원부터 (%s, VAT 별도)" % (n, p.get("priceNote", ""))
+        return "월 %s원 (VAT 별도 · 최소 계약 3개월)" % n
+
+    lines = ["# 에이치메디솔루션 (HMEDISOLUTION)", "",
+      "> " + ORG["desc"], "",
+      "- 슬로건: " + ORG["slogan"],
+      "- 사업 영역: ① 병원 온라인 마케팅 (네이버 플레이스 · 병원 블로그 · 영수증 리뷰 · CPC 광고 · 당근 · 인스타그램 · Meta) ② 개원 컨설팅 · MSO (입지분석 · 개원 준비 · 진료 준비 · 오프라인 마케팅 · 개원 후 경영 · 의약품 CSO) ③ 병원 홈페이지 제작 · 숏폼 영상 제작",
+      "- 검증: 프리랜서 마켓 크몽 마케팅 카테고리 Prime 전문가 · 평점 5.0 (109개 평가) · 총 작업 171개 · 만족도 100%",
+      "- 성과 예시: 포항 정형외과 개원 첫 달 일환자 120명 (성공사례 페이지), 부산 서면 피부과 플레이스 20위→3위, 운영 병원 50+, 누적 마케팅 계약 300건+, 재계약률 97%, 평균 매출 30%+ 증가",
+      "- 대표: 고한별 (수도권, 010-8263-0982), 정대호 (부산 · 경남, 010-4435-4389)",
+      "- 이메일: " + ORG["email"] + " · 사업자등록번호 " + ORG["biz"],
+      "- 주소: 부천 본사 경기도 부천시 소향로 13번길 28-14 403-1호 / 부산 지사 부산 부산진구 서면로 10 데시앙 2616호",
+      "- 서비스 지역: 수도권 · 부산 · 경남을 중심으로 전국 병의원", "",
+      "## 페이지", ""]
+    for p, (t, d, *_ ) in PAGES.items():
+        if p == "post": continue
+        lines.append("- [%s](%s): %s" % (t.split(" | ")[0], page_url(p), d))
+    lines += ["", "## 병원 마케팅 프로그램 · 가격 (marketing.html)", ""]
+    for p in PROGRAMS:
+        lines.append("- **%s** — %s. %s 가격: %s" % (p["name"], p.get("tagline", ""), p.get("desc", ""), price_txt(p)))
+    lines += ["", "## AI 마케팅 · AEO 마스터 (ai.html)", "",
+      "- 병원 홈페이지와 전용 외부 칼럼 사이트를 운영하고, ChatGPT · Gemini · Claude 등 AI 검색 노출을 측정 · 개선하는 서비스",
+      "- 제공 업무: 콘텐츠 제작(홈페이지 · 외부 칼럼 신규 원고 + 대표 이미지) → 발행 → 전체 SEO 월 1회 점검 → AI 측정 · 월간 보고",
+      "- 월 운영 플랜(VAT 별도): Basic 150만원(콘텐츠 8건 · AI 질문 20개) / Standard 250만원(16건 · 40개) / Premium 400만원(24건 · 60개)",
+      "- 초기 세팅(1회, VAT 별도): A 100만원(기존 페이지 2개 개선) / B 150만원(4개) / C 200만원(6개). 월 플랜과 자유 조합",
+      "- 홈페이지 제작 옵션: 최소형 150만원 정액 / 전체형 350만원부터",
+      "- 특정 순위 · 노출 · 예약 · 매출을 보장하지 않으며, 제공 범위 · 가격 · 조건은 계약 전 확정", "",
+      "## 개원 컨설팅 · MSO (consulting.html)", "",
+      "- 01 입지 선정: 상권 분석, 인구 · 세대 · 연령 통계, 경쟁병원 분포, 개원 입지 확보, 부동산 계약 조율",
+      "- 02 개원 준비: 개원 절차 · 신고, 인테리어 · 장비 조율, 노무 · 세무 연결",
+      "- 03 진료 준비: 진료 프로세스, 원내 게시자료, 의약품 · 심평원 업무",
+      "- 04 오프라인 마케팅: 현수막 · 전단 · 의료광고심의, 지역 홍보",
+      "- 05 온라인 마케팅: 네이버 플레이스 · 블로그 · 리뷰 · 광고 (사전마케팅부터 개원 후까지)",
+      "- 06 개원 후 경영: 매출 · 활동량 관리, 월별 보고, MSO 운영 지원", "",
+      "## 자주 묻는 질문", ""]
+    for p in ("index", "marketing", "ai", "consulting"):
+        for q, a in ALL_FAQ.get(p, []):
+            lines.append("- Q. %s\n  A. %s" % (q, a))
+    if POSTS:
+        lines += ["", "## 인사이트 칼럼 (insights.html)", ""]
+        for p in POSTS[:50]:
+            lines.append("- [%s](%s)%s" % (p.get("title", ""), post_url(p), (": " + p["excerpt"]) if p.get("excerpt") else ""))
+    lines += ["", "## 문의", "", "- 무료 플레이스 진단 · 개원 상담: %s/contact.html" % SITE_URL, "- 전화: 010-8263-0982 (수도권) · 010-4435-4389 (부산 · 경남)", ""]
+    open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8").write("\n".join(lines))
+    print("wrote robots.txt, sitemap.xml, llms.txt")
+
+
+if __name__ == "__main__":
+    main()

@@ -81,4 +81,15 @@ Prefer: return=representation
 - `status` 를 `draft` 로 넣으면 관리자가 검수 후 공개할 수 있습니다(권장). `source` 에 도구 이름을 넣으면 관리자 목록에 표시됩니다.
 - 같은 `slug` 로 다시 보내면 중복 오류가 나므로, 수정은 `PATCH …/posts?slug=eq.<slug>` 로 합니다.
 - 이미지는 Storage `popups` 버킷에 올리거나(공개 URL), 외부 URL을 그대로 써도 됩니다.
-- 검색엔진 참고: 글 페이지는 브라우저에서 렌더링되므로 네이버 색인이 느릴 수 있습니다. 글이 쌓이면 정적 페이지 자동 생성(GitHub Actions)으로 전환하는 것을 권장합니다.
+
+### 검색엔진용 정적 글 페이지 (자동)
+
+공개 글은 GitHub Actions(`.github/workflows/posts.yml`)가 **30분마다** `insights/<slug>.html` 로 만들어 커밋합니다. 목록(`insights.html`)·`sitemap.xml`·`llms.txt` 도 함께 갱신되므로 네이버·구글·AI 크롤러가 JS 없이 본문을 읽습니다.
+
+- 글 주소: `https://hmedisolution.com/insights/<slug>.html` (예전 `post.html?slug=…` 주소는 자동으로 이 주소로 이동)
+- 바로 반영하고 싶을 때: GitHub 저장소 → Actions → "인사이트 정적 페이지 생성" → Run workflow
+- 글을 저장하자마자 자동 반영(선택): Supabase → Database → Webhooks → Create: 테이블 `posts`, 이벤트 Insert·Update·Delete, HTTP POST
+  `https://api.github.com/repos/hmedisolution-cmd/hmedi-homepage/dispatches`, 헤더 `Authorization: Bearer <GitHub 개인 토큰(repo 권한)>` · `Accept: application/vnd.github+json`, 본문 `{"event_type":"posts-updated"}`.
+  토큰은 Supabase 웹훅 설정에만 넣고 홈페이지 코드에는 넣지 않습니다.
+- 공개 해제·삭제한 글의 정적 파일은 다음 실행 때 자동으로 지워집니다. slug 는 영문 소문자·숫자·한글·하이픈만 사용합니다.
+- 수동 실행: `python3 build/posts.py` (Supabase 설정은 `assets/js/config.js` 값 사용).
