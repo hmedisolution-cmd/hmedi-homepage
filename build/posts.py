@@ -129,7 +129,7 @@ def render_post(p, others):
     if p.get("source") == "aeomaster" and p.get("aeo_doc"):
         from column_builder import doc_body
         doc = p["aeo_doc"]
-        body = '<article class="column-content">' + doc_body(doc) + '</article>'
+        body = '<div class="column-main"><div class="wrap"><article class="column-content">' + doc_body(doc) + '</article></div></div>'
         result = B.render_page("post", esc(doc["title"]) + " | 에이치메디솔루션", esc(doc["summary"]), "", B.post_url(p), json.dumps({"@context":"https://schema.org","@type":"Article","headline":doc["title"],"description":doc["summary"],"url":B.post_url(p)},ensure_ascii=False).replace("<","\\u003c"), body, root_abs=True)
         fingerprint = p.get('aeo_publication_hash') or ''
         if not re.fullmatch(r'[a-f0-9]{64}', fingerprint): raise ValueError('missing publication proof')
