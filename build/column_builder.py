@@ -40,6 +40,17 @@ def path(slug):
     if not isinstance(slug,str) or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*',slug) or len(slug)>80 or slug in {'index','api','admin','new','edit'}:raise ValueError('invalid slug')
     return '/column/'+slug+'/'
 
+def body_paragraph(value, faq=False):
+    """Presentation only: split complete legacy FAQ pairs, never rewrite stored text."""
+    raw=text(value,5000)
+    if faq and re.match(r'^Q[.:．]\s*',raw,re.I):
+        markers=list(re.finditer(r'(?:^|\s)([QA])[.:．]\s*',raw,re.I))
+        if len(markers)>=2 and len(markers)%2==0 and all(m.group(1).upper()==('A' if i%2 else 'Q') for i,m in enumerate(markers)):
+            segments=[raw[m.start(1):(markers[i+1].start() if i+1<len(markers) else len(raw))].strip() for i,m in enumerate(markers)]
+            if all(re.sub(r'^[QA][.:．]\s*','',part,flags=re.I).strip() for part in segments):
+                return ''.join('<p class="faq-answer">'+E(part)+'</p>' if i%2 else '<p class="faq-question"><strong>'+E(part)+'</strong></p>' for i,part in enumerate(segments))
+    return '<p>'+E(raw)+'</p>'
+
 def doc_body(doc):
     title=text(doc['title'],200,True);summary=text(doc['summary'],1000,True)
     sections=doc.get('sections',[])
@@ -56,7 +67,7 @@ def doc_body(doc):
         body+='<section id="section-'+str(i+1)+'"><h'+str(level)+'>'+E(s['heading'])+'</h'+str(level)+'>'
         paras=s.get('body',[])
         if not isinstance(paras,list) or len(paras)>40:raise ValueError('invalid paragraphs')
-        body+=''.join('<p>'+E(text(p,5000))+'</p>' for p in paras)
+        body+=''.join(body_paragraph(p,bool(re.search(r'faq|자주.*질문|질문.*답변',s['heading'],re.I))) for p in paras)
         if s.get('list'):
             items=s['list']['items'];tag='ol' if s['list'].get('ordered') else 'ul'
             if len(items)>20:raise ValueError('list too long')
@@ -71,6 +82,9 @@ def doc_body(doc):
         if sources:body+='<ul class="column-sources">'+''.join('<li><a href="'+E(url(x['url']))+'" rel="noopener noreferrer">'+E(text(x['label'],200,True))+'</a></li>' for x in sources)+'</ul>'
         body+='</section>'
     if len(images)>1:body+=image(images[1])
+    related=doc.get('relatedLinks',[])
+    if not isinstance(related,list) or len(related)>30:raise ValueError('related links limit')
+    if related:body+='<aside class="column-related"><h2>관련 링크</h2><ul>'+''.join('<li><a href="'+E(url(x['url']))+'" rel="noopener noreferrer">'+E(text(x['label'],200,True))+'</a></li>' for x in related)+'</ul></aside>'
     return body
 
 def rooted(s):return re.sub(r'(href|src)="(?!https?:|//|#|mailto:|tel:|data:|javascript:|/)',r'\1="/',s)
