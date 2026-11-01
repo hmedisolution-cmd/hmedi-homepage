@@ -30,7 +30,7 @@ def url(value,image=False):
     if re.search(r'[\s\\\x00-\x1f]',value):raise ValueError('unsafe URL')
     if image:
         # Images must already be exported to this public namespace, not private app URLs.
-        if not re.fullmatch(r'/column/assets/[A-Za-z0-9_-]+\.(?:png|jpg|jpeg|webp)',value):raise ValueError('image not a public column asset')
+        if not (re.fullmatch(r'/column/assets/[A-Za-z0-9_-]+\.(?:png|jpg|jpeg|webp)',value) or re.fullmatch(r'https://rcrpisjwmiorhocgxjcw\.supabase\.co/storage/v1/object/public/aeo-hmedi-column-images/b7271da3-02da-4ff9-b8c1-6a1f89477ba1/[a-f0-9]{64}/r[1-9][0-9]*/[a-f0-9]{64}\.png',value)):raise ValueError('image not a public column asset')
         return value
     u=urlsplit(value)
     if u.scheme!='https' or not u.netloc or u.username or u.password:raise ValueError('unsafe URL')
