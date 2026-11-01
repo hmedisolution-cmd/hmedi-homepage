@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://hmedisolution.com/</loc><lastmod>2026-10-31</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://hmedisolution.com/company.html</loc><lastmod>2026-10-31</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://hmedisolution.com/marketing.html</loc><lastmod>2026-10-31</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://hmedisolution.com/consulting.html</loc><lastmod>2026-10-31</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://hmedisolution.com/portfolio.html</loc><lastmod>2026-10-31</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://hmedisolution.com/ai.html</loc><lastmod>2026-10-31</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://hmedisolution.com/insights.html</loc><lastmod>2026-10-31</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://hmedisolution.com/contact.html</loc><lastmod>2026-10-31</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-</urlset>
+<?xml version='1.0' encoding='utf-8'?>
+<ns0:urlset xmlns:ns0="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <ns0:url><ns0:loc>https://hmedisolution.com/</ns0:loc><ns0:lastmod>2026-11-01</ns0:lastmod><ns0:changefreq>weekly</ns0:changefreq><ns0:priority>1.0</ns0:priority></ns0:url>
+  <ns0:url><ns0:loc>https://hmedisolution.com/company.html</ns0:loc><ns0:lastmod>2026-11-01</ns0:lastmod><ns0:changefreq>monthly</ns0:changefreq><ns0:priority>0.7</ns0:priority></ns0:url>
+  <ns0:url><ns0:loc>https://hmedisolution.com/marketing.html</ns0:loc><ns0:lastmod>2026-11-01</ns0:lastmod><ns0:changefreq>weekly</ns0:changefreq><ns0:priority>0.9</ns0:priority></ns0:url>
+  <ns0:url><ns0:loc>https://hmedisolution.com/consulting.html</ns0:loc><ns0:lastmod>2026-11-01</ns0:lastmod><ns0:changefreq>monthly</ns0:changefreq><ns0:priority>0.9</ns0:priority></ns0:url>
+  <ns0:url><ns0:loc>https://hmedisolution.com/portfolio.html</ns0:loc><ns0:lastmod>2026-11-01</ns0:lastmod><ns0:changefreq>monthly</ns0:changefreq><ns0:priority>0.7</ns0:priority></ns0:url>
+  <ns0:url><ns0:loc>https://hmedisolution.com/ai.html</ns0:loc><ns0:lastmod>2026-11-01</ns0:lastmod><ns0:changefreq>monthly</ns0:changefreq><ns0:priority>0.9</ns0:priority></ns0:url>
+  <ns0:url><ns0:loc>https://hmedisolution.com/%EC%B9%BC%EB%9F%BC/</ns0:loc><ns0:lastmod>2026-11-01</ns0:lastmod><ns0:changefreq>weekly</ns0:changefreq><ns0:priority>0.8</ns0:priority></ns0:url>
+  <ns0:url><ns0:loc>https://hmedisolution.com/contact.html</ns0:loc><ns0:lastmod>2026-11-01</ns0:lastmod><ns0:changefreq>monthly</ns0:changefreq><ns0:priority>0.8</ns0:priority></ns0:url>
+</ns0:urlset>
