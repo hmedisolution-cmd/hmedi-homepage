@@ -4,6 +4,12 @@
 name: 인사이트 정적 페이지 생성
 
 on:
+  push:
+    branches: [claude/dreamy-cray-pp7z4h]
+    paths:
+      - 'build/**'
+      - 'assets/js/insights.js'
+      - '.github/workflows/posts.yml'
   schedule:
     - cron: "*/30 * * * *"
   workflow_dispatch:
@@ -29,10 +35,9 @@ jobs:
           python-version: "3.12"
 
       - name: 공개 글 → 정적 페이지
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}   # 비워두면 assets/js/config.js 의 공개 값 사용
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}   # publishable(anon) 키만. service_role 금지
-        run: python3 build/posts.py
+        run: |
+          python3 build/posts.py --force
+          python3 build/migrate_column_routes.py
 
       - name: 변경 사항 커밋 · 푸시
         id: commit
@@ -56,3 +61,4 @@ jobs:
         run: |
           curl -sS -X POST -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${{ github.repository }}/pages/builds" -o /dev/null -w "pages build: %{http_code}\n"
+

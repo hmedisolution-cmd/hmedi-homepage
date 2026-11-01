@@ -37,8 +37,8 @@
 
   /* 정적 글 페이지 색인 (build/posts.py 가 생성): 있으면 insights/<slug>.html 로, 아직 생성 전이면 post.html?slug= 로 */
   let STATIC = null;
-  const staticIndex = async () => { if (STATIC) return STATIC; try { const r = await fetch("insights/index.json", { cache: "no-cache" }); const j = r.ok ? await r.json() : null; STATIC = { set: new Set(((j && j.posts) || []).map((p) => p.slug)), posts: (j && j.posts) || [] }; } catch (e) { STATIC = { set: new Set(), posts: [] }; } return STATIC; };
-  const href = (p) => (STATIC && STATIC.set.has(p.slug)) ? `insights/${encodeURIComponent(p.slug)}.html` : `post.html?slug=${encodeURIComponent(p.slug)}`;
+  const staticIndex = async () => { if (STATIC) return STATIC; try { const r = await fetch("/insights/index.json", { cache: "no-cache" }); const j = r.ok ? await r.json() : null; STATIC = { set: new Set(((j && j.posts) || []).map((p) => p.slug)), posts: (j && j.posts) || [] }; } catch (e) { STATIC = { set: new Set(), posts: [] }; } return STATIC; };
+  const href = (p) => (STATIC && STATIC.set.has(p.slug)) ? `/%EC%B9%BC%EB%9F%BC/${encodeURIComponent(p.slug)}/` : `/post.html?slug=${encodeURIComponent(p.slug)}`;
   const card = (p) => `<a class="ins-card" href="${href(p)}">
       <div class="ins-thumb" ${p.cover_url ? `style="background-image:url('${esc(p.cover_url)}')"` : ""}>${p.cover_url ? "" : `<span>${esc((tagsOf(p)[0] || "Insight"))}</span>`}</div>
       <div class="ins-body"><div class="ins-tagline">${tagsOf(p).slice(0, 2).map((t) => `<span>${esc(t)}</span>`).join("")}</div><h3>${esc(p.title)}</h3><p>${esc(p.excerpt || "")}</p><div class="ins-meta"><span>${fmtDate(p.published_at || p.created_at)}</span>${p.author ? `<span>${esc(p.author)}</span>` : ""}</div></div></a>`;
@@ -67,14 +67,14 @@
     const slug = new URLSearchParams(location.search).get("slug");
     try {
       await S.ready(); const p = slug ? await S.getPost(slug) : null;
-      if (p && p.status === "published") { const idx = await staticIndex(); if (idx.set.has(p.slug)) { location.replace(`insights/${encodeURIComponent(p.slug)}.html`); return; } }
+      if (p && p.status === "published") { const idx = await staticIndex(); if (idx.set.has(p.slug)) { location.replace(`/%EC%B9%BC%EB%9F%BC/${encodeURIComponent(p.slug)}/`); return; } }
       if (!p || (p.status !== "published" && !sessionStorage.getItem("hmedi_admin_session") && !localStorage.getItem("hmedi_is_admin"))) { $("#postTitle").textContent = "글을 찾을 수 없습니다"; $("#postBody").innerHTML = '<p>삭제되었거나 아직 공개되지 않은 글입니다.</p>'; return; }
       document.title = `${p.title} | 에이치메디솔루션 인사이트`;
       const setMeta = (sel, v) => { const m = document.querySelector(sel); if (m && v) m.setAttribute("content", v); };
       setMeta('meta[name="description"]', p.excerpt || ""); setMeta('meta[property="og:title"]', p.title); setMeta('meta[property="og:description"]', p.excerpt || ""); if (p.cover_url) { setMeta('meta[property="og:image"]', p.cover_url); setMeta('meta[name="twitter:image"]', p.cover_url); }
       const canon = document.querySelector('link[rel="canonical"]'); if (canon) canon.setAttribute("href", location.origin + location.pathname + "?slug=" + encodeURIComponent(p.slug));
       $("#postTitle").textContent = p.title;
-      $("#postTags").innerHTML = tagsOf(p).map((t) => `<a href="insights.html">${esc(t)}</a>`).join("");
+      $("#postTags").innerHTML = tagsOf(p).map((t) => `<a href="/%EC%B9%BC%EB%9F%BC/">${esc(t)}</a>`).join("");
       $("#postMeta").innerHTML = `<span>${fmtDate(p.published_at || p.created_at)}</span><span>${esc(p.author || "에이치메디솔루션")}</span><span>${readMin(p.content)}분 읽기</span>`;
       if (p.cover_url) { const f = $("#postCover"); f.classList.remove("hidden"); f.querySelector("img").src = p.cover_url; f.querySelector("img").alt = p.title; }
       $("#postBody").innerHTML = md(p.content);
@@ -86,3 +86,4 @@
   }
   list(); post();
 })();
+

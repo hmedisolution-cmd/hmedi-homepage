@@ -31,23 +31,25 @@ def config_from_js():
 def fetch_posts():
     if "--from" in ARGS:
         return json.load(open(ARGS[ARGS.index("--from") + 1], encoding="utf-8"))
-    url, key = os.environ.get("SUPABASE_URL") or "", os.environ.get("SUPABASE_KEY") or ""
-    if not url or not key:
-        u, k = config_from_js(); url, key = url or u, key or k
-    if not url or not key:
-        print("Supabase 설정이 없습니다 (SUPABASE_URL / SUPABASE_KEY 또는 assets/js/config.js)."); sys.exit(1)
-    q = urllib.parse.urlencode({"select": "*", "status": "eq.published", "order": "published_at.desc.nullslast,created_at.desc", "limit": "500"})
+    # HMEDI uses the confirmed public contentlab config only; hidden Actions overrides are ignored.
+    url, key = config_from_js()
+    if url.rstrip('/') != 'https://rcrpisjwmiorhocgxjcw.supabase.co' or not key:
+        print("::error::Confirmed contentlab public read configuration is missing or mismatched."); sys.exit(1)
+    q = urllib.parse.urlencode({"select": "*", "status": "eq.published", "order": "published_at.desc.nullslast,created_at.desc", "limit": "501"})
     req = urllib.request.Request("%s/rest/v1/posts?%s" % (url.rstrip("/"), q), headers={"apikey": key, "Authorization": "Bearer " + key, "Accept": "application/json"})
+    class NoRedirect(urllib.request.HTTPRedirectHandler):
+        def redirect_request(self, *args, **kwargs): return None
     try:
-        with urllib.request.urlopen(req, timeout=30) as r:
-            return json.load(r)
-    except Exception as e:
-        body = ""
-        try: body = e.read().decode("utf-8", "ignore")[:300]
-        except Exception: pass
-        print("::warning::Supabase posts 조회 실패 — 정적 페이지를 바꾸지 않습니다. (%s) %s" % (e, body))
-        print("posts 테이블이 아직 없다면 admin/schema.sql 의 posts 블록을 Supabase SQL Editor 에서 실행하세요.")
-        sys.exit(0)
+        with urllib.request.build_opener(NoRedirect).open(req, timeout=30) as r:
+            raw = r.read(12000001)
+        if len(raw)>12000000: raise ValueError("feed limit")
+        data = json.loads(raw.decode("utf-8"))
+        if not isinstance(data,list) or len(data)>500: raise ValueError("feed shape")
+        return data
+    except Exception:
+        # No upstream body/URL/header/key in logs. Failed read MUST stop the subsequent route conversion.
+        print("::error::Published-post read failed; preserving prior static output.")
+        sys.exit(1)
 
 
 # ---------- 마크다운 → HTML (assets/js/insights.js 의 md() 와 동일 규칙) ----------
@@ -124,6 +126,14 @@ def article_ld(p, url, body_html):
     return json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False, separators=(",", ":"))
 
 def render_post(p, others):
+    if p.get("source") == "aeomaster" and p.get("aeo_doc"):
+        from column_builder import doc_body
+        doc = p["aeo_doc"]
+        body = '<article class="column-content">' + doc_body(doc) + '</article>'
+        result = B.render_page("post", esc(doc["title"]) + " | 에이치메디솔루션", esc(doc["summary"]), "", B.post_url(p), json.dumps({"@context":"https://schema.org","@type":"Article","headline":doc["title"],"description":doc["summary"],"url":B.post_url(p)},ensure_ascii=False).replace("<","\\u003c"), body, root_abs=True)
+        fingerprint = p.get('aeo_publication_hash') or ''
+        if not re.fullmatch(r'[a-f0-9]{64}', fingerprint): raise ValueError('missing publication proof')
+        return result.replace('</head>', '<meta name="aeo-publication-hash" content="' + fingerprint + '"><link rel="stylesheet" href="/칼럼/column.css"></head>')
     url = B.post_url(p); tags = B.tags_of(p)
     body_html = markdown(p.get("content") or "")
     cover = '<figure class="post-cover"><img src="%s" alt="%s"></figure>' % (esc(p["cover_url"]), esc(p["title"])) if p.get("cover_url") else ""
@@ -168,3 +178,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

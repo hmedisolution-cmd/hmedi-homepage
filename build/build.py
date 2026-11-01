@@ -90,7 +90,7 @@ HEADER = """
       <a href="marketing.html" data-nav="marketing">온라인 마케팅</a>
       <a href="consulting.html" data-nav="consulting">개원 컨설팅</a>
       <a href="portfolio.html" data-nav="portfolio">성공사례</a>
-      <a href="insights.html" data-nav="insights">인사이트</a>
+      <a href="/칼럼/" data-nav="insights">인사이트</a>
     </nav>
     <div class="header-right">
       <span class="header-tel">Tel. 010-8263-0982</span>
@@ -108,7 +108,7 @@ HEADER = """
       <a href="marketing.html" data-nav="marketing"><small>04</small>온라인 마케팅</a>
       <a href="consulting.html" data-nav="consulting"><small>05</small>개원 컨설팅 · MSO</a>
       <a href="portfolio.html" data-nav="portfolio"><small>06</small>성공사례 · 포트폴리오</a>
-      <a href="insights.html" data-nav="insights"><small>07</small>인사이트</a>
+      <a href="/칼럼/" data-nav="insights"><small>07</small>인사이트</a>
       <a href="contact.html" data-nav="contact"><small>08</small>문의하기</a>
     </nav>
     <aside class="menu-aside">
@@ -139,7 +139,7 @@ FOOTER = """
           <li><a href="marketing.html">온라인 마케팅</a></li>
           <li><a href="consulting.html">개원 컨설팅 · MSO</a></li>
           <li><a href="portfolio.html">성공사례 · 포트폴리오</a></li>
-          <li><a href="insights.html">인사이트</a></li>
+          <li><a href="/칼럼/">인사이트</a></li>
           <li><a href="contact.html">문의하기</a></li>
         </ul>
       </div>
@@ -366,7 +366,8 @@ def post_card(p, root_abs=False):
 
 def inject_posts(body, posts):
     """insights.html: 공개 글 카드 · 태그 버튼을 미리 채워 JS 없이도(검색엔진 · AI 크롤러) 목록이 보이게."""
-    if not posts: return body
+    if not posts:
+        return body.replace('<div class="ins-tags" id="insTags"></div>', '<div class="ins-tags" id="insTags"><button type="button" class="is-active" data-t="">전체 0</button></div>').replace('불러오는 중…', '아직 등록된 글이 없습니다.')
     tags = {}
     for p in posts:
         for t in tags_of(p): tags[t] = tags.get(t, 0) + 1
@@ -493,3 +494,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
