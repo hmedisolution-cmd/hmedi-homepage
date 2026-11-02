@@ -135,7 +135,7 @@
       $("#postTags").innerHTML = tagsOf(p).map((t) => `<a href="/%EC%B9%BC%EB%9F%BC/">${esc(t)}</a>`).join("");
       $("#postMeta").innerHTML = `${postMetadata(p)}<span>${readMin(contentText)}분 읽기</span>`;
       if (cover) { const f = $("#postCover"); f.classList.remove("hidden"); f.querySelector("img").src = cover; f.querySelector("img").alt = structured ? structured.coverAlt : p.title; }
-      if (structured) { document.body.classList.add("aeo-reading"); const bodyNode = $("#postBody"); bodyNode.classList.add("column-content"); if (!document.querySelector('link[data-aeo-column-style]')) { const style = document.createElement("link"); style.rel = "stylesheet"; style.href = "/%EC%B9%BC%EB%9F%BC/column.css"; style.setAttribute("data-aeo-column-style", "true"); document.head.appendChild(style); } }
+      if (structured) { document.body.classList.add("aeo-reading"); const bodyNode = $("#postBody"); bodyNode.classList.add("column-content"); if (!document.querySelector('link[data-aeo-column-style]')) { const style = document.createElement("link"); style.rel = "stylesheet"; style.href = "/%EC%B9%BC%EB%9F%BC/column.css?v=reading-layout-20261102"; style.setAttribute("data-aeo-column-style", "true"); document.head.appendChild(style); } }
       $("#postBody").innerHTML = structured ? structured.body : md(p.content);
       const ld = document.createElement("script"); ld.type = "application/ld+json";
       ld.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "Article", headline: p.title, description: excerpt, image: cover || undefined, ...postDates(p), author: { "@type": "Organization", name: p.author || "에이치메디솔루션" }, publisher: { "@type": "Organization", name: "에이치메디솔루션" }, mainEntityOfPage: location.href });

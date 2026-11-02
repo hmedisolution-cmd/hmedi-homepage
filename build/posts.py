@@ -133,7 +133,7 @@ def render_post(p, others):
         result = B.render_page("post", esc(doc["title"]) + " | 에이치메디솔루션", esc(doc["summary"]), "", B.post_url(p), json.dumps({"@context":"https://schema.org","@type":"Article","headline":doc["title"],"description":doc["summary"],"url":B.post_url(p),"author":{"@type":"Organization","name":p.get("author") or B.ORG["name"]},**B.post_dates(p)},ensure_ascii=False).replace("<","\\u003c"), body, root_abs=True)
         fingerprint = p.get('aeo_publication_hash') or ''
         if not re.fullmatch(r'[a-f0-9]{64}', fingerprint): raise ValueError('missing publication proof')
-        return result.replace('<body data-page="post">', '<body data-page="post" class="aeo-reading">').replace('</head>', '<meta name="aeo-publication-hash" content="' + fingerprint + '"><link rel="stylesheet" href="/칼럼/column.css"></head>')
+        return result.replace('<body data-page="post">', '<body data-page="post" class="aeo-reading">').replace('</head>', '<meta name="aeo-publication-hash" content="' + fingerprint + '"><link rel="stylesheet" href="/칼럼/column.css?v=reading-layout-20261102"></head>')
     url = B.post_url(p); tags = B.tags_of(p)
     body_html = markdown(p.get("content") or "")
     cover = '<figure class="post-cover"><img src="%s" alt="%s"></figure>' % (esc(p["cover_url"]), esc(p["title"])) if p.get("cover_url") else ""

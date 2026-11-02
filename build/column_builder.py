@@ -153,7 +153,7 @@ def page(parts,title,description,canonical,body,preview=True,article=False):
     graph={'@context':'https://schema.org','@type':'Article' if article else 'CollectionPage','headline':title,'description':description,'url':canonical,'publisher':{'@id':ORIGIN+'/#org'}}
     js=json.dumps(graph,ensure_ascii=False).replace('<','\\u003c')
     head=parts['HEAD'].format(title=E(title),desc=E(description),keywords='',robots='noindex, nofollow' if preview else 'index, follow',canonical=E(canonical),og_type='article' if article else 'website',og_title=E(title),og_image=ORIGIN+'/assets/img/og.jpg',verify='',jsonld=js,page='column',ver='column-v1')
-    head=head.replace('</head>','<link rel="stylesheet" href="/column/column.css">\n</head>')
+    head=head.replace('</head>','<link rel="stylesheet" href="/칼럼/column.css?v=reading-layout-20261102">\n</head>')
     notice='<p class="column-preview-note">비공개 템플릿 검토용 · 실제 게시글이 아닙니다</p>' if preview else ''
     return rooted(head+parts['HEADER']+'<main id="top" class="column-main"><div class="wrap"><article class="column-content">'+notice+body+'</article></div></main>'+parts['FOOTER'].replace('{ver}','column-v1'))
 
