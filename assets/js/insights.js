@@ -65,13 +65,15 @@
     const pendingSources=[];
     try {
       const d = p.aeo_doc; if (!d || typeof d !== 'object' || Array.isArray(d) || JSON.stringify(d).length > 524288) throw Error('INVALID_DOCUMENT');
-      const title = txt(d.title, 200, true), summary = rich(d.summary, 1000, true);
+      const title = txt(d.title, 200, true), summary = txt(d.summary, 1000, true);
       const sections = arr(d.sections, 24); if (!sections.length) throw Error('INVALID_DOCUMENT');
       const images = arr(d.images || [], 2).map(i => ({url:url(i.url,true),alt:txt(i.alt || '',500),caption:txt(i.caption || '',1000)}));
       const image = i => `<figure><img src="${escape(i.url)}" alt="${i.alt}" loading="lazy" width="1536" height="1024"><figcaption>${i.caption}</figcaption></figure>`;
       const links = (items, cls) => { const all = arr(items || [],30); return all.length ? `<ul class="${cls}">${all.map(x => `<li><a href="${escape(url(x.url))}" rel="noopener noreferrer">${txt(x.label,200,true)}</a></li>`).join('')}</ul>` : ''; };
-      let body = (images[0]?.caption ? `<p class="column-image-caption">${images[0].caption}</p>` : '') + `<section class="column-summary"><h2>칼럼 요약</h2><p>${summary}</p></section>`;
-      body += `<nav class="column-toc" aria-label="목차"><h2>목차</h2><ol>${sections.map((s,i)=>`<li><a href="#section-${i+1}">${txt(s.heading,200,true)}</a></li>`).join('')}</ol></nav>`;
+      const summaryItems=arr(d.summaryItems || [],3).map(item=>{if(!item||typeof item!=='object'||Array.isArray(item)||Object.keys(item).some(k=>!['label','text'].includes(k)))throw Error('INVALID_SUMMARY_ITEM');return {label:txt(item.label,40,true),text:rich(item.text,240,true)}});
+      let body = (images[0]?.caption ? `<p class="column-image-caption">${images[0].caption}</p>` : '') + `<section class="column-summary"><h2>칼럼 요약</h2>${summaryItems.length?`<ol class="column-summary-items">${summaryItems.map((item,i)=>`<li><span class="summary-number" aria-hidden="true">${String(i+1).padStart(2,'0')}</span><div><strong>${item.label}</strong><p>${item.text}</p></div></li>`).join('')}</ol>`:`<p>${rich(d.summary,1000,true)}</p>`}</section>`;
+      const major=sections.map((s,i)=>({s,i})).filter(({s})=>(s.level ?? 2)===2);
+      body += `<details class="column-toc"><summary>목차 <span>${major.length}개 주요 항목</span></summary><nav aria-label="목차"><ol>${major.map(({s,i})=>`<li><a href="#section-${i+1}">${txt(s.heading,200,true)}</a></li>`).join('')}</ol></nav></details>`;
       body += sections.map((s,i) => {
         const level = s.level === undefined ? 2 : s.level; if (level !== 2 && level !== 3) throw Error('INVALID_HEADING');
         let html = `<section id="section-${i+1}"><h${level}>${txt(s.heading,200,true)}</h${level}>`;
@@ -82,9 +84,9 @@
         pendingSources.push(...arr(s.sources || [],30));return html + '</section>';
       }).join('');
       if (images[1]) body += image(images[1]);
-      const related = links(d.relatedLinks,'column-related-links'); if (related) body += `<aside class="column-related"><h2>관련 링크</h2>${related}</aside>`;
+      const related = links(d.relatedLinks,'column-related-links'); const relatedHTML=related? `<aside class="column-related"><h2>관련 링크</h2>${related}</aside>`:'';
       for(const x of pendingSources){txt(x.label,200,true);citations.add(url(x.url),x.label,true)}
-      body+=citations.render();
+      body+=citations.render()+relatedHTML;
       return {body,text:textParts.join(' '),title:d.title.trim(),summary:d.summary.trim(),cover:images[0]?.url || '',coverAlt:images[0] ? String(d.images[0].alt || '') : '',coverCaption:images[0] ? String(d.images[0].caption || '') : '',valid:true};
     } catch (_) { return {body:'<p>구조화된 본문을 표시할 수 없습니다. 잠시 후 다시 확인해 주세요.</p>',text:'',summary:'',cover:'',coverAlt:'',valid:false}; }
   };
@@ -133,7 +135,7 @@
       $("#postTags").innerHTML = tagsOf(p).map((t) => `<a href="/%EC%B9%BC%EB%9F%BC/">${esc(t)}</a>`).join("");
       $("#postMeta").innerHTML = `${postMetadata(p)}<span>${readMin(contentText)}분 읽기</span>`;
       if (cover) { const f = $("#postCover"); f.classList.remove("hidden"); f.querySelector("img").src = cover; f.querySelector("img").alt = structured ? structured.coverAlt : p.title; }
-      if (structured) { const bodyNode = $("#postBody"); bodyNode.classList.add("column-content"); if (!document.querySelector('link[data-aeo-column-style]')) { const style = document.createElement("link"); style.rel = "stylesheet"; style.href = "/%EC%B9%BC%EB%9F%BC/column.css"; style.setAttribute("data-aeo-column-style", "true"); document.head.appendChild(style); } }
+      if (structured) { document.body.classList.add("aeo-reading"); const bodyNode = $("#postBody"); bodyNode.classList.add("column-content"); if (!document.querySelector('link[data-aeo-column-style]')) { const style = document.createElement("link"); style.rel = "stylesheet"; style.href = "/%EC%B9%BC%EB%9F%BC/column.css"; style.setAttribute("data-aeo-column-style", "true"); document.head.appendChild(style); } }
       $("#postBody").innerHTML = structured ? structured.body : md(p.content);
       const ld = document.createElement("script"); ld.type = "application/ld+json";
       ld.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "Article", headline: p.title, description: excerpt, image: cover || undefined, ...postDates(p), author: { "@type": "Organization", name: p.author || "에이치메디솔루션" }, publisher: { "@type": "Organization", name: "에이치메디솔루션" }, mainEntityOfPage: location.href });

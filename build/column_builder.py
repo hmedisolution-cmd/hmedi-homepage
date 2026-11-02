@@ -106,9 +106,19 @@ def doc_body(doc):
     images=doc.get('images',[])
     if len(images)>2:raise ValueError('too many images')
     def image(i):return '<figure><img src="'+E(url(i['url'],True))+'" alt="'+E(text(i.get('alt',''),500))+'" width="1440" height="640"><figcaption>'+E(text(i.get('caption',''),1000))+'</figcaption></figure>'
-    body=('<div class="column-hero">'+image(images[0])+'</div>') if images else ''
-    body+='<h1>'+E(title)+'</h1><section class="column-summary"><h2>칼럼 요약</h2><p>'+citations.inline(summary)+'</p></section>'
-    body+='<nav class="column-toc" aria-label="목차"><h2>목차</h2><ol>'+''.join('<li><a href="#section-'+str(i+1)+'">'+E(text(s['heading'],200,True))+'</a></li>' for i,s in enumerate(sections))+'</ol></nav>'
+    body='<h1>'+E(title)+'</h1>'
+    if images:body+='<div class="column-hero">'+image(images[0])+'</div>'
+    summary_items=doc.get('summaryItems',[])
+    if not isinstance(summary_items,list) or len(summary_items)>3:raise ValueError('summary items limit')
+    if summary_items:
+        rows=[]
+        for i,item in enumerate(summary_items):
+            if not isinstance(item,dict) or set(item)-{'label','text'}:raise ValueError('invalid summary item')
+            rows.append('<li><span class="summary-number" aria-hidden="true">'+str(i+1).zfill(2)+'</span><div><strong>'+E(text(item.get('label'),40,True))+'</strong><p>'+citations.inline(text(item.get('text'),240,True))+'</p></div></li>')
+        body+='<section class="column-summary"><h2>칼럼 요약</h2><ol class="column-summary-items">'+''.join(rows)+'</ol></section>'
+    else:body+='<section class="column-summary"><h2>칼럼 요약</h2><p>'+citations.inline(summary)+'</p></section>'
+    major=[(i,s) for i,s in enumerate(sections) if s.get('level',2)==2]
+    body+='<details class="column-toc"><summary>목차 <span>'+str(len(major))+'개 주요 항목</span></summary><nav aria-label="목차"><ol>'+''.join('<li><a href="#section-'+str(i+1)+'">'+E(text(s['heading'],200,True))+'</a></li>' for i,s in major)+'</ol></nav></details>'
     for i,s in enumerate(sections):
         level=s.get('level',2)
         if level not in [2,3]:raise ValueError('invalid heading')
@@ -132,9 +142,10 @@ def doc_body(doc):
     if len(images)>1:body+=image(images[1])
     related=doc.get('relatedLinks',[])
     if not isinstance(related,list) or len(related)>30:raise ValueError('related links limit')
-    if related:body+='<aside class="column-related"><h2>관련 링크</h2><ul>'+''.join('<li><a href="'+E(url(x['url']))+'" rel="noopener noreferrer">'+E(text(x['label'],200,True))+'</a></li>' for x in related)+'</ul></aside>'
+    related_html=''
+    if related:related_html='<aside class="column-related"><h2>관련 링크</h2><ul>'+''.join('<li><a href="'+E(url(x['url']))+'" rel="noopener noreferrer">'+E(text(x['label'],200,True))+'</a></li>' for x in related)+'</ul></aside>'
     for source in pending_sources:citations.add(url(source['url']),text(source['label'],200,True),True)
-    return body+citations.render()
+    return body+citations.render()+related_html
 
 def rooted(s):return re.sub(r'(href|src)="(?!https?:|//|#|mailto:|tel:|data:|javascript:|/)',r'\1="/',s)
 
