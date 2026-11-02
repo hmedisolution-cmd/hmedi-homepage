@@ -4,7 +4,10 @@
   const S = window.HmediStore; if (!S) { document.addEventListener("DOMContentLoaded", init, { once: true }); return; }
   const $ = (q, el) => (el || document).querySelector(q);
   const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const fmtDate = (d) => { if (!d) return ""; const t = new Date(d); return `${t.getFullYear()}.${String(t.getMonth() + 1).padStart(2, "0")}.${String(t.getDate()).padStart(2, "0")}`; };
+  const postISO = value => { if(typeof value!=='string'||!/(Z|[+-]\d{2}:\d{2})$/.test(value))return null;const t=new Date(value);if(!Number.isFinite(t.getTime()))return null;return new Date(t.getTime()+9*3600000).toISOString().slice(0,19)+'+09:00'; };
+  const fmtDate = value => { const iso=postISO(value);return iso?iso.slice(0,10).replaceAll('-','.')+' '+iso.slice(11,16)+' KST':'날짜 미확인'; };
+  const postDates = p => {const pub=postISO(p.published_at),mod=postISO(p.content_modified_at);return {...(pub?{datePublished:pub}:{}),...(pub&&mod&&mod>pub?{dateModified:mod}:{})};};
+  const postMetadata = p => {const d=postDates(p);return `<span>${esc(p.author||'에이치메디솔루션')}</span>${d.datePublished?`<time datetime="${d.datePublished}">발행 ${fmtDate(d.datePublished)}</time>`:'<span>날짜 미확인</span>'}${d.dateModified?`<time datetime="${d.dateModified}">수정 ${fmtDate(d.dateModified)}</time>`:''}`;};
   const tagsOf = (p) => Array.isArray(p.tags) ? p.tags : String(p.tags || "").split(",").map((x) => x.trim()).filter(Boolean);
   const readMin = (t) => Math.max(1, Math.round(String(t || "").replace(/<[^>]+>/g, "").length / 500));
 
@@ -93,7 +96,7 @@
   const href = (p) => (STATIC && STATIC.set.has(p.slug)) ? `/%EC%B9%BC%EB%9F%BC/${encodeURIComponent(p.slug)}/` : `/post.html?slug=${encodeURIComponent(p.slug)}`;
   const card = (p) => { const structured=structuredPost(p);if(structured)p={...p,cover_url:structured.cover,excerpt:structured.summary};return `<a class="ins-card" href="${href(p)}">
       <div class="ins-thumb" ${p.cover_url ? `style="background-image:url('${esc(p.cover_url)}')"` : ""}>${p.cover_url ? "" : `<span>${esc((tagsOf(p)[0] || "Insight"))}</span>`}</div>
-      <div class="ins-body"><div class="ins-tagline">${tagsOf(p).slice(0, 2).map((t) => `<span>${esc(t)}</span>`).join("")}</div><h3>${esc(p.title)}</h3><p>${esc(p.excerpt || "")}</p><div class="ins-meta"><span>${fmtDate(p.published_at || p.created_at)}</span>${p.author ? `<span>${esc(p.author)}</span>` : ""}</div></div></a>`; };
+      <div class="ins-body"><div class="ins-tagline">${tagsOf(p).slice(0, 2).map((t) => `<span>${esc(t)}</span>`).join("")}</div><h3>${esc(p.title)}</h3><p>${esc(p.excerpt || "")}</p><div class="ins-meta">${postMetadata(p)}</div></div></a>`; };
 
   async function list() {
     const grid = $("#insGrid"); if (!grid) return;
@@ -128,18 +131,19 @@
       const canon = document.querySelector('link[rel="canonical"]'); if (canon) canon.setAttribute("href", location.origin + location.pathname + "?slug=" + encodeURIComponent(p.slug));
       $("#postTitle").textContent = p.title;
       $("#postTags").innerHTML = tagsOf(p).map((t) => `<a href="/%EC%B9%BC%EB%9F%BC/">${esc(t)}</a>`).join("");
-      $("#postMeta").innerHTML = `<span>${fmtDate(p.published_at || p.created_at)}</span><span>${esc(p.author || "에이치메디솔루션")}</span><span>${readMin(contentText)}분 읽기</span>`;
+      $("#postMeta").innerHTML = `${postMetadata(p)}<span>${readMin(contentText)}분 읽기</span>`;
       if (cover) { const f = $("#postCover"); f.classList.remove("hidden"); f.querySelector("img").src = cover; f.querySelector("img").alt = structured ? structured.coverAlt : p.title; }
       if (structured) { const bodyNode = $("#postBody"); bodyNode.classList.add("column-content"); if (!document.querySelector('link[data-aeo-column-style]')) { const style = document.createElement("link"); style.rel = "stylesheet"; style.href = "/%EC%B9%BC%EB%9F%BC/column.css"; style.setAttribute("data-aeo-column-style", "true"); document.head.appendChild(style); } }
       $("#postBody").innerHTML = structured ? structured.body : md(p.content);
       const ld = document.createElement("script"); ld.type = "application/ld+json";
-      ld.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "Article", headline: p.title, description: excerpt, image: cover || undefined, datePublished: p.published_at || p.created_at, dateModified: p.updated_at || p.published_at || p.created_at, author: { "@type": "Organization", name: p.author || "에이치메디솔루션" }, publisher: { "@type": "Organization", name: "에이치메디솔루션" }, mainEntityOfPage: location.href });
+      ld.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "Article", headline: p.title, description: excerpt, image: cover || undefined, ...postDates(p), author: { "@type": "Organization", name: p.author || "에이치메디솔루션" }, publisher: { "@type": "Organization", name: "에이치메디솔루션" }, mainEntityOfPage: location.href });
       document.head.appendChild(ld);
       try { await staticIndex(); const all = await S.listPosts(); const rel = all.filter((x) => x.slug !== p.slug).slice(0, 3); if (rel.length) $("#postRelated").innerHTML = `<h3>다른 인사이트</h3><div class="ins-grid">${rel.map(card).join("")}</div>`; } catch (e) {}
     } catch (e) { $("#postTitle").textContent = "글을 불러오지 못했습니다"; }
   }
   list(); post();
 })();
+
 
 
 

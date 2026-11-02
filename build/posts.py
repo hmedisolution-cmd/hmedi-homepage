@@ -111,13 +111,13 @@ def article_ld(p, url, body_html):
     site = B.SITE_URL
     text = B.strip_tags(body_html)
     art = {"@type": ["Article", "BlogPosting"], "@id": url + "#article", "headline": p["title"], "description": p.get("excerpt") or "", "url": url, "mainEntityOfPage": {"@id": url + "#webpage"},
-           "datePublished": p.get("published_at") or p.get("created_at"), "dateModified": p.get("updated_at") or p.get("published_at") or p.get("created_at"),
+           **B.post_dates(p),
            "author": {"@type": "Organization", "name": p.get("author") or B.ORG["name"], "url": site + "/"}, "publisher": {"@id": site + "/#org"},
            "inLanguage": "ko-KR", "keywords": ", ".join(B.tags_of(p)), "wordCount": len(text), "articleSection": (B.tags_of(p) or ["인사이트"])[0], "isAccessibleForFree": True}
     if p.get("cover_url"): art["image"] = p["cover_url"]
     graph = [B.org_ld(),
              {"@type": "WebSite", "@id": site + "/#website", "url": site + "/", "name": B.ORG["name"], "inLanguage": "ko-KR", "publisher": {"@id": site + "/#org"}},
-             {"@type": "WebPage", "@id": url + "#webpage", "url": url, "name": p["title"], "description": p.get("excerpt") or "", "inLanguage": "ko-KR", "isPartOf": {"@id": site + "/#website"}, "breadcrumb": {"@id": url + "#breadcrumb"}, "dateModified": art["dateModified"]},
+             {"@type": "WebPage", "@id": url + "#webpage", "url": url, "name": p["title"], "description": p.get("excerpt") or "", "inLanguage": "ko-KR", "isPartOf": {"@id": site + "/#website"}, "breadcrumb": {"@id": url + "#breadcrumb"}, **({"dateModified":art["dateModified"]} if "dateModified" in art else {})},
              {"@type": "BreadcrumbList", "@id": url + "#breadcrumb", "itemListElement": [
                  {"@type": "ListItem", "position": 1, "name": "홈", "item": site + "/"},
                  {"@type": "ListItem", "position": 2, "name": "인사이트", "item": site + "/insights.html"},
@@ -129,8 +129,8 @@ def render_post(p, others):
     if p.get("source") == "aeomaster" and p.get("aeo_doc"):
         from column_builder import doc_body
         doc = p["aeo_doc"]
-        body = '<div class="column-main"><div class="wrap"><article class="column-content">' + doc_body(doc) + '</article></div></div>'
-        result = B.render_page("post", esc(doc["title"]) + " | 에이치메디솔루션", esc(doc["summary"]), "", B.post_url(p), json.dumps({"@context":"https://schema.org","@type":"Article","headline":doc["title"],"description":doc["summary"],"url":B.post_url(p)},ensure_ascii=False).replace("<","\\u003c"), body, root_abs=True)
+        body = '<div class="column-main"><div class="wrap"><article class="column-content">' + doc_body(doc).replace('</h1>', '</h1><div class="post-meta">'+B.post_metadata(p)+'</div>', 1) + '</article></div></div>'
+        result = B.render_page("post", esc(doc["title"]) + " | 에이치메디솔루션", esc(doc["summary"]), "", B.post_url(p), json.dumps({"@context":"https://schema.org","@type":"Article","headline":doc["title"],"description":doc["summary"],"url":B.post_url(p),"author":{"@type":"Organization","name":p.get("author") or B.ORG["name"]},**B.post_dates(p)},ensure_ascii=False).replace("<","\\u003c"), body, root_abs=True)
         fingerprint = p.get('aeo_publication_hash') or ''
         if not re.fullmatch(r'[a-f0-9]{64}', fingerprint): raise ValueError('missing publication proof')
         return result.replace('</head>', '<meta name="aeo-publication-hash" content="' + fingerprint + '"><link rel="stylesheet" href="/칼럼/column.css"></head>')
@@ -141,12 +141,12 @@ def render_post(p, others):
     if others:
         related = '<div class="post-related"><h3>다른 인사이트</h3><div class="ins-grid">%s</div></div>' % "".join(B.post_card(x, root_abs=True) for x in others[:3])
     body = '''<article class="post" id="post" data-slug="%s">
-  <div class="post-hero"><div class="wrap-narrow"><div class="crumbs"><a href="/">Home</a><span>/</span><a href="/insights.html">Insight</a></div><div class="post-tags">%s</div><h1>%s</h1><div class="post-meta"><span>%s</span><span>%s</span><span>%d분 읽기</span></div></div></div>
+  <div class="post-hero"><div class="wrap-narrow"><div class="crumbs"><a href="/">Home</a><span>/</span><a href="/insights.html">Insight</a></div><div class="post-tags">%s</div><h1>%s</h1><div class="post-meta">%s<span>%d분 읽기</span></div></div></div>
   <div class="wrap-narrow">%s<div class="post-body">%s</div>
     <div class="post-foot"><a class="btn btn-line" href="/insights.html">목록으로 %s</a><a class="btn btn-accent js-inquiry" href="/contact.html">무료 상담 신청 %s</a></div>
     %s
   </div>
-</article>''' % (esc(p["slug"]), "".join('<a href="/insights.html">%s</a>' % esc(t) for t in tags), esc(p["title"]), B.fmt_date(p.get("published_at") or p.get("created_at")), esc(p.get("author") or B.ORG["name"]), read_min(p.get("content")), cover, body_html, B.ARROW, B.ARROW, related)
+</article>''' % (esc(p["slug"]), "".join('<a href="/insights.html">%s</a>' % esc(t) for t in tags), esc(p["title"]), B.post_metadata(p), read_min(p.get("content")), cover, body_html, B.ARROW, B.ARROW, related)
     desc = (p.get("excerpt") or B.strip_tags(body_html)[:150]).strip()
     keywords = ", ".join(tags + ["병원 마케팅 칼럼", "에이치메디솔루션 인사이트"])
     return B.render_page("post", "%s | 에이치메디솔루션 인사이트" % p["title"], desc, keywords, url, article_ld(p, url, body_html), body,
@@ -157,7 +157,7 @@ def main():
     posts = [p for p in fetch_posts() if p.get("slug") and p.get("title") and p.get("status", "published") == "published"]
     posts = [p for p in posts if re.match(r'^[a-z0-9가-힣-]+$', p["slug"])]  # 파일명으로 안전한 slug 만
     index = {"generated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-             "posts": [{k: p.get(k) for k in ("slug", "title", "excerpt", "cover_url", "tags", "author", "published_at", "updated_at", "created_at")} for p in posts]}
+             "posts": [{k: p.get(k) for k in ("slug", "title", "excerpt", "cover_url", "tags", "author", "published_at", "updated_at", "created_at", "content_modified_at")} for p in posts]}
     os.makedirs(INS_DIR, exist_ok=True)
     old = B.load_posts_index()
     existing = {f[:-5] for f in os.listdir(INS_DIR) if f.endswith(".html")}
@@ -178,4 +178,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 

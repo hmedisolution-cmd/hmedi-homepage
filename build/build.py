@@ -346,8 +346,33 @@ def load_posts_index():
 def post_url(p):
     return "%s/insights/%s.html" % (SITE_URL, p["slug"])
 
-def fmt_date(d):
-    return (d or "")[:10].replace("-", ".")
+def post_timestamp(value):
+    if not isinstance(value,str) or not re.search(r'(Z|[+-]\d{2}:\d{2})$',value): return None
+    try:
+        dt=datetime.datetime.fromisoformat(value.replace('Z','+00:00'))
+        if dt.tzinfo is None: return None
+        return dt.astimezone(datetime.timezone(datetime.timedelta(hours=9)))
+    except (ValueError,OverflowError): return None
+
+def fmt_date(value):
+    dt=post_timestamp(value)
+    return dt.strftime('%Y.%m.%d %H:%M')+' KST' if dt else '날짜 미확인'
+
+def post_dates(p):
+    pub=post_timestamp(p.get('published_at'))
+    # Raw updated_at is not content-change evidence in the current receiver.
+    mod=post_timestamp(p.get('content_modified_at'))
+    out={}
+    if pub: out['datePublished']=pub.isoformat(timespec='seconds')
+    if pub and mod and mod>pub: out['dateModified']=mod.isoformat(timespec='seconds')
+    return out
+
+def post_metadata(p):
+    dates=post_dates(p); e=htmlmod.escape
+    author=p.get('author') or ORG['name']
+    stamp='<time datetime="%s">발행 %s</time>' % (e(dates['datePublished'],quote=True),e(fmt_date(dates['datePublished']))) if dates.get('datePublished') else '<span>날짜 미확인</span>'
+    if dates.get('dateModified'): stamp+='<time datetime="%s">수정 %s</time>' % (e(dates['dateModified'],quote=True),e(fmt_date(dates['dateModified'])))
+    return '<span>'+e(author)+'</span>'+stamp
 
 def tags_of(p):
     t = p.get("tags") or []
@@ -360,7 +385,7 @@ def post_card(p, root_abs=False):
     tags = tags_of(p)
     cover = p.get("cover_url") or ""
     thumb = '<div class="ins-thumb" style="background-image:url(\'%s\')"></div>' % e(cover, quote=True) if cover else '<div class="ins-thumb"><span>%s</span></div>' % e(tags[0] if tags else "Insight")
-    meta = '<span>%s</span>' % fmt_date(p.get("published_at") or p.get("created_at")) + ('<span>%s</span>' % e(p["author"]) if p.get("author") else "")
+    meta = post_metadata(p)
     return ('<a class="ins-card" href="%s">%s<div class="ins-body"><div class="ins-tagline">%s</div><h3>%s</h3><p>%s</p><div class="ins-meta">%s</div></div></a>'
             % (href, thumb, "".join('<span>%s</span>' % e(t) for t in tags[:2]), e(p.get("title", "")), e(p.get("excerpt") or ""), meta))
 
@@ -494,4 +519,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
