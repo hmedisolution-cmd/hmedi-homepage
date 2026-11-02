@@ -1584,12 +1584,20 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 .slide-visual .aeo-cycle.hero { backdrop-filter: blur(14px); }
 @media (max-width: 960px) { .slide-visual .aeo-cycle.hero { backdrop-filter: none; background: rgba(14,22,48,.92); } }
 @media (max-width: 640px) {
-  .slide-visual .aeo-cycle.hero { padding: 14px 14px 12px; }
-  .slide-visual .aeo-cycle.hero ol { margin-top: 10px; gap: 6px; }
-  .slide-visual .aeo-cycle.hero li { padding: 8px 10px; grid-template-columns: 28px 1fr; gap: 10px; }
-  .slide-visual .aeo-cycle.hero li i { width: 28px; height: 28px; font-size: 10px; }
-  .slide-visual .aeo-cycle.hero li b { font-size: 13px; } .slide-visual .aeo-cycle.hero li span { font-size: 11px; }
+  /* 모바일 첫 슬라이드: 다른 슬라이드처럼 부제 숨김 · 사이클 카드는 2×2 로 압축해 다른 비주얼 카드와 높이를 맞춤 */
+  .hero-slider .slide-sub { display: none; }
+  .slide-visual .aeo-cycle.hero { padding: 14px 14px 12px; max-height: 100%; }
+  .slide-visual .aeo-cycle.hero ol { margin-top: 10px; gap: 8px; grid-template-columns: 1fr 1fr; }
+  .slide-visual .aeo-cycle.hero li { padding: 10px 10px 9px; grid-template-columns: 24px 1fr; gap: 3px 8px; align-items: center; }
+  .slide-visual .aeo-cycle.hero li > div { display: contents; }
+  .slide-visual .aeo-cycle.hero li i { width: 24px; height: 24px; font-size: 9.5px; }
+  .slide-visual .aeo-cycle.hero li b { font-size: 13px; }
+  .slide-visual .aeo-cycle.hero li span { grid-column: 1 / -1; font-size: 11px; margin-top: 0; }
   .slide-visual .aeo-cycle.hero .ac-ai { margin-top: 10px; padding-top: 10px; } .slide-visual .aeo-cycle.hero .ac-ai span { font-size: 11px; padding: 4px 9px; }
+}
+@media (max-width: 640px) and (max-height: 800px) {
+  .slide-visual .aeo-cycle.hero li span { display: none; }
+  .slide-visual .aeo-cycle.hero li { padding: 9px 10px; }
 }
 
 /* ---------- 인사이트 ---------- */
