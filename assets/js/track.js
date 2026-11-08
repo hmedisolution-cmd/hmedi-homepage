@@ -3,6 +3,14 @@
    - 개인정보 없이 페이지뷰 · 유입경로 · 기기 · 전환(전화/메일/상담 클릭)만 기록
    - 관리자 로그인 상태 · 자동화 브라우저 방문은 제외
    ========================================================================== */
+/* AI 매니저 「사이트 통계」 — 쿠키 없이 조회 한 줄만 보낸다 (관리자 · 자동화 브라우저 제외와 무관하게 늘 보낸다, 2026-11-08) */
+(function () {
+  try {
+    if (navigator.webdriver) return;
+    navigator.sendBeacon("https://hmedi-aimanager.vercel.app/api/hit", JSON.stringify({ s: "hmedi", p: location.pathname, t: document.title, r: document.referrer, m: innerWidth < 768 }));
+  } catch (e) {}
+})();
+
 (function () {
   "use strict";
   const S = window.HmediStore; if (!S) return;
