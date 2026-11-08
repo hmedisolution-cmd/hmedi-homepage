@@ -7,7 +7,7 @@
 (function () {
   try {
     if (navigator.webdriver) return;
-    navigator.sendBeacon("https://hmedi-aimanager.vercel.app/api/hit", JSON.stringify({ s: "hmedi", p: location.pathname, t: document.title, r: document.referrer, m: innerWidth < 768 }));
+    navigator.sendBeacon("https://hmedi-aimanager.vercel.app/api/hit", JSON.stringify({ s: "hmedi-home", p: location.pathname, t: document.title, r: document.referrer, m: innerWidth < 768 }));
   } catch (e) {}
 })();
 
