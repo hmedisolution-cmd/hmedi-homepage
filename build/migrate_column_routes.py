@@ -75,6 +75,8 @@ def migrate(root):
     # Existing root pages retain logo/menu text and body; only exact insights href/canonical paths change.
     for page in root.glob('*.html'):
         if page.name!='insights.html':staged[page]=rewrite(page.read_text())
+    # 기본 이름공간으로 다시 써야 <ns0:urlset> 꼴이 안 된다 (검색엔진이 못 읽는 일이 있다)
+    ET.register_namespace('','http://www.sitemaps.org/schemas/sitemap/0.9')
     sitemap=ET.parse(root/'sitemap.xml');ns='{http://www.sitemaps.org/schemas/sitemap/0.9}'
     for loc in sitemap.getroot().iter(ns+'loc'):
         for old,new in mapping.items():
