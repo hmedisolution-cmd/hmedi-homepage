@@ -419,7 +419,8 @@ def main():
         print("wrote", page + ".html", len(html))
 
     # ---------- robots.txt · sitemap.xml · llms.txt ----------
-    open(os.path.join(OUT, "robots.txt"), "w", encoding="utf-8").write("""# 에이치메디솔루션 - 검색엔진 · AI 크롤러 모두 허용 (관리자 페이지 제외)
+    # robots.txt 는 줄 앞 빈칸을 걷어 낸다 — 네이버 Yeti 는 들여쓴 줄을 규칙으로 못 읽는다
+    open(os.path.join(OUT, "robots.txt"), "w", encoding="utf-8").write(("""# 에이치메디솔루션 - 검색엔진 · AI 크롤러 모두 허용 (관리자 페이지 제외)
     User-agent: *
     Allow: /
     Disallow: /admin.html
@@ -460,7 +461,7 @@ def main():
     Allow: /
 
     Sitemap: %s/sitemap.xml
-    """ % SITE_URL)
+    """ % SITE_URL).replace("\n    ", "\n").rstrip() + "\n")
 
     prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3"}
     urls = "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%s</priority></url>\n" % (page_url(p), TODAY, "weekly" if p in ("index", "marketing", "insights") else "monthly", prio[p]) for p in PAGES if p != "post")
