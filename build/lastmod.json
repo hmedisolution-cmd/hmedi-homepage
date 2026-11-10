@@ -1,0 +1,42 @@
+{
+ "ai": {
+  "date": "2026-11-10",
+  "sig": "dec81f9e86cd356527caacdc834de9c453840d4a"
+ },
+ "company": {
+  "date": "2026-11-10",
+  "sig": "9de1671a8c397308bb3a1569843aa1895b5d3491"
+ },
+ "consulting": {
+  "date": "2026-11-10",
+  "sig": "057d1dde85ca0ea3328325ff6062ed52cbce15f4"
+ },
+ "contact": {
+  "date": "2026-11-10",
+  "sig": "37d453c5c79db84e15da0f5dccf40f9766492581"
+ },
+ "index": {
+  "date": "2026-11-10",
+  "sig": "5b15ebc2023b3a686834e95ec429757d49d875c6"
+ },
+ "insights": {
+  "date": "2026-11-10",
+  "sig": "80b474f56bdf23e728436d459b1761816c2dfba0"
+ },
+ "marketing": {
+  "date": "2026-11-10",
+  "sig": "f6d1d639a6e70db367c58a3297a8de96bfd42dcd"
+ },
+ "portfolio": {
+  "date": "2026-11-10",
+  "sig": "a7978ea52cc61133502b936f71335a6359c428a0"
+ },
+ "post": {
+  "date": "2026-11-10",
+  "sig": "5f2689796903463147f60f948ba651a3eebc4bcb"
+ },
+ "privacy": {
+  "date": "2026-11-10",
+  "sig": "c3f5cfe373f29b2dd22965c208afbfe6ee6002fc"
+ }
+}
