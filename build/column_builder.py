@@ -83,7 +83,8 @@ class Citations:
                     elif start!=i and citation_url(target):out.append(E('('))
                     out.append(self.marker(target,match[1]) if citation_url(target) else E(raw[i:end]));i=end;continue
             out.append(E(raw[i]));i+=1
-        return ''.join(out)
+        # **강조** -> <strong> (AI 매니저 미리보기 · 칼럼 사이트와 같은 규칙)
+        return re.sub(r'\*\*([^*\n]{1,120})\*\*',r'<strong>\1</strong>',''.join(out))
     def render(self):
         if not self.entries:return ''
         return '<aside class="column-references" aria-labelledby="references-title"><h2 id="references-title">참고자료</h2><ol>'+''.join('<li id="reference-'+str(i+1)+'"><span class="reference-number">['+str(i+1)+']</span> <a href="'+E(x['url'])+'" target="_blank" rel="noopener noreferrer">'+E(x['label'])+'</a><span class="reference-url">'+E(urlsplit(x['url']).hostname)+'</span></li>' for i,x in enumerate(self.entries))+'</ol></aside>'
