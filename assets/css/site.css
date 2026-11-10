@@ -587,8 +587,8 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 /* Roadmap */
 .roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .road { padding: 28px 26px 30px; border-radius: 20px; background: #fff; border: 1px solid var(--line); }
-.road h4 { font-size: 18px; font-weight: 800; letter-spacing: -.02em; display: flex; align-items: center; gap: 10px; }
-.road h4 i { font-family: var(--font-display); font-style: normal; font-size: 12px; width: 28px; height: 28px; border-radius: 8px; background: var(--ink); color: #fff; display: grid; place-items: center; }
+.road h4, .road h3 { font-size: 18px; font-weight: 800; letter-spacing: -.02em; display: flex; align-items: center; gap: 10px; }
+.road h4 i, .road h3 i { font-family: var(--font-display); font-style: normal; font-size: 12px; width: 28px; height: 28px; border-radius: 8px; background: var(--ink); color: #fff; display: grid; place-items: center; }
 .road ul { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 6px; }
 .road li { font-size: 13px; padding: 7px 12px; border-radius: 8px; background: var(--paper-2); color: var(--text); }
 .road .plus { margin-top: 16px; font-family: var(--font-display); font-size: 11px; letter-spacing: .18em; color: var(--sky); text-transform: uppercase; }
@@ -736,7 +736,7 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 .site-footer .statement { font-family: var(--font-display); font-size: clamp(32px, 5vw, 64px); font-weight: 700; letter-spacing: -.03em; line-height: 1.05; color: #fff; }
 .site-footer .statement .a { color: var(--sky); }
 .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 40px; margin-top: 60px; padding-top: 44px; border-top: 1px solid var(--line-dark); }
-.foot-grid h5 { font-family: var(--font-display); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.45); margin: 0 0 18px; font-weight: 600; }
+.foot-grid h5, .foot-grid .foot-h { font-family: var(--font-display); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.45); margin: 0 0 18px; font-weight: 600; }
 .foot-grid ul { display: grid; gap: 10px; }
 .foot-grid a { color: rgba(255,255,255,.8); font-size: 14.5px; transition: color .25s; }
 .foot-grid a:hover { color: #8fd0ff; }
@@ -1651,3 +1651,17 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 .post-related .ins-grid { grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 960px) { .ins-grid, .post-related .ins-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 640px) { .ins-grid, .post-related .ins-grid { grid-template-columns: 1fr; gap: 14px; } .ins-search { width: 100%; } .ins-search input { width: 100%; } .post-hero { padding: 130px 0 36px; } .post-body { font-size: 16px; padding-top: 28px; } .post-body h2 { font-size: 22px; } .post-body h3 { font-size: 18px; } }
+
+/* ---------- 근거 각주 · 개인정보 동의 · 처리방침 ---------- */
+.src-note { font-size: 12.5px !important; line-height: 1.6; color: var(--muted) !important; margin-top: 10px; word-break: keep-all; }
+.form .agree { margin: 6px 0 18px; padding: 14px 16px; border-radius: 12px; background: var(--paper-2); border: 1px solid var(--line); }
+.form .agree label { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; cursor: pointer; }
+.form .agree input { width: 18px; height: 18px; margin-top: 2px; flex: none; accent-color: var(--sky); }
+.form .agree a { color: var(--sky-deep); text-decoration: underline; margin-left: 4px; white-space: nowrap; }
+.form .agree p { margin: 8px 0 0 28px; font-size: 12.5px; color: var(--muted); line-height: 1.6; text-align: left; }
+.foot-bottom a { color: rgba(255,255,255,.7); text-decoration: underline; }
+.foot-bottom a:hover { color: #fff; }
+.policy table { width: 100%; border-collapse: collapse; margin: 6px 0 20px; font-size: 14.5px; }
+.policy th, .policy td { padding: 10px 12px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.policy th { background: var(--paper-2); font-weight: 700; white-space: nowrap; }
+@media (max-width: 640px) { .policy table { font-size: 13px; } .policy th, .policy td { padding: 8px 9px; } .policy th { white-space: normal; } }

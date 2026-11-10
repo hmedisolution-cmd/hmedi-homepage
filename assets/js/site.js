@@ -274,6 +274,7 @@
       e.preventDefault();
       const d = Object.fromEntries(new FormData(form).entries());
       if (!d.name || !d.phone) { showToast("성함과 연락처를 입력해 주세요."); return; }
+      const agree = form.querySelector('[name="agree"]'); if (agree && !agree.checked) { showToast("개인정보 수집 · 이용에 동의해 주세요."); agree.focus(); return; }
       const btn = form.querySelector('[type="submit"]'); if (btn) { btn.disabled = true; btn.style.opacity = ".7"; }
       const row = { type: d.type || "", name: d.name.trim(), phone: d.phone.trim(), hospital: (d.hospital || "").trim(), region: (d.region || "").trim(), program: d.program || "", situation: d.status || "", message: (d.message || "").trim(), page: location.pathname.replace(/^.*\//, "") };
       const notify = () => { const key = (window.HMEDI_CONFIG || {}).notifyKey; if (!key) return Promise.resolve();

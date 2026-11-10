@@ -80,7 +80,7 @@ HEAD = """<!DOCTYPE html>
 HEADER = """
 <header class="site-header" id="siteHeader">
   <div class="header-inner">
-    <a class="brand" href="index.html" aria-label="에이치메디솔루션 홈">
+    <a class="brand" href="/" aria-label="에이치메디솔루션 홈">
       <img class="logo-dark" src="assets/img/logo.png" alt="에이치메디솔루션 HMEDISOLUTION">
       <img class="logo-light" src="assets/img/logo-white.png" alt="에이치메디솔루션 HMEDISOLUTION">
     </a>
@@ -102,7 +102,7 @@ HEADER = """
 <div class="menu-overlay" aria-hidden="true">
   <div class="wrap menu-grid">
     <nav class="menu-links" aria-label="전체 메뉴">
-      <a href="index.html" data-nav="home"><small>01</small>메인</a>
+      <a href="/" data-nav="home"><small>01</small>메인</a>
       <a href="company.html" data-nav="company"><small>02</small>회사소개</a>
       <a href="ai.html" data-nav="ai"><small>03</small>AI 마케팅 · AEO</a>
       <a href="marketing.html" data-nav="marketing"><small>04</small>온라인 마케팅</a>
@@ -132,7 +132,7 @@ FOOTER = """
         <p>에이치메디솔루션 · 대표 고한별 · 정대호<br>사업자등록번호 209-37-36004<br>부천 본사 · 경기도 부천시 소향로 13번길 28-14 403-1호<br>부산 지사 · 부산진구 서면로 10 데시앙 2616호</p>
       </div>
       <div>
-        <h5>Menu</h5>
+        <p class="foot-h">Menu</p>
         <ul>
           <li><a href="company.html">회사소개</a></li>
           <li><a href="ai.html">AI 마케팅 · AEO</a></li>
@@ -144,7 +144,7 @@ FOOTER = """
         </ul>
       </div>
       <div>
-        <h5>Service</h5>
+        <p class="foot-h">Service</p>
         <ul>
           <li><a href="marketing.html#program-standard">마케팅 프로그램 Standard</a></li>
           <li><a href="marketing.html#program-ai">AI 실속 패키지</a></li>
@@ -154,7 +154,7 @@ FOOTER = """
         </ul>
       </div>
       <div class="foot-contact">
-        <h5>Contact</h5>
+        <p class="foot-h">Contact</p>
         <b>010-8263-0982</b><span>고한별 대표 · 수도권</span>
         <b>010-4435-4389</b><span>정대호 대표 · 부산 / 경남</span>
         <b style="font-size:16px">hmedi@hmedisolution.com</b>
@@ -162,7 +162,7 @@ FOOTER = """
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© <span id="year">2026</span> HMEDISOLUTION. All rights reserved.</span>
+      <span>© <span id="year">2026</span> HMEDISOLUTION. All rights reserved. · <a href="privacy.html">개인정보 처리방침</a></span>
       <span>Medical Marketing · Opening Consulting · MSO</span>
     </div>
   </div>
@@ -223,6 +223,10 @@ PAGES = {
               "네이버 플레이스 무료 진단과 개원 컨설팅 상담 신청. 수도권 010-8263-0982(고한별 대표), 부산·경남 010-4435-4389(정대호 대표). 병원 상황에 맞는 프로그램만 제안해 드립니다.",
               "병원 마케팅 상담, 플레이스 무료 진단, 개원 상담, 병원 마케팅 문의, 개원 컨설팅 문의, 에이치메디솔루션 연락처",
               "병원 마케팅 무료 진단 · 개원 컨설팅 상담 신청", "문의하기", None),
+  "privacy": ("개인정보 처리방침 | 에이치메디솔루션",
+              "에이치메디솔루션 홈페이지 상담 신청 과정에서 수집하는 개인정보 항목, 이용 목적, 보유 기간(3년), 처리 위탁, 이용자 권리와 개인정보 보호책임자 안내.",
+              "에이치메디솔루션 개인정보 처리방침",
+              "개인정보 처리방침", "개인정보 처리방침", None),
 }
 
 SENT_SPLIT = re.compile(r'(?<=[.!?。])\s+(?=\S)')
@@ -238,7 +242,7 @@ def wrap_sentences(html):
         return open_tag + " ".join(f'<span class="sn">{x}</span>' for x in parts) + close
     return re.sub(r'(<p(?:\s[^>]*)?>)(.*?)(</p>)', repl, html, flags=re.S)
 
-import json, html as htmlmod, subprocess, datetime
+import json, html as htmlmod, subprocess, datetime, hashlib
 
 def strip_tags(x):
     return re.sub(r"\s+", " ", htmlmod.unescape(re.sub(r"<[^>]+>", " ", x))).strip()
@@ -404,6 +408,9 @@ def inject_posts(body, posts):
 def main():
     POSTS = load_posts_index()
     ALL_FAQ = {}
+    lm_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lastmod.json")
+    try: LASTMOD = json.load(open(lm_path, encoding="utf-8"))
+    except Exception: LASTMOD = {}
     for page, (title, desc, keywords, h1, crumb, service) in PAGES.items():
         body = open(os.path.join(SRC, page + ".html"), encoding="utf-8").read()
         body = body.replace("{{ARROW}}", ARROW).replace("{ver}", VER)
@@ -414,6 +421,10 @@ def main():
         if page == "insights": body = inject_posts(body, POSTS)
         og_title = ("%s | 에이치메디솔루션" % crumb) if crumb else "에이치메디솔루션 | 마케팅 잘하는 개원 컨설턴트"
         html = render_page(page, title, desc, keywords, page_url(page), jsonld, body, robots=("noindex, follow" if page == "post" else ROBOTS_INDEX), og_title=og_title)
+        # 버전 문자열 · 오늘 날짜를 뺀 내용이 그대로면 수정일을 유지한다 (sitemap lastmod · dateModified)
+        sig = hashlib.sha1(html.replace(VER, "").replace(TODAY, "").encode("utf-8")).hexdigest()
+        if LASTMOD.get(page, {}).get("sig") != sig: LASTMOD[page] = {"sig": sig, "date": TODAY}
+        html = html.replace('"dateModified":"%s"' % TODAY, '"dateModified":"%s"' % LASTMOD[page]["date"])
         with open(os.path.join(OUT, page + ".html"), "w", encoding="utf-8") as f:
             f.write(html)
         print("wrote", page + ".html", len(html))
@@ -463,8 +474,9 @@ def main():
     Sitemap: %s/sitemap.xml
     """ % SITE_URL).replace("\n    ", "\n").rstrip() + "\n")
 
-    prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3"}
-    urls = "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%s</priority></url>\n" % (page_url(p), TODAY, "weekly" if p in ("index", "marketing", "insights") else "monthly", prio[p]) for p in PAGES if p != "post")
+    json.dump(LASTMOD, open(lm_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1, sort_keys=True)
+    prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3", "privacy": "0.2"}
+    urls = "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%s</priority></url>\n" % (page_url(p), LASTMOD.get(p, {}).get("date", TODAY), "weekly" if p in ("index", "marketing", "insights") else "monthly", prio[p]) for p in PAGES if p != "post")
     urls += "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>\n" % (post_url(p), (p.get("updated_at") or p.get("published_at") or TODAY)[:10]) for p in POSTS)
     open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
 
@@ -486,7 +498,7 @@ def main():
       "- 서비스 지역: 수도권 · 부산 · 경남을 중심으로 전국 병의원", "",
       "## 페이지", ""]
     for p, (t, d, *_ ) in PAGES.items():
-        if p == "post": continue
+        if p in ("post", "privacy"): continue
         lines.append("- [%s](%s): %s" % (t.split(" | ")[0], page_url(p), d))
     lines += ["", "## 병원 마케팅 프로그램 · 가격 (marketing.html)", ""]
     for p in PROGRAMS:
