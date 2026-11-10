@@ -1707,3 +1707,5 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
   .history b { font-size: 15px; } .history p { font-size: 13px; }
   .ceo-card { padding: 26px 22px; border-radius: 18px; } .ceo-bio p { font-size: 15px; }
 }
+.kmong-link { color: #8fd0ff; font-weight: 700; text-decoration: underline; white-space: nowrap; }
+.kmong-link:hover { color: #fff; }

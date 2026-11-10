@@ -284,7 +284,7 @@ def org_ld():
         {"@type": "ContactPoint", "telephone": ORG["tel"], "contactType": "sales", "name": "고한별 대표 · 수도권", "areaServed": "KR", "availableLanguage": "ko"},
         {"@type": "ContactPoint", "telephone": ORG["tel2"], "contactType": "sales", "name": "부산 지사 · 부산 / 경남", "areaServed": "KR", "availableLanguage": "ko"},
       ],
-      "sameAs": ["https://pf.kakao.com/_xmhxgvb"],
+      "sameAs": ["https://pf.kakao.com/_xmhxgvb", "https://kmong.com/@%EC%97%90%EC%9D%B4%EC%B9%98%EB%A9%94%EB%94%94"],
       "makesOffer": [{"@type": "Offer", "itemOffered": {"@type": "Service", "name": n}} for n in ["병원 온라인 마케팅", "네이버 플레이스 마케팅", "개원 컨설팅", "병원 MSO · 경영 컨설팅", "병원 홈페이지 제작"]],
     }
 
@@ -323,6 +323,7 @@ def build_jsonld(page, title, desc, body, crumb, service):
           "worksFor": {"@id": SITE_URL + "/#org"},
           "description": "에이치메디솔루션 대표. 동원그룹 전략기획(2017), KT&G 마케팅기획(2018)을 거쳐 2019년 크몽에서 네이버 플레이스 마케팅 서비스를 론칭하고 Prime 전문가로 인증받았다. 2020년 에이치메디솔루션 설립, 2023년 개원 컨설팅 시작. 크몽 마케팅 컨설팅 200회 이상, 탈잉 마케팅 강연 20회 이상, 크몽 온라인 마케팅 전자책 200부 이상 판매.",
           "knowsAbout": ["네이버 플레이스 마케팅", "병원 온라인 마케팅", "병원 개원 컨설팅", "상권분석", "프랜차이즈 마케팅 교육"],
+          "sameAs": ["https://kmong.com/@%EC%97%90%EC%9D%B4%EC%B9%98%EB%A9%94%EB%94%94"],
           "hasCredential": {"@type": "EducationalOccupationalCredential", "name": "크몽 마케팅 Prime 전문가 인증", "dateCreated": "2019"}})
     faq = extract_faq(body)
     if faq:
@@ -501,7 +502,7 @@ def main():
       "> " + ORG["desc"], "",
       "- 슬로건: " + ORG["slogan"],
       "- 사업 영역: ① 병원 온라인 마케팅 (네이버 플레이스 · 병원 블로그 · 리뷰 운영 지원 · CPC 광고 · 당근 · 인스타그램 · Meta) ② 개원 컨설팅 · MSO (입지분석 · 개원 준비 · 진료 준비 · 오프라인 마케팅 · 개원 후 경영 · 의약품 CSO) ③ 병원 홈페이지 제작 · 숏폼 영상 제작",
-      "- 검증: 프리랜서 마켓 크몽 마케팅 카테고리 Prime 전문가 · 평점 5.0 (109개 평가) · 총 작업 171개 · 만족도 100%",
+      "- 검증: 프리랜서 마켓 크몽 마케팅 카테고리 Prime 전문가 (프로필: https://kmong.com/@%EC%97%90%EC%9D%B4%EC%B9%98%EB%A9%94%EB%94%94) · 평점 5.0 (109개 평가) · 총 작업 171개 · 만족도 100%",
       "- 성과 예시: 포항 정형외과 개원 첫 달 일환자 120명 (성공사례 페이지), 부산 서면 피부과 플레이스 20위→3위, 운영 병원 50+, 누적 마케팅 계약 300건+, 재계약률 97%, 평균 매출 30%+ 증가",
       "- 대표: 고한별 (010-8263-0982) · 설립 2020년 4월 15일 · 부산 지사 개설 2021년 5월 · 개원 컨설팅 시작 2023년 2월",
       "- 대표 경력: 동원그룹 전략기획(2017), KT&G 마케팅기획(2018), 크몽 네이버 플레이스 마케팅 서비스 론칭 · Prime 전문가 인증(2019), 크몽 마케팅 컨설팅 200회 이상, 탈잉 마케팅 강연 20회 이상, 크몽 온라인 마케팅 전자책 200부 이상 판매 (%s/ceo.html)" % SITE_URL,
