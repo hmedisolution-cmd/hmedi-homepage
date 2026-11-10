@@ -1665,3 +1665,45 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 .policy th, .policy td { padding: 10px 12px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
 .policy th { background: var(--paper-2); font-weight: 700; white-space: nowrap; }
 @media (max-width: 640px) { .policy table { font-size: 13px; } .policy th, .policy td { padding: 8px 9px; } .policy th { white-space: normal; } }
+
+/* ---------- 회사 개요 · 연혁 · 대표 소개 ---------- */
+.overview-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: start; }
+.info-table-wrap { background: #fff; border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
+.info-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.info-table th, .info-table td { padding: 15px 20px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); line-height: 1.6; word-break: keep-all; }
+.info-table tr:last-child th, .info-table tr:last-child td { border-bottom: 0; }
+.info-table tbody th { width: 132px; font-weight: 700; color: var(--muted); background: var(--paper-2); white-space: nowrap; }
+.info-table thead th { background: var(--ink); color: #fff; font-weight: 700; font-size: 13.5px; }
+.info-table a { color: var(--sky-deep); font-weight: 700; }
+.history { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; position: relative; }
+.history::before { content: ""; position: absolute; left: 31px; top: 14px; bottom: 14px; width: 2px; background: var(--line); }
+.history li { display: grid; grid-template-columns: 64px 1fr; gap: 18px; align-items: start; padding: 12px 0; position: relative; }
+.history .y { position: relative; z-index: 1; display: grid; place-items: center; width: 64px; height: 34px; border-radius: 999px; background: var(--ink); color: #fff; font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: .02em; transition: background .3s; }
+.history li:hover .y { background: var(--sky); }
+.history b { display: block; font-size: 16.5px; font-weight: 800; letter-spacing: -.02em; padding-top: 5px; }
+.history p { margin: 4px 0 0; font-size: 14px; color: var(--muted); line-height: 1.6; word-break: keep-all; }
+.ceo-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 48px; align-items: start; }
+.ceo-card { padding: 36px 34px; border-radius: 24px; background: var(--ink); color: #fff; }
+.ceo-card .kicker { color: #8fd0ff; }
+.ceo-name { margin-top: 14px; font-size: clamp(34px, 4vw, 46px); font-weight: 900; letter-spacing: -.04em; line-height: 1.1; }
+.ceo-name small { font-size: .45em; font-weight: 700; color: #8fd0ff; margin-left: 4px; letter-spacing: 0; }
+.ceo-role { margin-top: 10px; font-size: 14.5px; color: rgba(255,255,255,.72); }
+.ceo-facts { margin: 24px 0 0; display: grid; gap: 14px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.14); }
+.ceo-facts dt { font-size: 12px; font-weight: 700; color: #8fd0ff; letter-spacing: .04em; }
+.ceo-facts dd { margin: 3px 0 0; font-size: 14.5px; line-height: 1.6; color: rgba(255,255,255,.9); word-break: keep-all; }
+.ceo-facts a { color: #fff; text-decoration: underline; }
+.ceo-card .btn-ink { background: #fff; color: var(--ink); }
+.ceo-bio .big { font-size: clamp(24px, 2.6vw, 32px); font-weight: 800; letter-spacing: -.035em; line-height: 1.35; margin-bottom: 18px; }
+.ceo-bio .big .a { color: var(--sky); }
+.ceo-bio p { font-size: 16px; line-height: 1.85; color: var(--text); margin: 0 0 14px; word-break: keep-all; }
+.ceo-list { margin: 18px 0 0; display: grid; gap: 10px; }
+.ceo-list li { position: relative; padding-left: 18px; font-size: 15px; line-height: 1.6; word-break: keep-all; }
+.ceo-list li::before { content: ""; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; border-radius: 50%; background: var(--sky); }
+@media (max-width: 960px) { .overview-grid, .ceo-grid { grid-template-columns: 1fr; gap: 26px; } }
+@media (max-width: 640px) {
+  .info-table { font-size: 13.5px; } .info-table th, .info-table td { padding: 11px 12px; } .info-table tbody th { width: 96px; white-space: normal; }
+  .info-table thead th { font-size: 12px; }
+  .history li { grid-template-columns: 54px 1fr; gap: 12px; } .history .y { width: 54px; height: 30px; font-size: 12.5px; } .history::before { left: 26px; }
+  .history b { font-size: 15px; } .history p { font-size: 13px; }
+  .ceo-card { padding: 26px 22px; border-radius: 18px; } .ceo-bio p { font-size: 15px; }
+}

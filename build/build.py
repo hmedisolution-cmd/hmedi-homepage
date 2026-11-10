@@ -22,8 +22,8 @@ ORG = {
   "name": "에이치메디솔루션", "alt": ["HMEDISOLUTION", "H MEDI SOLUTION", "에이치메디"],
   "slogan": "마케팅 잘하는 개원 컨설턴트",
   "desc": "병원 온라인 마케팅(네이버 플레이스 · 블로그 · 리뷰 운영 지원 · CPC 광고)과 개원 컨설팅 · MSO(입지분석 · 개원 준비 · 오프라인 마케팅 · 병원경영)를 한 팀이 실행하는 메디컬 솔루션 회사. 부천 본사와 부산 지사에서 수도권 · 부산 · 경남을 포함한 전국 병의원을 지원합니다.",
-  "tel": "+82-10-8263-0982", "tel2": "+82-10-4435-4389", "email": "hmedi@hmedisolution.com", "biz": "209-37-36004",
-  "founders": ["고한별", "정대호"],
+  "tel": "+82-10-8263-0982", "email": "hmedi@hmedisolution.com", "biz": "209-37-36004",
+  "founders": ["고한별"], "founded": "2020-04-15",
   "addr": [
     {"name": "부천 본사", "street": "소향로 13번길 28-14 403-1호", "city": "부천시", "region": "경기도", "country": "KR"},
     {"name": "부산 지사", "street": "서면로 10 데시앙 2616호", "city": "부산진구", "region": "부산광역시", "country": "KR"},
@@ -129,7 +129,7 @@ FOOTER = """
     <div class="foot-grid">
       <div class="foot-brand">
         <img src="assets/img/logo-white.png" alt="HMEDISOLUTION">
-        <p>에이치메디솔루션 · 대표 고한별 · 정대호<br>사업자등록번호 209-37-36004<br>부천 본사 · 경기도 부천시 소향로 13번길 28-14 403-1호<br>부산 지사 · 부산진구 서면로 10 데시앙 2616호</p>
+        <p>에이치메디솔루션 · 대표 고한별<br>사업자등록번호 209-37-36004<br>부천 본사 · 경기도 부천시 소향로 13번길 28-14 403-1호<br>부산 지사 · 부산진구 서면로 10 데시앙 2616호</p>
       </div>
       <div>
         <p class="foot-h">Menu</p>
@@ -155,8 +155,7 @@ FOOTER = """
       </div>
       <div class="foot-contact">
         <p class="foot-h">Contact</p>
-        <b>010-8263-0982</b><span>고한별 대표 · 수도권</span>
-        <b>010-4435-4389</b><span>정대호 대표 · 부산 / 경남</span>
+        <b>010-8263-0982</b><span>고한별 대표 · 전국 상담</span>
         <b style="font-size:16px">hmedi@hmedisolution.com</b>
         <a class="foot-kakao" href="https://pf.kakao.com/_xmhxgvb" target="_blank" rel="noopener">카카오톡 채널 상담 →</a>
       </div>
@@ -220,9 +219,13 @@ PAGES = {
            "병원 마케팅 칼럼, 개원 인사이트",
            None, "인사이트", None),
   "contact": ("병원 마케팅 무료 진단 · 개원 상담 신청 | 에이치메디솔루션",
-              "네이버 플레이스 무료 진단과 개원 컨설팅 상담 신청. 수도권 010-8263-0982(고한별 대표), 부산·경남 010-4435-4389(정대호 대표). 병원 상황에 맞는 프로그램만 제안해 드립니다.",
+              "네이버 플레이스 무료 진단과 개원 컨설팅 상담 신청. 부천 본사 · 부산 지사, 대표번호 010-8263-0982(고한별 대표). 병원 상황에 맞는 프로그램만 제안해 드립니다.",
               "병원 마케팅 상담, 플레이스 무료 진단, 개원 상담, 병원 마케팅 문의, 개원 컨설팅 문의, 에이치메디솔루션 연락처",
               "병원 마케팅 무료 진단 · 개원 컨설팅 상담 신청", "문의하기", None),
+  "ceo": ("고한별 대표 소개 · 경력 | 에이치메디솔루션",
+          "에이치메디솔루션 고한별 대표 소개. 동원그룹 전략기획, KT&G 마케팅기획을 거쳐 2019년 크몽 네이버 플레이스 마케팅 서비스 론칭 · Prime 전문가 인증. 마케팅 컨설팅 200회 이상, 강연 20회 이상.",
+          "고한별, 에이치메디솔루션 대표, 병원 마케팅 전문가, 네이버 플레이스 마케팅 전문가, 크몽 Prime 전문가, 개원 컨설턴트",
+          "고한별 대표 소개 · 경력", "대표 소개", None),
   "privacy": ("개인정보 처리방침 | 에이치메디솔루션",
               "에이치메디솔루션 홈페이지 상담 신청 과정에서 수집하는 개인정보 항목, 이용 목적, 보유 기간(3년), 처리 위탁, 이용자 권리와 개인정보 보호책임자 안내.",
               "에이치메디솔루션 개인정보 처리방침",
@@ -273,12 +276,11 @@ def org_ld():
       "name": ORG["name"], "alternateName": ORG["alt"], "url": SITE_URL + "/", "logo": SITE_URL + "/assets/img/logo.png",
       "image": SITE_URL + "/assets/img/og.jpg", "description": ORG["desc"], "slogan": ORG["slogan"],
       "telephone": ORG["tel"], "email": ORG["email"], "taxID": ORG["biz"], "priceRange": "₩₩",
-      "founder": [{"@type": "Person", "name": n} for n in ORG["founders"]],
+      "founder": [{"@type": "Person", "@id": SITE_URL + "/ceo.html#person", "name": n, "url": SITE_URL + "/ceo.html"} for n in ORG["founders"]], "foundingDate": ORG["founded"],
       "address": [{"@type": "PostalAddress", "name": a["name"], "streetAddress": a["street"], "addressLocality": a["city"], "addressRegion": a["region"], "addressCountry": a["country"]} for a in ORG["addr"]],
       "areaServed": ORG["areas"], "knowsAbout": ORG["knows"],
       "contactPoint": [
-        {"@type": "ContactPoint", "telephone": ORG["tel"], "contactType": "sales", "name": "고한별 대표 · 수도권", "areaServed": "KR", "availableLanguage": "ko"},
-        {"@type": "ContactPoint", "telephone": ORG["tel2"], "contactType": "sales", "name": "정대호 대표 · 부산 / 경남", "areaServed": "KR", "availableLanguage": "ko"},
+        {"@type": "ContactPoint", "telephone": ORG["tel"], "contactType": "sales", "name": "고한별 대표", "areaServed": "KR", "availableLanguage": "ko"},
       ],
       "sameAs": ["https://pf.kakao.com/_xmhxgvb"],
       "makesOffer": [{"@type": "Offer", "itemOffered": {"@type": "Service", "name": n}} for n in ["병원 온라인 마케팅", "네이버 플레이스 마케팅", "개원 컨설팅", "병원 MSO · 경영 컨설팅", "병원 홈페이지 제작"]],
@@ -313,6 +315,13 @@ def build_jsonld(page, title, desc, body, crumb, service):
         sv = {"@type": "Service", "@id": url + "#service", "name": service, "serviceType": service, "provider": {"@id": SITE_URL + "/#org"}, "areaServed": ORG["areas"], "url": url, "description": desc}
         if page == "marketing" and PROGRAMS: sv["hasOfferCatalog"] = offers_ld(PROGRAMS)
         graph.append(sv)
+    if page == "ceo":
+        web["@type"] = "ProfilePage"; web["mainEntity"] = {"@id": url + "#person"}
+        graph.append({"@type": "Person", "@id": url + "#person", "name": "고한별", "jobTitle": "대표", "url": url,
+          "worksFor": {"@id": SITE_URL + "/#org"},
+          "description": "에이치메디솔루션 대표. 동원그룹 전략기획(2017), KT&G 마케팅기획(2018)을 거쳐 2019년 크몽에서 네이버 플레이스 마케팅 서비스를 론칭하고 Prime 전문가로 인증받았다. 2020년 에이치메디솔루션 설립, 2023년 개원 컨설팅 시작. 크몽 마케팅 컨설팅 200회 이상, 탈잉 마케팅 강연 20회 이상.",
+          "knowsAbout": ["네이버 플레이스 마케팅", "병원 온라인 마케팅", "병원 개원 컨설팅", "상권분석", "프랜차이즈 마케팅 교육"],
+          "hasCredential": {"@type": "EducationalOccupationalCredential", "name": "크몽 마케팅 Prime 전문가 인증", "dateCreated": "2019"}})
     faq = extract_faq(body)
     if faq:
         graph.append({"@type": "FAQPage", "@id": url + "#faq", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]})
@@ -475,7 +484,7 @@ def main():
     """ % SITE_URL).replace("\n    ", "\n").rstrip() + "\n")
 
     json.dump(LASTMOD, open(lm_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1, sort_keys=True)
-    prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3", "privacy": "0.2"}
+    prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3", "privacy": "0.2", "ceo": "0.7"}
     urls = "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%s</priority></url>\n" % (page_url(p), LASTMOD.get(p, {}).get("date", TODAY), "weekly" if p in ("index", "marketing", "insights") else "monthly", prio[p]) for p in PAGES if p != "post")
     urls += "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>\n" % (post_url(p), (p.get("updated_at") or p.get("published_at") or TODAY)[:10]) for p in POSTS)
     open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
@@ -492,7 +501,8 @@ def main():
       "- 사업 영역: ① 병원 온라인 마케팅 (네이버 플레이스 · 병원 블로그 · 리뷰 운영 지원 · CPC 광고 · 당근 · 인스타그램 · Meta) ② 개원 컨설팅 · MSO (입지분석 · 개원 준비 · 진료 준비 · 오프라인 마케팅 · 개원 후 경영 · 의약품 CSO) ③ 병원 홈페이지 제작 · 숏폼 영상 제작",
       "- 검증: 프리랜서 마켓 크몽 마케팅 카테고리 Prime 전문가 · 평점 5.0 (109개 평가) · 총 작업 171개 · 만족도 100%",
       "- 성과 예시: 포항 정형외과 개원 첫 달 일환자 120명 (성공사례 페이지), 부산 서면 피부과 플레이스 20위→3위, 운영 병원 50+, 누적 마케팅 계약 300건+, 재계약률 97%, 평균 매출 30%+ 증가",
-      "- 대표: 고한별 (수도권, 010-8263-0982), 정대호 (부산 · 경남, 010-4435-4389)",
+      "- 대표: 고한별 (010-8263-0982) · 설립 2020년 4월 15일 · 부산 지사 개설 2021년 5월 · 개원 컨설팅 시작 2023년 2월",
+      "- 대표 경력: 동원그룹 전략기획(2017), KT&G 마케팅기획(2018), 크몽 네이버 플레이스 마케팅 서비스 론칭 · Prime 전문가 인증(2019), 크몽 마케팅 컨설팅 200회 이상, 탈잉 마케팅 강연 20회 이상 (%s/ceo.html)" % SITE_URL,
       "- 이메일: " + ORG["email"] + " · 사업자등록번호 " + ORG["biz"],
       "- 주소: 부천 본사 경기도 부천시 소향로 13번길 28-14 403-1호 / 부산 지사 부산 부산진구 서면로 10 데시앙 2616호",
       "- 서비스 지역: 수도권 · 부산 · 경남을 중심으로 전국 병의원", "",
@@ -525,7 +535,7 @@ def main():
         lines += ["", "## 인사이트 칼럼 (insights.html)", ""]
         for p in POSTS[:50]:
             lines.append("- [%s](%s)%s" % (p.get("title", ""), post_url(p), (": " + p["excerpt"]) if p.get("excerpt") else ""))
-    lines += ["", "## 문의", "", "- 무료 플레이스 진단 · 개원 상담: %s/contact.html" % SITE_URL, "- 전화: 010-8263-0982 (수도권) · 010-4435-4389 (부산 · 경남)", ""]
+    lines += ["", "## 문의", "", "- 무료 플레이스 진단 · 개원 상담: %s/contact.html" % SITE_URL, "- 전화: 010-8263-0982 (고한별 대표)", ""]
     open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8").write("\n".join(lines))
     print("wrote robots.txt, sitemap.xml, llms.txt")
 
