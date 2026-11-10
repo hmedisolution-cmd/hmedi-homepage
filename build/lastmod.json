@@ -3,6 +3,22 @@
   "date": "2026-11-10",
   "sig": "2480208478afdd363440f4270f3e0723fdded53a"
  },
+ "case-busan": {
+  "date": "2026-11-10",
+  "sig": "d5c9a7d10123dc3d25910288631d6bab9e6d6468"
+ },
+ "case-gwanggyo": {
+  "date": "2026-11-10",
+  "sig": "6ea01eafc928ce156393e72be79be28668784c39"
+ },
+ "case-incheon": {
+  "date": "2026-11-10",
+  "sig": "6bcfda13133666e4a4ce74993b4f6f78d88dc1aa"
+ },
+ "case-pohang": {
+  "date": "2026-11-10",
+  "sig": "9ca39b172b803f4366eed4271b94f01efd1b0049"
+ },
  "ceo": {
   "date": "2026-11-10",
   "sig": "e9ad134a4f54e73d727df0030c1246a2cee88aac"
@@ -13,7 +29,7 @@
  },
  "consulting": {
   "date": "2026-11-10",
-  "sig": "143792d11eed6039fdb081e32c036eeebdddb651"
+  "sig": "a992cb74c93abeaa5556c2a39a2cb5306969c155"
  },
  "contact": {
   "date": "2026-11-10",
@@ -21,7 +37,7 @@
  },
  "index": {
   "date": "2026-11-10",
-  "sig": "7902139f7675b9bdf3d1d4a61c2ab6a400e4e03c"
+  "sig": "562a8fe6bc9b3967b83f71f9e873657da4a21e4a"
  },
  "insights": {
   "date": "2026-11-10",
@@ -33,7 +49,7 @@
  },
  "portfolio": {
   "date": "2026-11-10",
-  "sig": "fd2ef2bc6aa1c72f1801eacb26d7ff4e55a756c7"
+  "sig": "f4f52bf70f93ec8a2fe47e901a8958fa31b55bbf"
  },
  "post": {
   "date": "2026-11-10",
