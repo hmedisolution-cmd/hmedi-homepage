@@ -108,13 +108,20 @@ def read_min(content):
     return max(1, round(len(re.sub(r'<[^>]+>', '', content or "")) / 500))
 
 def author_ld(p):
-    """작성자 — 사람 이름(예: 「고한별 대표」)이면 Person, 회사 이름이면 Organization (2026-11-10 대표 지시: 칼럼 작성자는 고한별 대표)"""
+    """작성자 — 알려진 사람(「고한별 대표」)이면 대표 소개 페이지의 Person @id 로 묶고, 회사 이름이면 Organization (2026-11-11 대표 지시)"""
     site = B.SITE_URL
+    who = B.author_person(p)
+    if who:
+        return {"@type": "Person", "@id": who["url"] + "#person", "name": who["name"], "url": who["url"]}
     name = (p.get("author") or B.ORG["name"]).strip()
     if name == B.ORG["name"]:
         return {"@type": "Organization", "name": name, "url": site + "/"}
-    m = re.match(r"^(.+?)\s+(대표|원장|이사|실장)$", name)
-    return {"@type": "Person", "name": m.group(1) if m else name, **({"jobTitle": m.group(2)} if m else {}), "worksFor": {"@type": "Organization", "name": B.ORG["name"], "url": site + "/"}, "url": site + "/company.html"}
+    return {"@type": "Person", "name": name, "worksFor": {"@type": "Organization", "name": B.ORG["name"], "url": site + "/"}}
+
+def meta_author(html, p):
+    """페이지 머리의 meta author — 알려진 작성자면 그 사람 이름"""
+    who = B.author_person(p)
+    return html.replace('<meta name="author" content="%s">' % B.ORG["name"], '<meta name="author" content="%s">' % esc(who["name"]), 1) if who else html
 
 def article_ld(p, url, body_html):
     site = B.SITE_URL
@@ -138,11 +145,11 @@ def render_post(p, others):
     if p.get("source") == "aeomaster" and p.get("aeo_doc"):
         from column_builder import doc_body
         doc = p["aeo_doc"]
-        body = '<div class="column-main"><div class="wrap"><article class="column-content">' + doc_body(doc).replace('</h1>', '</h1><div class="post-meta">'+B.post_metadata(p)+'</div>', 1) + '</article></div></div>'
+        body = '<div class="column-main"><div class="wrap"><article class="column-content">' + doc_body(doc).replace('</h1>', '</h1><div class="post-meta">'+B.post_metadata(p, link=True)+'</div>', 1) + '</article></div></div>'
         result = B.render_page("post", esc(doc["title"]) + " | 에이치메디솔루션", esc(doc["summary"]), "", B.post_url(p), json.dumps({"@context":"https://schema.org","@type":"Article","headline":doc["title"],"description":doc["summary"],"url":B.post_url(p),"author":author_ld(p),"publisher":{"@type":"Organization","name":B.ORG["name"],"url":B.SITE_URL+"/"},**B.post_dates(p)},ensure_ascii=False).replace("<","\\u003c"), body, root_abs=True)
         fingerprint = p.get('aeo_publication_hash') or ''
         if not re.fullmatch(r'[a-f0-9]{64}', fingerprint): raise ValueError('missing publication proof')
-        return result.replace('<body data-page="post">', '<body data-page="post" class="aeo-reading">').replace('</head>', '<meta name="aeo-publication-hash" content="' + fingerprint + '"><link rel="stylesheet" href="/칼럼/column.css?v=reading-layout-20261102"></head>')
+        return meta_author(result, p).replace('<body data-page="post">', '<body data-page="post" class="aeo-reading">').replace('</head>', '<meta name="aeo-publication-hash" content="' + fingerprint + '"><link rel="stylesheet" href="/칼럼/column.css?v=reading-layout-20261102"></head>')
     url = B.post_url(p); tags = B.tags_of(p)
     body_html = markdown(p.get("content") or "")
     cover = '<figure class="post-cover"><img src="%s" alt="%s"></figure>' % (esc(p["cover_url"]), esc(p["title"])) if p.get("cover_url") else ""
@@ -155,11 +162,11 @@ def render_post(p, others):
     <div class="post-foot"><a class="btn btn-line" href="/insights.html">목록으로 %s</a><a class="btn btn-accent js-inquiry" href="/contact.html">무료 상담 신청 %s</a></div>
     %s
   </div>
-</article>''' % (esc(p["slug"]), "".join('<a href="/insights.html">%s</a>' % esc(t) for t in tags), esc(p["title"]), B.post_metadata(p), read_min(p.get("content")), cover, body_html, B.ARROW, B.ARROW, related)
+</article>''' % (esc(p["slug"]), "".join('<a href="/insights.html">%s</a>' % esc(t) for t in tags), esc(p["title"]), B.post_metadata(p, link=True), read_min(p.get("content")), cover, body_html, B.ARROW, B.ARROW, related)
     desc = (p.get("excerpt") or B.strip_tags(body_html)[:150]).strip()
     keywords = ", ".join(tags + ["병원 마케팅 칼럼", "에이치메디솔루션 인사이트"])
-    return B.render_page("post", "%s | 에이치메디솔루션 인사이트" % p["title"], desc, keywords, url, article_ld(p, url, body_html), body,
-                         og_title=p["title"], og_type="article", og_image=p.get("cover_url") or None, root_abs=True)
+    return meta_author(B.render_page("post", "%s | 에이치메디솔루션 인사이트" % p["title"], desc, keywords, url, article_ld(p, url, body_html), body,
+                         og_title=p["title"], og_type="article", og_image=p.get("cover_url") or None, root_abs=True), p)
 
 
 def main():

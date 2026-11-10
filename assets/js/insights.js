@@ -133,12 +133,15 @@
       const canon = document.querySelector('link[rel="canonical"]'); if (canon) canon.setAttribute("href", location.origin + location.pathname + "?slug=" + encodeURIComponent(p.slug));
       $("#postTitle").textContent = p.title;
       $("#postTags").innerHTML = tagsOf(p).map((t) => `<a href="/%EC%B9%BC%EB%9F%BC/">${esc(t)}</a>`).join("");
-      $("#postMeta").innerHTML = `${postMetadata(p)}<span>${readMin(contentText)}분 읽기</span>`;
+      // 칼럼 작성자 → 대표 소개 페이지 (2026-11-11 대표 지시). build.py 의 AUTHORS 와 같은 값
+      const 작성자 = ({ "고한별 대표": { name: "고한별", url: "https://hmedisolution.com/ceo.html" } })[(p.author || "").trim()];
+      $("#postMeta").innerHTML = `${작성자 ? postMetadata(p).replace(`<span>${esc(p.author)}</span>`, `<span><a href="${작성자.url}" rel="author">${esc(p.author)}</a></span>`) : postMetadata(p)}<span>${readMin(contentText)}분 읽기</span>`;
+      if (작성자) setMeta('meta[name="author"]', 작성자.name);
       if (cover) { const f = $("#postCover"); f.classList.remove("hidden"); f.querySelector("img").src = cover; f.querySelector("img").alt = structured ? structured.coverAlt : p.title; }
       if (structured) { document.body.classList.add("aeo-reading"); const bodyNode = $("#postBody"); bodyNode.classList.add("column-content"); if (!document.querySelector('link[data-aeo-column-style]')) { const style = document.createElement("link"); style.rel = "stylesheet"; style.href = "/%EC%B9%BC%EB%9F%BC/column.css?v=reading-layout-20261102"; style.setAttribute("data-aeo-column-style", "true"); document.head.appendChild(style); } }
       $("#postBody").innerHTML = structured ? structured.body : md(p.content);
       const ld = document.createElement("script"); ld.type = "application/ld+json";
-      ld.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "Article", headline: p.title, description: excerpt, image: cover || undefined, ...postDates(p), author: (() => { const n = (p.author || "에이치메디솔루션").trim(); if (n === "에이치메디솔루션") return { "@type": "Organization", name: n }; const m = n.match(/^(.+?)\s+(대표|원장|이사|실장)$/); return m ? { "@type": "Person", name: m[1], jobTitle: m[2], worksFor: { "@type": "Organization", name: "에이치메디솔루션" } } : { "@type": "Person", name: n }; })(), publisher: { "@type": "Organization", name: "에이치메디솔루션" }, mainEntityOfPage: location.href });
+      ld.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "Article", headline: p.title, description: excerpt, image: cover || undefined, ...postDates(p), author: 작성자 ? { "@type": "Person", "@id": 작성자.url + "#person", name: 작성자.name, url: 작성자.url } : { "@type": "Organization", name: p.author || "에이치메디솔루션" }, publisher: { "@type": "Organization", name: "에이치메디솔루션" }, mainEntityOfPage: location.href });
       document.head.appendChild(ld);
       try { await staticIndex(); const all = await S.listPosts(); const rel = all.filter((x) => x.slug !== p.slug).slice(0, 3); if (rel.length) $("#postRelated").innerHTML = `<h3>다른 인사이트</h3><div class="ins-grid">${rel.map(card).join("")}</div>`; } catch (e) {}
     } catch (e) { $("#postTitle").textContent = "글을 불러오지 못했습니다"; }

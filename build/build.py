@@ -383,12 +383,22 @@ def post_dates(p):
     if pub and mod and mod>pub: out['dateModified']=mod.isoformat(timespec='seconds')
     return out
 
-def post_metadata(p):
+# 칼럼 작성자 → 사람 정보 (2026-11-11 대표 지시: 「고한별 대표」 는 대표 소개 페이지로 잇고 구조화 데이터는 그 사람의 @id 로 묶는다)
+AUTHORS = {"고한별 대표": {"name": "고한별", "url": SITE_URL + "/ceo.html"}}
+
+def author_person(p):
+    """알려진 작성자면 {name, url}, 아니면 None"""
+    return AUTHORS.get((p.get('author') or '').strip())
+
+def post_metadata(p, link=False):
+    """link=True 는 글 페이지에서만 — 목록 카드는 통째로 <a> 라 안에 링크를 또 넣으면 안 된다"""
     dates=post_dates(p); e=htmlmod.escape
     author=p.get('author') or ORG['name']
+    who=author_person(p)
     stamp='<time datetime="%s">발행 %s</time>' % (e(dates['datePublished'],quote=True),e(fmt_date(dates['datePublished']))) if dates.get('datePublished') else '<span>날짜 미확인</span>'
     if dates.get('dateModified'): stamp+='<time datetime="%s">수정 %s</time>' % (e(dates['dateModified'],quote=True),e(fmt_date(dates['dateModified'])))
-    return '<span>'+e(author)+'</span>'+stamp
+    name='<a href="%s" rel="author">%s</a>' % (e(who['url'],quote=True), e(author)) if (link and who) else e(author)
+    return '<span>'+name+'</span>'+stamp
 
 def tags_of(p):
     t = p.get("tags") or []
