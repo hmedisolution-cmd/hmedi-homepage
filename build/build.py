@@ -227,6 +227,22 @@ PAGES = {
           "에이치메디솔루션 고한별 대표 소개. 동원그룹 전략기획, KT&G 마케팅기획을 거쳐 2019년 크몽 네이버 플레이스 마케팅 서비스 론칭 · Prime 전문가 인증. 마케팅 컨설팅 200회 이상, 강연 20회 이상.",
           "고한별, 에이치메디솔루션 대표, 병원 마케팅 전문가, 네이버 플레이스 마케팅 전문가, 크몽 Prime 전문가, 개원 컨설턴트",
           "고한별 대표 소개 · 경력", "대표 소개", None),
+  "case-pohang": ("포항 정형외과 개원 컨설팅 사례 · 개원 첫 달 일환자 120명 | 에이치메디솔루션",
+          "포항 오천읍 1인 진료 정형외과 개원 사례. 상권분석으로 입지를 정하고 개원 준비와 사전마케팅을 함께 진행해 2025년 2월 개원, 4주차 일환자 121명을 기록한 과정을 정리했습니다.",
+          "정형외과 개원 컨설팅 사례, 포항 병원 개원, 병원 입지분석 사례, 개원 사전마케팅, 1인 정형외과 개원",
+          "포항 정형외과 개원 컨설팅 사례 · 개원 첫 달 일환자 120명", "포항 O정형외과 사례", None),
+  "case-busan": ("부산 서면 피부과 플레이스 마케팅 사례 · 조회수 83.5% 증가 | 에이치메디솔루션",
+          "부산 H피부과 네이버 플레이스 마케팅 사례. 저품질 블로그를 정리하고 콘텐츠를 다시 쌓아 8개월 동안 플레이스 월 조회수가 5,690회에서 10,443회로 늘고, 20위권에서 부산피부과 4위 · 서면피부과 3위까지 오른 과정입니다.",
+          "피부과 마케팅 사례, 부산 피부과 마케팅, 서면 피부과 플레이스, 네이버 플레이스 마케팅 사례, 병원 블로그 저품질",
+          "부산 서면 피부과 플레이스 마케팅 사례 · 조회수 83.5% 증가", "부산 H피부과 사례", None),
+  "case-incheon": ("인천 외과 플레이스 마케팅 사례 · 조회수 48.7% 증가 | 에이치메디솔루션",
+          "인천 S외과 네이버 플레이스 마케팅 사례. 비슷한 상호가 많아 분산되던 검색 유입을 상호 키워드부터 모으고 진료 항목 키워드로 넓혀, 6개월 동안 월 조회수가 4,970회에서 7,393회로 늘어난 과정입니다.",
+          "외과 마케팅 사례, 인천 병원 마케팅, 병원 상호 키워드, 네이버 플레이스 마케팅 사례, 내과 외과 마케팅",
+          "인천 외과 플레이스 마케팅 사례 · 상호 키워드 전략으로 조회수 48.7% 증가", "인천 S외과 사례", None),
+  "case-gwanggyo": ("광교 피부과 개원 사전마케팅 사례 · 조회수 54% 증가 | 에이치메디솔루션",
+          "광교 G피부과 개원 사전마케팅 사례. 신규 개원 피부과가 많은 경쟁 지역에서 개원 1개월 전부터 플레이스 · 블로그를 준비해, 7개월 동안 월 조회수가 6,085회에서 9,409회로 늘고 광교피부과 5위(최대 1위)에 오른 과정입니다.",
+          "피부과 개원 마케팅 사례, 광교 피부과 마케팅, 개원 사전마케팅, 네이버 플레이스 마케팅 사례, 신규 개원 병원 마케팅",
+          "광교 피부과 개원 사전마케팅 사례 · 조회수 54% 증가", "광교 G피부과 사례", None),
   "privacy": ("개인정보 처리방침 | 에이치메디솔루션",
               "에이치메디솔루션 홈페이지 상담 신청 과정에서 수집하는 개인정보 항목, 이용 목적, 보유 기간(3년), 처리 위탁, 이용자 권리와 개인정보 보호책임자 안내.",
               "에이치메디솔루션 개인정보 처리방침",
@@ -310,13 +326,18 @@ def build_jsonld(page, title, desc, body, crumb, service):
     graph = [org_ld(), {"@type": "WebSite", "@id": SITE_URL + "/#website", "url": SITE_URL + "/", "name": ORG["name"], "alternateName": "HMEDISOLUTION", "inLanguage": "ko-KR", "publisher": {"@id": SITE_URL + "/#org"}}]
     web = {"@type": "WebPage", "@id": url + "#webpage", "url": url, "name": title, "description": desc, "inLanguage": "ko-KR", "isPartOf": {"@id": SITE_URL + "/#website"}, "about": {"@id": SITE_URL + "/#org"}, "dateModified": TODAY}
     crumbs = [{"@type": "ListItem", "position": 1, "name": "홈", "item": SITE_URL + "/"}]
-    if crumb: crumbs.append({"@type": "ListItem", "position": 2, "name": crumb, "item": url})
+    if page.startswith("case-"): crumbs.append({"@type": "ListItem", "position": 2, "name": "성공사례", "item": SITE_URL + "/portfolio.html"})
+    if crumb: crumbs.append({"@type": "ListItem", "position": len(crumbs) + 1, "name": crumb, "item": url})
     web["breadcrumb"] = {"@id": url + "#breadcrumb"}
     graph.append(web); graph.append({"@type": "BreadcrumbList", "@id": url + "#breadcrumb", "itemListElement": crumbs})
     if service:
         sv = {"@type": "Service", "@id": url + "#service", "name": service, "serviceType": service, "provider": {"@id": SITE_URL + "/#org"}, "areaServed": ORG["areas"], "url": url, "description": desc}
         if page == "marketing" and PROGRAMS: sv["hasOfferCatalog"] = offers_ld(PROGRAMS)
         graph.append(sv)
+    if page.startswith("case-"):
+        graph.append({"@type": "Article", "@id": url + "#article", "headline": title.split(" | ")[0], "description": desc, "url": url, "mainEntityOfPage": {"@id": url + "#webpage"},
+          "datePublished": "2026-11-11", "inLanguage": "ko-KR", "articleSection": "성공사례",
+          "author": {"@type": "Person", "@id": SITE_URL + "/ceo.html#person", "name": "고한별", "url": SITE_URL + "/ceo.html"}, "publisher": {"@id": SITE_URL + "/#org"}})
     if page == "ceo":
         web["@type"] = "ProfilePage"; web["mainEntity"] = {"@id": url + "#person"}
         graph.append({"@type": "Person", "@id": url + "#person", "name": "고한별", "jobTitle": "대표", "url": url,
@@ -497,7 +518,7 @@ def main():
     """ % SITE_URL).replace("\n    ", "\n").rstrip() + "\n")
 
     json.dump(LASTMOD, open(lm_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1, sort_keys=True)
-    prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3", "privacy": "0.2", "ceo": "0.7"}
+    prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3", "privacy": "0.2", "ceo": "0.7", "case-pohang": "0.7", "case-busan": "0.7", "case-incheon": "0.7", "case-gwanggyo": "0.7"}
     urls = "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%s</priority></url>\n" % (page_url(p), LASTMOD.get(p, {}).get("date", TODAY), "weekly" if p in ("index", "marketing", "insights") else "monthly", prio[p]) for p in PAGES if p != "post")
     urls += "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>\n" % (post_url(p), (p.get("updated_at") or p.get("published_at") or TODAY)[:10]) for p in POSTS)
     open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
