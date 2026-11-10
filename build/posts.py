@@ -107,12 +107,21 @@ def markdown(src):
 def read_min(content):
     return max(1, round(len(re.sub(r'<[^>]+>', '', content or "")) / 500))
 
+def author_ld(p):
+    """작성자 — 사람 이름(예: 「고한별 대표」)이면 Person, 회사 이름이면 Organization (2026-11-10 대표 지시: 칼럼 작성자는 고한별 대표)"""
+    site = B.SITE_URL
+    name = (p.get("author") or B.ORG["name"]).strip()
+    if name == B.ORG["name"]:
+        return {"@type": "Organization", "name": name, "url": site + "/"}
+    m = re.match(r"^(.+?)\s+(대표|원장|이사|실장)$", name)
+    return {"@type": "Person", "name": m.group(1) if m else name, **({"jobTitle": m.group(2)} if m else {}), "worksFor": {"@type": "Organization", "name": B.ORG["name"], "url": site + "/"}, "url": site + "/company.html"}
+
 def article_ld(p, url, body_html):
     site = B.SITE_URL
     text = B.strip_tags(body_html)
     art = {"@type": ["Article", "BlogPosting"], "@id": url + "#article", "headline": p["title"], "description": p.get("excerpt") or "", "url": url, "mainEntityOfPage": {"@id": url + "#webpage"},
            **B.post_dates(p),
-           "author": {"@type": "Organization", "name": p.get("author") or B.ORG["name"], "url": site + "/"}, "publisher": {"@id": site + "/#org"},
+           "author": author_ld(p), "publisher": {"@id": site + "/#org"},
            "inLanguage": "ko-KR", "keywords": ", ".join(B.tags_of(p)), "wordCount": len(text), "articleSection": (B.tags_of(p) or ["인사이트"])[0], "isAccessibleForFree": True}
     if p.get("cover_url"): art["image"] = p["cover_url"]
     graph = [B.org_ld(),
@@ -130,7 +139,7 @@ def render_post(p, others):
         from column_builder import doc_body
         doc = p["aeo_doc"]
         body = '<div class="column-main"><div class="wrap"><article class="column-content">' + doc_body(doc).replace('</h1>', '</h1><div class="post-meta">'+B.post_metadata(p)+'</div>', 1) + '</article></div></div>'
-        result = B.render_page("post", esc(doc["title"]) + " | 에이치메디솔루션", esc(doc["summary"]), "", B.post_url(p), json.dumps({"@context":"https://schema.org","@type":"Article","headline":doc["title"],"description":doc["summary"],"url":B.post_url(p),"author":{"@type":"Organization","name":p.get("author") or B.ORG["name"]},**B.post_dates(p)},ensure_ascii=False).replace("<","\\u003c"), body, root_abs=True)
+        result = B.render_page("post", esc(doc["title"]) + " | 에이치메디솔루션", esc(doc["summary"]), "", B.post_url(p), json.dumps({"@context":"https://schema.org","@type":"Article","headline":doc["title"],"description":doc["summary"],"url":B.post_url(p),"author":author_ld(p),"publisher":{"@type":"Organization","name":B.ORG["name"],"url":B.SITE_URL+"/"},**B.post_dates(p)},ensure_ascii=False).replace("<","\\u003c"), body, root_abs=True)
         fingerprint = p.get('aeo_publication_hash') or ''
         if not re.fullmatch(r'[a-f0-9]{64}', fingerprint): raise ValueError('missing publication proof')
         return result.replace('<body data-page="post">', '<body data-page="post" class="aeo-reading">').replace('</head>', '<meta name="aeo-publication-hash" content="' + fingerprint + '"><link rel="stylesheet" href="/칼럼/column.css?v=reading-layout-20261102"></head>')
