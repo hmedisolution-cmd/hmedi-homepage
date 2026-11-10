@@ -37,7 +37,7 @@ window.HMEDI_CASES = {
   notice2: { no: "06", cat: "디자인", title: "영수증 리뷰 안내", lead: "대기 중에 QR로 바로 참여하게 만듭니다.",
     spec: [["참여", "QR 4단계"], ["게시", "데스크 · 대기실"], ["효과", "플레이스 순위"]],
     visual: `<div class="cs-shot"><img src="assets/img/portfolio/notice-review.jpg" alt="영수증 리뷰 참여 안내"></div>`,
-    keys: ["영수증 리뷰는 플레이스 순위의 핵심 신호", "리뷰 답글 · 악성 리뷰 밀어내기까지 함께 관리"],
+    keys: ["영수증 리뷰는 플레이스 순위의 핵심 신호", "리뷰 답글 · 부정 리뷰 대응까지 함께 관리"],
     link: ["marketing.html", "마케팅 프로그램"] },
   insta: { no: "07", cat: "인스타그램", title: "피부과 피드 운영", lead: "정보 · 이벤트 · 리뷰를 한 톤으로.",
     spec: [["제작", "월 8~12건"], ["범위", "기획 → 디자인 → 게시"], ["연계", "당근 · Meta 광고"]],
