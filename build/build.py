@@ -22,7 +22,7 @@ ORG = {
   "name": "에이치메디솔루션", "alt": ["HMEDISOLUTION", "H MEDI SOLUTION", "에이치메디"],
   "slogan": "마케팅 잘하는 개원 컨설턴트",
   "desc": "병원 온라인 마케팅(네이버 플레이스 · 블로그 · 리뷰 운영 지원 · CPC 광고)과 개원 컨설팅 · MSO(입지분석 · 개원 준비 · 오프라인 마케팅 · 병원경영)를 한 팀이 실행하는 메디컬 솔루션 회사. 부천 본사와 부산 지사에서 수도권 · 부산 · 경남을 포함한 전국 병의원을 지원합니다.",
-  "tel": "+82-10-8263-0982", "email": "hmedi@hmedisolution.com", "biz": "209-37-36004",
+  "tel": "+82-10-8263-0982", "tel2": "+82-10-4435-4389", "email": "hmedi@hmedisolution.com", "biz": "209-37-36004",
   "founders": ["고한별"], "founded": "2020-04-15",
   "addr": [
     {"name": "부천 본사", "street": "소향로 13번길 28-14 403-1호", "city": "부천시", "region": "경기도", "country": "KR"},
@@ -155,7 +155,8 @@ FOOTER = """
       </div>
       <div class="foot-contact">
         <p class="foot-h">Contact</p>
-        <b>010-8263-0982</b><span>고한별 대표 · 전국 상담</span>
+        <b>010-8263-0982</b><span>고한별 대표 · 수도권</span>
+        <b>010-4435-4389</b><span>부산 지사 · 부산 / 경남</span>
         <b style="font-size:16px">hmedi@hmedisolution.com</b>
         <a class="foot-kakao" href="https://pf.kakao.com/_xmhxgvb" target="_blank" rel="noopener">카카오톡 채널 상담 →</a>
       </div>
@@ -219,7 +220,7 @@ PAGES = {
            "병원 마케팅 칼럼, 개원 인사이트",
            None, "인사이트", None),
   "contact": ("병원 마케팅 무료 진단 · 개원 상담 신청 | 에이치메디솔루션",
-              "네이버 플레이스 무료 진단과 개원 컨설팅 상담 신청. 부천 본사 · 부산 지사, 대표번호 010-8263-0982(고한별 대표). 병원 상황에 맞는 프로그램만 제안해 드립니다.",
+              "네이버 플레이스 무료 진단과 개원 컨설팅 상담 신청. 수도권 010-8263-0982(고한별 대표), 부산·경남 010-4435-4389(부산 지사). 병원 상황에 맞는 프로그램만 제안해 드립니다.",
               "병원 마케팅 상담, 플레이스 무료 진단, 개원 상담, 병원 마케팅 문의, 개원 컨설팅 문의, 에이치메디솔루션 연락처",
               "병원 마케팅 무료 진단 · 개원 컨설팅 상담 신청", "문의하기", None),
   "ceo": ("고한별 대표 소개 · 경력 | 에이치메디솔루션",
@@ -280,7 +281,8 @@ def org_ld():
       "address": [{"@type": "PostalAddress", "name": a["name"], "streetAddress": a["street"], "addressLocality": a["city"], "addressRegion": a["region"], "addressCountry": a["country"]} for a in ORG["addr"]],
       "areaServed": ORG["areas"], "knowsAbout": ORG["knows"],
       "contactPoint": [
-        {"@type": "ContactPoint", "telephone": ORG["tel"], "contactType": "sales", "name": "고한별 대표", "areaServed": "KR", "availableLanguage": "ko"},
+        {"@type": "ContactPoint", "telephone": ORG["tel"], "contactType": "sales", "name": "고한별 대표 · 수도권", "areaServed": "KR", "availableLanguage": "ko"},
+        {"@type": "ContactPoint", "telephone": ORG["tel2"], "contactType": "sales", "name": "부산 지사 · 부산 / 경남", "areaServed": "KR", "availableLanguage": "ko"},
       ],
       "sameAs": ["https://pf.kakao.com/_xmhxgvb"],
       "makesOffer": [{"@type": "Offer", "itemOffered": {"@type": "Service", "name": n}} for n in ["병원 온라인 마케팅", "네이버 플레이스 마케팅", "개원 컨설팅", "병원 MSO · 경영 컨설팅", "병원 홈페이지 제작"]],
@@ -535,7 +537,7 @@ def main():
         lines += ["", "## 인사이트 칼럼 (insights.html)", ""]
         for p in POSTS[:50]:
             lines.append("- [%s](%s)%s" % (p.get("title", ""), post_url(p), (": " + p["excerpt"]) if p.get("excerpt") else ""))
-    lines += ["", "## 문의", "", "- 무료 플레이스 진단 · 개원 상담: %s/contact.html" % SITE_URL, "- 전화: 010-8263-0982 (고한별 대표)", ""]
+    lines += ["", "## 문의", "", "- 무료 플레이스 진단 · 개원 상담: %s/contact.html" % SITE_URL, "- 전화: 010-8263-0982 (고한별 대표 · 수도권) · 010-4435-4389 (부산 지사 · 부산 / 경남)", ""]
     open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8").write("\n".join(lines))
     print("wrote robots.txt, sitemap.xml, llms.txt")
 
