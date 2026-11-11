@@ -4,265 +4,303 @@
   "name": "갤러리아피부과의원 강동송파점",
   "group": "피부과",
   "region": "서울 강동",
-  "place": "https://m.place.naver.com/hospital/1549050552"
+  "place": "https://m.place.naver.com/hospital/1549050552",
+  "sido": "서울"
  },
  {
   "slug": "galleria-gaepo",
   "name": "갤러리아피부과의원 개포도곡점",
   "group": "피부과",
   "region": "서울 강남",
-  "place": "https://m.place.naver.com/hospital/1382059565"
+  "place": "https://m.place.naver.com/hospital/1382059565",
+  "sido": "서울"
  },
  {
   "slug": "galleria-gwanggyo",
   "name": "갤러리아피부과의원 광교점",
   "group": "피부과",
   "region": "수원 광교",
-  "place": "https://m.place.naver.com/hospital/1291111043"
+  "place": "https://m.place.naver.com/hospital/1291111043",
+  "sido": "경기"
  },
  {
   "slug": "galleria-mapo",
   "name": "갤러리아피부과의원 마포공덕점",
   "group": "피부과",
   "region": "서울 마포",
-  "place": "https://m.place.naver.com/hospital/2099502791"
+  "place": "https://m.place.naver.com/hospital/2099502791",
+  "sido": "서울"
  },
  {
   "slug": "galleria-seongbuk",
   "name": "갤러리아피부과의원 성북점",
   "group": "피부과",
   "region": "서울 성북",
-  "place": "https://m.place.naver.com/hospital/1568088519"
+  "place": "https://m.place.naver.com/hospital/1568088519",
+  "sido": "서울"
  },
  {
   "slug": "theheal-dongdaemun",
   "name": "더힐피부과의원 동대문점",
   "group": "피부과",
   "region": "서울 동대문",
-  "place": "https://m.place.naver.com/hospital/1001845876"
+  "place": "https://m.place.naver.com/hospital/1001845876",
+  "sido": "서울"
  },
  {
   "slug": "theheal-mapo",
   "name": "더힐피부과의원 마포공덕점",
   "group": "피부과",
   "region": "서울 마포",
-  "place": "https://m.place.naver.com/hospital/2008186980"
+  "place": "https://m.place.naver.com/hospital/2008186980",
+  "sido": "서울"
  },
  {
   "slug": "theheal-jamsil",
   "name": "더힐피부과의원 잠실점",
   "group": "피부과",
   "region": "서울 송파",
-  "place": "https://m.place.naver.com/hospital/2054184311"
+  "place": "https://m.place.naver.com/hospital/2054184311",
+  "sido": "서울"
  },
  {
   "slug": "raon",
   "name": "라온피부과의원",
   "group": "피부과",
   "region": "서울 성동",
-  "place": "https://m.place.naver.com/hospital/1084536941"
+  "place": "https://m.place.naver.com/hospital/1084536941",
+  "sido": "서울"
  },
  {
   "slug": "trinity",
   "name": "트리니티피부과의원",
   "group": "피부과",
   "region": "부산 양정",
-  "place": "https://m.place.naver.com/hospital/2090808702"
+  "place": "https://m.place.naver.com/hospital/2090808702",
+  "sido": "부산"
  },
  {
   "slug": "artofshine",
   "name": "아트오브샤인의원",
   "group": "피부과",
   "region": "부산 서면",
-  "place": "https://m.place.naver.com/hospital/2028818654"
+  "place": "https://m.place.naver.com/hospital/2028818654",
+  "sido": "부산"
  },
  {
   "slug": "bodana",
   "name": "보다나의원",
   "group": "피부과",
   "region": "경남 김해",
-  "place": "https://m.place.naver.com/hospital/2054760089"
+  "place": "https://m.place.naver.com/hospital/2054760089",
+  "sido": "경남"
  },
  {
   "slug": "reyou",
   "name": "이유의원",
   "group": "피부과",
   "region": "서울 강남",
-  "place": "https://m.place.naver.com/hospital/1303487840"
+  "place": "https://m.place.naver.com/hospital/1303487840",
+  "sido": "서울"
  },
  {
   "slug": "thebeauty",
   "name": "더아름다운성형외과의원",
   "group": "성형외과",
   "region": "부산 해운대",
-  "place": "https://m.place.naver.com/hospital/19792869"
+  "place": "https://m.place.naver.com/hospital/19792869",
+  "sido": "부산"
  },
  {
   "slug": "yonseigyeol",
   "name": "연세결성형외과의원",
   "group": "성형외과",
   "region": "부산 서면",
-  "place": "https://m.place.naver.com/hospital/1044873886"
+  "place": "https://m.place.naver.com/hospital/1044873886",
+  "sido": "부산"
  },
  {
   "slug": "saeroun",
   "name": "새로운내과의원",
   "group": "내과 · 가정의학과",
   "region": "서울 영등포",
-  "place": "https://m.place.naver.com/hospital/1251028418"
+  "place": "https://m.place.naver.com/hospital/1251028418",
+  "sido": "서울"
  },
  {
   "slug": "dadae-best",
   "name": "다대으뜸내과의원",
   "group": "내과 · 가정의학과",
   "region": "부산 사하",
-  "place": "https://m.place.naver.com/hospital/1195617913"
+  "place": "https://m.place.naver.com/hospital/1195617913",
+  "sido": "부산"
  },
  {
   "slug": "seoul-ace",
   "name": "서울에이스내과의원",
   "group": "내과 · 가정의학과",
   "region": "서울 동작",
-  "place": "https://m.place.naver.com/hospital/2027032493"
+  "place": "https://m.place.naver.com/hospital/2027032493",
+  "sido": "서울"
  },
  {
   "slug": "jckim",
   "name": "제이씨김내과의원",
   "group": "내과 · 가정의학과",
   "region": "인천 미추홀",
-  "place": "https://m.place.naver.com/hospital/13030747"
+  "place": "https://m.place.naver.com/hospital/13030747",
+  "sido": "인천"
  },
  {
   "slug": "han-im",
   "name": "한내과의원",
   "group": "내과 · 가정의학과",
   "region": "서울 구로",
-  "place": "https://m.place.naver.com/hospital/2007573109"
+  "place": "https://m.place.naver.com/hospital/2007573109",
+  "sido": "서울"
  },
  {
   "slug": "doksan-cham",
   "name": "독산참연세의원",
   "group": "내과 · 가정의학과",
   "region": "서울 금천",
-  "place": "https://m.place.naver.com/hospital/1860914418"
+  "place": "https://m.place.naver.com/hospital/1860914418",
+  "sido": "서울"
  },
  {
   "slug": "palpal365",
   "name": "면목팔팔365의원",
   "group": "내과 · 가정의학과",
   "region": "서울 중랑",
-  "place": "https://m.place.naver.com/hospital/1907835598"
+  "place": "https://m.place.naver.com/hospital/1907835598",
+  "sido": "서울"
  },
  {
   "slug": "hangaram",
   "name": "한가람메디즈의원",
   "group": "내과 · 가정의학과",
   "region": "인천 계양",
-  "place": "https://m.place.naver.com/hospital/1673050709"
+  "place": "https://m.place.naver.com/hospital/1673050709",
+  "sido": "인천"
  },
  {
   "slug": "hankook",
   "name": "한국의원",
   "group": "내과 · 가정의학과",
   "region": "경기 안산",
-  "place": "https://m.place.naver.com/hospital/1442534133"
+  "place": "https://m.place.naver.com/hospital/1442534133",
+  "sido": "경기"
  },
  {
   "slug": "hippocrata",
   "name": "히포크라타의원",
   "group": "내과 · 가정의학과",
   "region": "서울 서초",
-  "place": "https://m.place.naver.com/hospital/1205572828"
+  "place": "https://m.place.naver.com/hospital/1205572828",
+  "sido": "서울"
  },
  {
   "slug": "saemsori",
   "name": "샘소리이비인후과의원",
   "group": "이비인후과",
   "region": "부산 양정",
-  "place": "https://m.place.naver.com/hospital/1400429965"
+  "place": "https://m.place.naver.com/hospital/1400429965",
+  "sido": "부산"
  },
  {
   "slug": "oneulsiwon",
   "name": "오늘시원이비인후과의원",
   "group": "이비인후과",
   "region": "서울 동작",
-  "place": "https://m.place.naver.com/hospital/2066942117"
+  "place": "https://m.place.naver.com/hospital/2066942117",
+  "sido": "서울"
  },
  {
   "slug": "changwon-sol",
   "name": "창원솔이비인후과의원",
   "group": "이비인후과",
   "region": "경남 창원",
-  "place": "https://m.place.naver.com/hospital/2019388461"
+  "place": "https://m.place.naver.com/hospital/2019388461",
+  "sido": "경남"
  },
  {
   "slug": "baegot",
   "name": "배곧정형외과의원",
   "group": "정형외과 · 통증 · 재활",
   "region": "경기 시흥",
-  "place": "https://m.place.naver.com/hospital/454178718"
+  "place": "https://m.place.naver.com/hospital/454178718",
+  "sido": "경기"
  },
  {
   "slug": "bigtree",
   "name": "포항큰나무365정형외과의원",
   "group": "정형외과 · 통증 · 재활",
   "region": "경북 포항",
-  "place": "https://m.place.naver.com/hospital/1430489301"
+  "place": "https://m.place.naver.com/hospital/1430489301",
+  "sido": "경북"
  },
  {
   "slug": "centro",
   "name": "센트로 신경외과 정형외과 의원",
   "group": "정형외과 · 통증 · 재활",
   "region": "경기 부천",
-  "place": "https://m.place.naver.com/hospital/1573583228"
+  "place": "https://m.place.naver.com/hospital/1573583228",
+  "sido": "경기"
  },
  {
   "slug": "seteun",
   "name": "새튼재활의학과의원",
   "group": "정형외과 · 통증 · 재활",
   "region": "서울 도봉",
-  "place": "https://m.place.naver.com/hospital/1493368184"
+  "place": "https://m.place.naver.com/hospital/1493368184",
+  "sido": "서울"
  },
  {
   "slug": "sigma",
   "name": "시그마마취통증의학과의원",
   "group": "정형외과 · 통증 · 재활",
   "region": "서울 송파",
-  "place": "https://m.place.naver.com/hospital/1964300924"
+  "place": "https://m.place.naver.com/hospital/1964300924",
+  "sido": "서울"
  },
  {
   "slug": "fine",
   "name": "화인마취통증의학과의원 덕천점",
   "group": "정형외과 · 통증 · 재활",
   "region": "부산 덕천",
-  "place": "https://m.place.naver.com/hospital/33307143"
+  "place": "https://m.place.naver.com/hospital/33307143",
+  "sido": "부산"
  },
  {
   "slug": "songdo",
   "name": "송도외과의원",
   "group": "외과 · 비뇨의학과",
   "region": "인천 송도",
-  "place": "https://m.place.naver.com/hospital/271829504"
+  "place": "https://m.place.naver.com/hospital/271829504",
+  "sido": "인천"
  },
  {
   "slug": "menpower",
   "name": "멘파워비뇨의학과의원 강동송파점",
   "group": "외과 · 비뇨의학과",
   "region": "서울 강동",
-  "place": "https://m.place.naver.com/hospital/1300445977"
+  "place": "https://m.place.naver.com/hospital/1300445977",
+  "sido": "서울"
  },
  {
   "slug": "onfamily",
   "name": "양정온가족치과의원",
   "group": "치과",
   "region": "부산 양정",
-  "place": "https://m.place.naver.com/hospital/2082933966"
+  "place": "https://m.place.naver.com/hospital/2082933966",
+  "sido": "부산"
  },
  {
   "slug": "chungun",
   "name": "청운치과의원 동래",
   "group": "치과",
   "region": "부산 동래",
-  "place": "https://m.place.naver.com/hospital/2056998032"
+  "place": "https://m.place.naver.com/hospital/2056998032",
+  "sido": "부산"
  }
 ]

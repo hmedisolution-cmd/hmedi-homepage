@@ -448,26 +448,22 @@ def inject_posts(body, posts):
     body = body.replace('<div class="ins-tags" id="insTags"></div>', '<div class="ins-tags" id="insTags">%s</div>' % tag_html)
     return body.replace('<div class="ins-grid" id="insGrid"><div class="ins-empty">불러오는 중…</div></div>', '<div class="ins-grid" id="insGrid">%s</div>' % "".join(post_card(p) for p in posts))
 
-CLIENT_STYLE = os.environ.get("CLIENT_STYLE", "logos")   # "logos": 컬러 로고 / "cards": 진한 카드 + 흰색 로고
+def load_clients():
+    try: return json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "clients.json"), encoding="utf-8"))
+    except Exception: return []
 
-def client_count():
-    try: return len(json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "clients.json"), encoding="utf-8")))
-    except Exception: return 0
+def client_counts(key):
+    """clients.json 을 key(sido · group)로 세어 많은 순으로 돌려준다."""
+    out = {}
+    for c in load_clients(): out[c[key]] = out.get(c[key], 0) + 1
+    return sorted(out.items(), key=lambda x: -x[1])
 
 def clients_html():
-    """메인 페이지 고객사 섹션: 흐르는 로고 두 줄 + 진료과목별 텍스트 목록 (build/clients.json)."""
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "clients.json")
-    try: cl = json.load(open(path, encoding="utf-8"))
-    except Exception: return ""
+    """메인 페이지 고객사 섹션: 같은 크기의 카드(흰색 로고 + 병원명)가 두 줄로 흐르고, 아래에 지역별 병의원 수를 보여 준다."""
+    cl = load_clients()
+    if not cl: return ""
     e = htmlmod.escape
     n = len(cl)
-    img_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "img", "clients")
-    def size(slug):
-        try:
-            with open(os.path.join(img_dir, slug + ".png"), "rb") as f: head = f.read(24)
-            w, h = int.from_bytes(head[16:20], "big"), int.from_bytes(head[20:24], "big")
-            return round(w * 60 / h), 60
-        except Exception: return 120, 60
     # 지점이 여러 곳인 브랜드(갤러리아 · 더힐)는 붙여서 보여 주고, 나머지는 진료과목이 섞이게 흩는다
     brand = lambda c: c["slug"].split("-")[0] if c["slug"].split("-")[0] in ("galleria", "theheal") else ""
     rest = [c for c in cl if not brand(c)]
@@ -476,25 +472,15 @@ def clients_html():
     g1 = [c for c in cl if brand(c) == "galleria"]; g2 = [c for c in cl if brand(c) == "theheal"]
     k1 = max(0, (n + 1) // 2 - len(g1))
     order = g1 + rest[:k1] + g2 + rest[k1:]
-    def item(c, clone=False):
-        attr = ' aria-hidden="true" tabindex="-1"' if clone else ''
-        if CLIENT_STYLE == "cards":   # 같은 크기의 진한 카드 + 흰색 로고 + 병원명
-            return ('<a class="logo-card" href="%s" target="_blank" rel="noopener"%s><img src="assets/img/clients/white/%s.png?v={ver}" alt="" width="150" height="52" loading="lazy" decoding="async"><span>%s</span></a>'
-                    % (e(c["place"], quote=True), attr, c["slug"], e(c["name"])))
-        w, h = size(c["slug"])
-        return ('<a class="logo-item" href="%s" target="_blank" rel="noopener"%s><img src="assets/img/clients/%s.png?v={ver}" alt="%s" width="%d" height="%d" loading="lazy" decoding="async"><span>%s</span></a>'
-                % (e(c["place"], quote=True), attr, c["slug"], "" if clone else e(c["name"], quote=True), w, h, e(c["name"])))
+    def card(c, clone=False):
+        return ('<a class="logo-card" href="%s" target="_blank" rel="noopener"%s><img src="assets/img/clients/white/%s.png?v={ver}" alt="" width="150" height="52" loading="lazy" decoding="async"><span>%s</span></a>'
+                % (e(c["place"], quote=True), ' aria-hidden="true" tabindex="-1"' if clone else '', c["slug"], e(c["name"])))
     def row(items, cls=""):
-        return '<div class="logo-row%s"><div class="logo-track">%s%s</div></div>' % (cls, "".join(item(c) for c in items), "".join(item(c, True) for c in items))
+        return '<div class="logo-row%s"><div class="logo-track">%s%s</div></div>' % (cls, "".join(card(c) for c in items), "".join(card(c, True) for c in items))
     half = (n + 1) // 2
-    groups = []
-    for c in cl:
-        g = next((x for x in groups if x[0] == c["group"]), None)
-        if not g: g = (c["group"], []); groups.append(g)
-        g[1].append(c)
-    lst = "".join('<div class="cg"><dt>%s <b>%d</b></dt><dd>%s</dd></div>' % (e(g), len(v), "".join('<span>%s <i>%s</i></span>' % (e(c["name"]), e(c["region"])) for c in v)) for g, v in groups)
-    return ('<div class="logo-marquee%s" aria-label="함께하고 있는 병의원 로고">%s%s</div>\n  <div class="wrap client-wrap"><input type="checkbox" id="clAll" class="cl-toggle" hidden><div class="client-clip"><dl class="client-list" data-reveal>%s</dl></div><label for="clAll" class="cl-more"><span class="more">병의원 전체 보기</span><span class="less">접기</span></label></div>'
-            % (" cards" if CLIENT_STYLE == "cards" else "", row(order[:half]), row(order[half:], " slow"), lst)).replace("{ver}", VER)
+    stats = "".join('<li><span>%s</span><b>%d</b><i>곳</i></li>' % (e(k), v) for k, v in client_counts("sido"))
+    return ('<div class="logo-marquee" aria-label="함께하고 있는 병의원">%s%s</div>\n  <div class="wrap"><ul class="client-stats" data-reveal aria-label="지역별 병의원 수">%s</ul></div>'
+            % (row(order[:half]), row(order[half:], " slow"), stats)).replace("{ver}", VER)
 
 def main():
     POSTS = load_posts_index()
@@ -510,7 +496,7 @@ def main():
         jsonld = build_jsonld(page, title, desc, body, crumb, service)
         body = wrap_sentences(body)
         if page == "insights": body = inject_posts(body, POSTS)
-        if "{{CLIENTS}}" in body: body = body.replace("{{CLIENTS}}", clients_html()).replace("{{CLIENT_COUNT}}", str(client_count()))
+        if "{{CLIENTS}}" in body: body = body.replace("{{CLIENTS}}", clients_html()).replace("{{CLIENT_COUNT}}", str(len(load_clients())))
         og_title = ("%s | 에이치메디솔루션" % crumb) if crumb else "에이치메디솔루션 | 마케팅 잘하는 개원 컨설턴트"
         html = render_page(page, title, desc, keywords, page_url(page), jsonld, body, robots=("noindex, follow" if page == "post" else ROBOTS_INDEX), og_title=og_title)
         # 버전 문자열 · 오늘 날짜를 뺀 내용이 그대로면 수정일을 유지한다 (sitemap lastmod · dateModified)
@@ -585,6 +571,7 @@ def main():
       "- 검증: 프리랜서 마켓 크몽 마케팅 카테고리 Prime 전문가 (프로필: https://kmong.com/@%EC%97%90%EC%9D%B4%EC%B9%98%EB%A9%94%EB%94%94) · 평점 5.0 (109개 평가) · 총 작업 171개 · 만족도 100%",
       "- 성과 예시: 포항 정형외과 개원 첫 달 일환자 120명 (성공사례 페이지), 부산 서면 피부과 플레이스 20위→3위, 운영 병원 50+, 누적 마케팅 계약 300건+, 재계약률 97%, 평균 매출 30%+ 증가",
       "- 대표: 고한별 (010-8263-0982) · 설립 2020년 4월 15일 · 부산 지사 개설 2021년 5월 · 개원 컨설팅 시작 2023년 2월",
+      "- 현재 함께하고 있는 병의원: %d곳 (지역별 %s / 진료과목별 %s)" % (len(load_clients()), " · ".join("%s %d곳" % kv for kv in client_counts("sido")), " · ".join("%s %d곳" % (k.replace(" · ", "·"), v) for k, v in client_counts("group"))),
       "- 대표 경력: 동원그룹 전략기획(2017), KT&G 마케팅기획(2018), 크몽 네이버 플레이스 마케팅 서비스 론칭 · Prime 전문가 인증(2019), 크몽 마케팅 컨설팅 200회 이상, 탈잉 마케팅 강연 20회 이상, 크몽 온라인 마케팅 전자책 200부 이상 판매 (%s/ceo.html)" % SITE_URL,
       "- 이메일: " + ORG["email"] + " · 사업자등록번호 " + ORG["biz"],
       "- 주소: 부천 본사 경기도 부천시 소향로 13번길 28-14 403-1호 / 부산 지사 부산 부산진구 서면로 10 데시앙 2616호",
