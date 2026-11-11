@@ -45,7 +45,23 @@
  },
  "marketing": {
   "date": "2026-11-11",
-  "sig": "06fef18d0d94bf5d3d94f158605287f7a0c1e06a"
+  "sig": "028e6527792144eade1c0a177e823cc49080607d"
+ },
+ "marketing-dermatology": {
+  "date": "2026-11-11",
+  "sig": "22838ca6efdfd2f2d69447f494142a5a639dccf4"
+ },
+ "marketing-ent-surgery-dental": {
+  "date": "2026-11-11",
+  "sig": "189ed8cbed787ef00cda205e01b334eb3094d256"
+ },
+ "marketing-internal": {
+  "date": "2026-11-11",
+  "sig": "c9519d2baec2101b06936df35e4fb188110fcda0"
+ },
+ "marketing-orthopedics": {
+  "date": "2026-11-11",
+  "sig": "4158785ce9457c2de38a196393e76d55b332ba50"
  },
  "portfolio": {
   "date": "2026-11-10",
