@@ -74,6 +74,8 @@
     document.body.classList.toggle("menu-open", open);
     document.body.classList.toggle("is-locked", open);
     menuBtn.setAttribute("aria-expanded", String(open));
+    const ov = $(".menu-overlay");
+    if (ov) { ov.toggleAttribute("inert", !open); ov.setAttribute("aria-hidden", String(!open)); }
   };
   menuBtn.addEventListener("click", () => setMenu(!document.body.classList.contains("menu-open")));
   $$(".menu-overlay a").forEach((a) => a.addEventListener("click", () => setMenu(false)));

@@ -63,7 +63,7 @@ HEAD = """<!DOCTYPE html>
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link rel="stylesheet" href="assets/css/site.css?v={ver}">
   <script type="application/ld+json">{jsonld}</script>
@@ -108,7 +108,7 @@ HEADER = """
     </div>
   </div>
 </header>
-<div class="menu-overlay" aria-hidden="true">
+<div class="menu-overlay" aria-hidden="true" inert>
   <div class="wrap menu-grid">
     <nav class="menu-links" aria-label="전체 메뉴">
       <a href="/" data-nav="home"><small>01</small>메인</a>
@@ -214,7 +214,7 @@ PAGES = {
               "에이치메디솔루션, 병원 마케팅 회사, 개원 컨설팅 회사, 병원 MSO, 메디컬 마케팅 대행사, 부천 병원 마케팅, 부산 병원 마케팅",
               "병원 마케팅 · 개원 컨설팅 전문 메디컬 솔루션 회사", "회사소개", None),
   "marketing": ("병원 마케팅 프로그램 · 네이버 플레이스 마케팅 | 에이치메디솔루션",
-                "네이버 플레이스 로직 기반 병원 마케팅 프로그램. Standard(월 150만원), Premium(월 180만원), AI 실속 패키지(월 99만원)와 홈페이지 제작, 숏폼 영상, 당근·인스타그램·Meta 광고 대행. 크몽 Prime 전문가, 만족도 100%.",
+                "네이버 플레이스 로직 기반 병원 마케팅 프로그램. Standard(월 150만원) · Premium(월 180만원) · AI 실속 패키지(월 99만원). 회사 영업과 광고를 하지 않아 비용이 담백합니다. 크몽 Prime 전문가.",
                 "병원 마케팅, 병원 온라인 마케팅, 네이버 플레이스 마케팅, 플레이스 상위노출, 병원 블로그 마케팅, 병원 바이럴 마케팅, 피부과 마케팅, 정형외과 마케팅, 병원 리뷰 관리, 병원 마케팅 비용, 병원 마케팅 대행, 병원 홈페이지 제작, 병원 숏폼, 당근 광고 대행, 의료광고심의",
                 "네이버 플레이스 기반 병원 마케팅 프로그램", "온라인 마케팅", "병원 온라인 마케팅"),
   "consulting": ("개원 컨설팅 · 병원 MSO | 마케팅 잘하는 개원 컨설턴트 에이치메디솔루션",
@@ -250,13 +250,13 @@ PAGES = {
           "정형외과 개원 컨설팅 사례, 포항 병원 개원, 병원 입지분석 사례, 개원 사전마케팅, 1인 정형외과 개원",
           "포항 정형외과 개원 컨설팅 사례 · 개원 첫 달 일환자 120명", "포항 O정형외과 사례", None),
   "marketing-dermatology": ("피부과 마케팅 · 플레이스 · 인스타그램 · 숏폼 | 에이치메디솔루션",
-          "피부과 13곳과 함께하는 병원 전문 마케팅. 네이버 플레이스 · 블로그 · 리뷰 운영에 인스타그램 마케팅(피드 디자인 · 계정 관리 · CPC 광고), 이벤트 디자인, 숏폼 영상까지 한 팀이 맡습니다. 부산 H피부과 조회수 83.5% 증가 사례 수록.",
+          "피부과 13곳과 함께하는 병원 전문 마케팅. 네이버 플레이스 · 블로그에 인스타그램, 이벤트 디자인, 숏폼 영상까지 한 팀이 맡습니다. 부산 H피부과 조회수 83.5% 증가 사례 수록.",
           "피부과 마케팅, 피부과 마케팅 업체, 피부과 인스타그램 마케팅, 피부과 플레이스 마케팅, 피부과 블로그 마케팅, 피부과 이벤트 디자인, 피부과 숏폼, 피부과 개원 마케팅",
           "피부과 마케팅 · 플레이스부터 인스타그램 · 숏폼까지",
           "피부과 마케팅",
           "피부과 마케팅"),
-  "marketing-internal": ("내과 · 가정의학과 마케팅 · 건강검진 · 예방접종 · 기능의학 | 에이치메디솔루션",
-          "내과 · 가정의학과 10곳과 함께하는 병원 전문 마케팅. 동네 생활권 키워드, 예방접종 · 건강검진 시즌, 네이버 예약, 카카오 채널을 중심으로 검진센터 · 인공신장실 · 기능의학 · 365일 진료 의원의 특색을 살리고 기본 진료와 균형을 맞춥니다.",
+  "marketing-internal": ("내과 · 가정의학과 마케팅 · 검진 · 기능의학 | 에이치메디솔루션",
+          "내과 · 가정의학과 10곳과 함께하는 병원 전문 마케팅. 동네 키워드, 예방접종 · 건강검진 시즌, 기능의학까지 병원의 특색을 살리고 기본 진료와 균형을 맞춥니다.",
           "내과 마케팅, 가정의학과 마케팅, 내과 가정의학과 마케팅, 내과 마케팅 업체, 건강검진 마케팅, 기능의학 마케팅, 예방접종 마케팅, 내과 플레이스 마케팅, 내과 블로그 마케팅, 내과 개원 마케팅",
           "내과 · 가정의학과 마케팅 · 병원의 특색과 기본 진료의 균형",
           "내과 · 가정의학과 마케팅",
@@ -268,7 +268,7 @@ PAGES = {
           "정형외과 마케팅",
           "정형외과 마케팅"),
   "marketing-ent-surgery-dental": ("보험 진료과 마케팅 · 이비인후과 · 수술병원 · 치과 | 에이치메디솔루션",
-          "이비인후과 · 수술병원 · 치과 등 보험 진료과 전문 마케팅. 이비인후과는 유행 한 달 전 콘텐츠 준비와 비수기 특색 진료, 항문외과 · 외과 등 수술병원은 치질 수술 · 하지정맥류 수술의 전 과정 콘텐츠와 원거리 환자 유입, 치과는 세부 키워드 · 플레이스 최적화 · CPC 광고를 중심으로 진행합니다.",
+          "이비인후과 · 수술병원(항문외과 · 외과) · 치과 등 보험 진료과 전문 마케팅. 유행 한 달 전 콘텐츠 준비, 수술 전 과정 콘텐츠, 치과 세부 키워드와 CPC 광고까지 진료과에 맞게 진행합니다.",
           "보험 진료과 마케팅, 이비인후과 마케팅, 수술병원 마케팅, 외과 마케팅, 항문외과 마케팅, 치질 수술 병원 마케팅, 하지정맥류 병원 마케팅, 유방외과 마케팅, 치과 마케팅, 치과 개원 마케팅, 임플란트 마케팅, 이비인후과 플레이스 마케팅, 치과 플레이스 마케팅, 치과 CPC 광고",
           "보험 진료과 마케팅 · 이비인후과 · 수술병원 · 치과",
           "보험 진료과 마케팅",
@@ -377,9 +377,9 @@ def build_jsonld(page, title, desc, body, crumb, service):
         sv = {"@type": "Service", "@id": url + "#service", "name": service, "serviceType": service, "provider": {"@id": SITE_URL + "/#org"}, "areaServed": ORG["areas"], "url": url, "description": desc}
         if page == "marketing" and PROGRAMS: sv["hasOfferCatalog"] = offers_ld(PROGRAMS)
         graph.append(sv)
-    if page.startswith("case-"):
+    if page.startswith("case-") or page.startswith("marketing-"):
         graph.append({"@type": "Article", "@id": url + "#article", "headline": title.split(" | ")[0], "description": desc, "url": url, "mainEntityOfPage": {"@id": url + "#webpage"},
-          "datePublished": "2026-11-11", "inLanguage": "ko-KR", "articleSection": "성공사례",
+          "datePublished": "2026-11-11", "inLanguage": "ko-KR", "articleSection": "성공사례" if page.startswith("case-") else "진료과별 마케팅",
           "author": {"@type": "Person", "@id": SITE_URL + "/ceo.html#person", "name": "고한별", "url": SITE_URL + "/ceo.html"}, "publisher": {"@id": SITE_URL + "/#org"}})
     if page == "ceo":
         web["@type"] = "ProfilePage"; web["mainEntity"] = {"@id": url + "#person"}
@@ -397,6 +397,11 @@ def build_jsonld(page, title, desc, body, crumb, service):
 def korean_h1(body, h1):
     """페이지 히어로: 영문 장식 제목은 <p>로, 한국어 키워드 제목을 실제 <h1>으로."""
     if not h1: return body
+    t = h1
+    for term in NOWRAP_TERMS: t = t.replace(term, term.replace(" · ", "\x00"))
+    segs = [x.replace("\x00", "&nbsp;·&nbsp;") for x in t.split(" · ")]
+    if len(segs) > 1 and max(len(x.replace("&nbsp;", " ")) for x in segs) <= 18:
+        h1 = " · ".join('<span class="nw">%s</span>' % x for x in segs)
     return re.sub(r'<h1 class="title-en split">(.*?)</h1>', lambda m: '<p class="title-en split" aria-hidden="true">%s</p>\n    <h1 class="ph-h1">%s</h1>' % (m.group(1), h1), body, count=1, flags=re.S)
 
 
@@ -632,7 +637,7 @@ def main():
       "- 검증: 프리랜서 마켓 크몽 마케팅 카테고리 Prime 전문가 (프로필: https://kmong.com/@%EC%97%90%EC%9D%B4%EC%B9%98%EB%A9%94%EB%94%94) · 평점 5.0 (109개 평가) · 총 작업 171개 · 만족도 100%",
       "- 성과 예시: 포항 정형외과 개원 첫 달 일환자 120명 (성공사례 페이지), 부산 서면 피부과 플레이스 20위→3위, 운영 병원 50+, 누적 마케팅 계약 300건+, 재계약률 97%, 평균 매출 30%+ 증가",
       "- 대표: 고한별 (010-8263-0982) · 설립 2020년 4월 15일 · 부산 지사 개설 2021년 5월 · 개원 컨설팅 시작 2023년 2월",
-      "- 영업과 광고를 하지 않습니다: 영업 사원을 두지 않고 유료 광고를 하지 않으며, 설립 때부터 원장님들의 소개로 고객을 만나 왔습니다. 개원 컨설팅 · MSO를 함께 하고 있어 마케팅 고객 수를 무리하게 늘리지 않습니다. 영업비 · 광고비가 들지 않는 만큼 마케팅 비용을 낮췄습니다 (%s/#no-ads)" % SITE_URL,
+      "- 영업과 광고를 하지 않습니다: 에이치메디솔루션은 회사를 알리기 위한 영업 사원을 두지 않고 유료 광고도 하지 않으며(병원을 위한 광고 운영은 프로그램대로 진행), 설립 때부터 원장님들의 소개로 고객을 만나 왔습니다. 개원 컨설팅 · MSO를 함께 하고 있어 마케팅 고객 수를 무리하게 늘리지 않습니다. 영업비 · 광고비가 들지 않는 만큼 마케팅 비용을 낮췄습니다 (%s/#no-ads)" % SITE_URL,
       "- 의료법 대응: 의료법 기준에 맞춰 콘텐츠를 제작하고 심의 대상 광고물은 의료광고 심의를 거쳐 집행합니다. 신고가 들어오면 보건소 담당 주무관과 직접 소통하며 대응하고, 필요하면 변호사 자문을 받습니다. 에이치메디솔루션이 진행한 마케팅으로 거래 병원이 행정처분이나 법적 조치를 받은 사례는 0건입니다 (2026년 11월 기준, 자체 집계, %s/marketing.html#compliance)" % SITE_URL,
       "- 현재 함께하고 있는 병의원: %d곳 (지역별 %s / 진료과목별 %s)" % (len(load_clients()), " · ".join("%s %d곳" % kv for kv in client_counts("sido")), " · ".join("%s %d곳" % (k.replace(" · ", "·"), v) for k, v in client_counts("group"))),
       "- 대표 경력: 동원그룹 전략기획(2017), KT&G 마케팅기획(2018), 크몽 네이버 플레이스 마케팅 서비스 론칭 · Prime 전문가 인증(2019), 크몽 마케팅 컨설팅 200회 이상, 탈잉 마케팅 강연 20회 이상, 크몽 온라인 마케팅 전자책 200부 이상 판매 (%s/ceo.html)" % SITE_URL,
