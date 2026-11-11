@@ -1780,3 +1780,12 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
   .logo-card[aria-hidden] { display: none; }
   .logo-marquee { -webkit-mask-image: none; mask-image: none; }
 }
+
+/* ===== 진료과 페이지 ===== */
+.dept-pillars { grid-template-columns: repeat(4, 1fr); }
+.dept-pillars .pillar h3 { margin-top: 30px; }
+.dept-pillars .pillar .no { left: 24px; right: auto; top: 22px; color: var(--sky-deep); }
+@media (max-width: 1080px) { .dept-pillars { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 760px) { .dept-pillars { grid-template-columns: 1fr; } }
+.info-table-wrap + .case-more { margin-top: 18px; }
+.case-more + .case-notes { margin-top: 26px; }

@@ -327,6 +327,7 @@ def build_jsonld(page, title, desc, body, crumb, service):
     web = {"@type": "WebPage", "@id": url + "#webpage", "url": url, "name": title, "description": desc, "inLanguage": "ko-KR", "isPartOf": {"@id": SITE_URL + "/#website"}, "about": {"@id": SITE_URL + "/#org"}, "dateModified": TODAY}
     crumbs = [{"@type": "ListItem", "position": 1, "name": "홈", "item": SITE_URL + "/"}]
     if page.startswith("case-"): crumbs.append({"@type": "ListItem", "position": 2, "name": "성공사례", "item": SITE_URL + "/portfolio.html"})
+    if page.startswith("marketing-"): crumbs.append({"@type": "ListItem", "position": 2, "name": "온라인 마케팅", "item": SITE_URL + "/marketing.html"})
     if crumb: crumbs.append({"@type": "ListItem", "position": len(crumbs) + 1, "name": crumb, "item": url})
     web["breadcrumb"] = {"@id": url + "#breadcrumb"}
     graph.append(web); graph.append({"@type": "BreadcrumbList", "@id": url + "#breadcrumb", "itemListElement": crumbs})
@@ -553,7 +554,7 @@ def main():
     """ % SITE_URL).replace("\n    ", "\n").rstrip() + "\n")
 
     json.dump(LASTMOD, open(lm_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1, sort_keys=True)
-    prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3", "privacy": "0.2", "ceo": "0.7", "case-pohang": "0.7", "case-busan": "0.7", "case-incheon": "0.7", "case-gwanggyo": "0.7"}
+    prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3", "privacy": "0.2", "ceo": "0.7", "case-pohang": "0.7", "case-busan": "0.7", "case-incheon": "0.7", "case-gwanggyo": "0.7", "marketing-dermatology": "0.8", "marketing-internal": "0.8", "marketing-orthopedics": "0.8"}
     urls = "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%s</priority></url>\n" % (page_url(p), LASTMOD.get(p, {}).get("date", TODAY), "weekly" if p in ("index", "marketing", "insights") else "monthly", prio[p]) for p in PAGES if p != "post")
     urls += "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>\n" % (post_url(p), (p.get("updated_at") or p.get("published_at") or TODAY)[:10]) for p in POSTS)
     open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
