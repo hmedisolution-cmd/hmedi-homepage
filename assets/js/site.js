@@ -43,8 +43,30 @@
   }
 
   const page = document.body.dataset.page;
-  $$(".site-nav a, .menu-links a").forEach((a) => {
-    if (a.dataset.nav === page) a.classList.add("is-current");
+  $$(".site-nav a, .menu-links a, .menu-links .menu-parent").forEach((a) => {
+    const g = a.dataset.navGroup;
+    if (a.dataset.nav === page || (g && (page === g || page.startsWith(g + "-")))) a.classList.add("is-current");
+  });
+
+  /* 하위 메뉴: 상단 드롭다운(PC) · 전체 메뉴 펼침 */
+  $$(".site-nav .has-sub").forEach((item) => {
+    const top = item.querySelector(":scope > a");
+    const set = (open) => { item.classList.toggle("is-open", open); top.setAttribute("aria-expanded", String(open)); };
+    item.addEventListener("mouseenter", () => set(true));
+    item.addEventListener("mouseleave", () => set(false));
+    item.addEventListener("focusin", () => set(true));
+    item.addEventListener("focusout", (e) => { if (!item.contains(e.relatedTarget)) set(false); });
+    item.addEventListener("keydown", (e) => { if (e.key === "Escape") { set(false); top.focus(); } });
+    // 터치 기기에서는 첫 번째 탭으로 펼치고, 두 번째 탭에 이동한다
+    top.addEventListener("click", (e) => {
+      if (window.matchMedia("(hover: none)").matches && !item.classList.contains("is-open")) { e.preventDefault(); set(true); }
+    });
+  });
+  $$(".menu-group").forEach((g) => {
+    const btn = g.querySelector(".menu-parent");
+    const set = (open) => { g.classList.toggle("is-open", open); btn.setAttribute("aria-expanded", String(open)); };
+    btn.addEventListener("click", () => set(!g.classList.contains("is-open")));
+    if (btn.classList.contains("is-current")) set(true);
   });
 
   const menuBtn = $(".menu-btn");
@@ -55,6 +77,45 @@
   };
   menuBtn.addEventListener("click", () => setMenu(!document.body.classList.contains("menu-open")));
   $$(".menu-overlay a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
+
+  /* ---------- 고객사 카드: 자동으로 흐르고, 손가락 · 트랙패드로 좌우로 넘길 수 있다 ---------- */
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    $$(".logo-row").forEach((row, i) => {
+      const track = row.querySelector(".logo-track");
+      if (!track) return;
+      row.classList.add("is-js");
+      const speed = i ? 39 : 50;            // 초당 px (아랫줄이 조금 느리다)
+      let pos = 0, last = 0, hold = false, hover = false, inView = true, timer = 0;
+      const half = () => track.scrollWidth / 2;
+      const wrap = () => {                  // 같은 카드가 두 번 이어져 있어 절반 지점에서 이어 붙인다
+        const h = half(); if (!h) return;
+        if (row.scrollLeft >= h) row.scrollLeft -= h;
+        else if (row.scrollLeft <= 0) row.scrollLeft += h;
+      };
+      const pause = (ms) => { hold = true; clearTimeout(timer); if (ms) timer = setTimeout(() => { hold = false; pos = row.scrollLeft; }, ms); };
+      row.addEventListener("touchstart", () => pause(0), { passive: true });
+      row.addEventListener("touchend", () => pause(1800), { passive: true });
+      row.addEventListener("touchcancel", () => pause(1800), { passive: true });
+      row.addEventListener("wheel", (e) => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) pause(1800); }, { passive: true });
+      row.addEventListener("scroll", () => { if (hold) wrap(); }, { passive: true });
+      row.addEventListener("mouseenter", () => { hover = true; });
+      row.addEventListener("mouseleave", () => { hover = false; pos = row.scrollLeft; });
+      row.addEventListener("focusin", () => { hover = true; });
+      row.addEventListener("focusout", () => { hover = false; pos = row.scrollLeft; });
+      if ("IntersectionObserver" in window) new IntersectionObserver((es) => es.forEach((e) => { inView = e.isIntersecting; }), { threshold: 0 }).observe(row);
+      requestAnimationFrame(() => { row.scrollLeft = pos = 1; });
+      const tick = (now) => {
+        const dt = Math.min(64, now - (last || now)); last = now;
+        if (!hold && !hover && inView && !document.hidden) {
+          pos += speed * dt / 1000;
+          const h = half(); if (h && pos >= h) pos -= h;
+          row.scrollLeft = pos;
+        }
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }
 
   /* ---------- Reveal ---------- */
   const splitWords = (el) => {

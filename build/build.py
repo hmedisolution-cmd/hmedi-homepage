@@ -87,7 +87,16 @@ HEADER = """
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="company.html" data-nav="company">회사소개</a>
       <a href="ai.html" data-nav="ai">AI 마케팅</a>
-      <a href="marketing.html" data-nav="marketing">온라인 마케팅</a>
+      <div class="nav-item has-sub">
+        <a href="marketing.html" data-nav-group="marketing" aria-haspopup="true" aria-expanded="false">온라인 마케팅<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+        <div class="nav-sub"><div class="nav-sub-in">
+          <a href="marketing.html" data-nav="marketing"><b>마케팅 노하우</b><small>프로그램 · 비용 · 플레이스 로직</small></a>
+          <a href="marketing-dermatology.html" data-nav="marketing-dermatology"><b>피부과 마케팅</b><small>인스타그램 · 이벤트 · 숏폼</small></a>
+          <a href="marketing-internal.html" data-nav="marketing-internal"><b>내과 · 가정의학과 마케팅</b><small>검진 · 예방접종 · 기능의학</small></a>
+          <a href="marketing-orthopedics.html" data-nav="marketing-orthopedics"><b>정형외과 마케팅</b><small>개원 사전마케팅 · 통증 · 재활</small></a>
+          <a href="marketing-ent-surgery-dental.html" data-nav="marketing-ent-surgery-dental"><b>보험 진료과 마케팅</b><small>이비인후과 · 수술병원 · 치과</small></a>
+        </div></div>
+      </div>
       <a href="consulting.html" data-nav="consulting">개원 컨설팅</a>
       <a href="portfolio.html" data-nav="portfolio">성공사례</a>
       <a href="/칼럼/" data-nav="insights">인사이트</a>
@@ -105,7 +114,16 @@ HEADER = """
       <a href="/" data-nav="home"><small>01</small>메인</a>
       <a href="company.html" data-nav="company"><small>02</small>회사소개</a>
       <a href="ai.html" data-nav="ai"><small>03</small>AI 마케팅 · AEO</a>
-      <a href="marketing.html" data-nav="marketing"><small>04</small>온라인 마케팅</a>
+      <div class="menu-group">
+        <button type="button" class="menu-parent" data-nav-group="marketing" aria-expanded="false"><small>04</small>온라인 마케팅<i class="pm" aria-hidden="true"></i></button>
+        <div class="menu-sub"><div class="menu-sub-in">
+          <a href="marketing.html" data-nav="marketing">마케팅 노하우<span>프로그램 · 비용 · 플레이스 로직</span></a>
+          <a href="marketing-dermatology.html" data-nav="marketing-dermatology">피부과 마케팅<span>인스타그램 · 이벤트 · 숏폼</span></a>
+          <a href="marketing-internal.html" data-nav="marketing-internal">내과 · 가정의학과 마케팅<span>검진 · 예방접종 · 기능의학</span></a>
+          <a href="marketing-orthopedics.html" data-nav="marketing-orthopedics">정형외과 마케팅<span>개원 사전마케팅 · 통증 · 재활</span></a>
+          <a href="marketing-ent-surgery-dental.html" data-nav="marketing-ent-surgery-dental">보험 진료과 마케팅<span>이비인후과 · 수술병원 · 치과</span></a>
+        </div></div>
+      </div>
       <a href="consulting.html" data-nav="consulting"><small>05</small>개원 컨설팅 · MSO</a>
       <a href="portfolio.html" data-nav="portfolio"><small>06</small>성공사례 · 포트폴리오</a>
       <a href="/칼럼/" data-nav="insights"><small>07</small>인사이트</a>
@@ -473,6 +491,23 @@ def inject_posts(body, posts):
     body = body.replace('<div class="ins-tags" id="insTags"></div>', '<div class="ins-tags" id="insTags">%s</div>' % tag_html)
     return body.replace('<div class="ins-grid" id="insGrid"><div class="ins-empty">불러오는 중…</div></div>', '<div class="ins-grid" id="insGrid">%s</div>' % "".join(post_card(p) for p in posts))
 
+NOWRAP_TERMS = ["내과 · 가정의학과"]
+
+def tidy_breaks(body):
+    """줄바꿈 정리: 본문 글자에서 가운뎃점(·)이 줄 맨 앞에 오지 않게 하고, 한 덩어리로 읽어야 하는 말은 끊기지 않게 한다."""
+    def text(m):
+        t = m.group(0)
+        for term in NOWRAP_TERMS: t = t.replace(term, '<span class="nw">%s</span>' % term)
+        t = t.replace(" · ", "&nbsp;· ")
+        t = re.sub(r'([억만천]) 원', r'\1&nbsp;원', t)      # 5억 7천만 원
+        t = re.sub(r'월 (\d)', r'월&nbsp;\1', t)           # 월 150만원
+        return re.sub(r'(?<=[^\s;])·(?=\S)', '&#8288;·', t)   # 붙여 쓴 가운뎃점: 앞에서 끊기지 않게 (단어 결합 문자)
+    out = []
+    for chunk in re.split(r'(<script\b.*?</script>|<style\b.*?</style>)', body, flags=re.S | re.I):
+        skip = chunk[:7].lower() == "<script" or chunk[:6].lower() == "<style"
+        out.append(chunk if skip else re.sub(r'(?<=>)[^<>]+(?=<)', text, chunk))
+    return "".join(out)
+
 def load_clients():
     try: return json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "clients.json"), encoding="utf-8"))
     except Exception: return []
@@ -520,6 +555,7 @@ def main():
         ALL_FAQ[page] = extract_faq(body)
         jsonld = build_jsonld(page, title, desc, body, crumb, service)
         body = wrap_sentences(body)
+        body = tidy_breaks(body)
         if page == "insights": body = inject_posts(body, POSTS)
         if "{{CLIENTS}}" in body: body = body.replace("{{CLIENTS}}", clients_html()).replace("{{CLIENT_COUNT}}", str(len(load_clients())))
         og_title = ("%s | 에이치메디솔루션" % crumb) if crumb else "에이치메디솔루션 | 마케팅 잘하는 개원 컨설턴트"
