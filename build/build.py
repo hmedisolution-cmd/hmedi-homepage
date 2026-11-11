@@ -448,6 +448,34 @@ def inject_posts(body, posts):
     body = body.replace('<div class="ins-tags" id="insTags"></div>', '<div class="ins-tags" id="insTags">%s</div>' % tag_html)
     return body.replace('<div class="ins-grid" id="insGrid"><div class="ins-empty">불러오는 중…</div></div>', '<div class="ins-grid" id="insGrid">%s</div>' % "".join(post_card(p) for p in posts))
 
+def client_count():
+    try: return len(json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "clients.json"), encoding="utf-8")))
+    except Exception: return 0
+
+def clients_html():
+    """메인 페이지 고객사 섹션: 흐르는 로고 두 줄 + 진료과목별 텍스트 목록 (build/clients.json)."""
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "clients.json")
+    try: cl = json.load(open(path, encoding="utf-8"))
+    except Exception: return ""
+    e = htmlmod.escape
+    n = len(cl)
+    step = next(k for k in (7, 5, 3, 1) if n % k)  # 같은 브랜드 지점이 붙어 나오지 않게 섞는다
+    order = [cl[(i * step) % n] for i in range(n)]
+    def item(c, clone=False):
+        return ('<a class="logo-item" href="%s" target="_blank" rel="noopener"%s><img src="assets/img/clients/%s.png?v={ver}" alt="%s" width="480" height="280" loading="lazy" decoding="async"><span>%s</span></a>'
+                % (e(c["place"], quote=True), ' aria-hidden="true" tabindex="-1"' if clone else '', c["slug"], "" if clone else e(c["name"], quote=True), e(c["name"])))
+    def row(items, cls=""):
+        return '<div class="logo-row%s"><div class="logo-track">%s%s</div></div>' % (cls, "".join(item(c) for c in items), "".join(item(c, True) for c in items))
+    half = (n + 1) // 2
+    groups = []
+    for c in cl:
+        g = next((x for x in groups if x[0] == c["group"]), None)
+        if not g: g = (c["group"], []); groups.append(g)
+        g[1].append(c)
+    lst = "".join('<div class="cg"><dt>%s <b>%d</b></dt><dd>%s</dd></div>' % (e(g), len(v), "".join('<span>%s <i>%s</i></span>' % (e(c["name"]), e(c["region"])) for c in v)) for g, v in groups)
+    return ('<div class="logo-marquee" aria-label="함께하고 있는 병의원 로고">%s%s</div>\n  <div class="wrap client-wrap"><input type="checkbox" id="clAll" class="cl-toggle" hidden><div class="client-clip"><dl class="client-list" data-reveal>%s</dl></div><label for="clAll" class="cl-more"><span class="more">병의원 전체 보기</span><span class="less">접기</span></label></div>'
+            % (row(order[:half]), row(order[half:], " slow"), lst)).replace("{ver}", VER)
+
 def main():
     POSTS = load_posts_index()
     ALL_FAQ = {}
@@ -462,6 +490,7 @@ def main():
         jsonld = build_jsonld(page, title, desc, body, crumb, service)
         body = wrap_sentences(body)
         if page == "insights": body = inject_posts(body, POSTS)
+        if "{{CLIENTS}}" in body: body = body.replace("{{CLIENTS}}", clients_html()).replace("{{CLIENT_COUNT}}", str(client_count()))
         og_title = ("%s | 에이치메디솔루션" % crumb) if crumb else "에이치메디솔루션 | 마케팅 잘하는 개원 컨설턴트"
         html = render_page(page, title, desc, keywords, page_url(page), jsonld, body, robots=("noindex, follow" if page == "post" else ROBOTS_INDEX), og_title=og_title)
         # 버전 문자열 · 오늘 날짜를 뺀 내용이 그대로면 수정일을 유지한다 (sitemap lastmod · dateModified)
