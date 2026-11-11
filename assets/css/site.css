@@ -1811,3 +1811,7 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 .comp-zero span { display: block; margin-top: 8px; font-size: 12.5px; color: rgba(255,255,255,.5); }
 #compliance .svc .no { letter-spacing: .04em; font-family: var(--font-body); font-weight: 700; }
 @media (max-width: 760px) { .comp-zero { flex-direction: column; align-items: flex-start; gap: 14px; padding: 26px 22px; } .comp-zero strong { font-size: 17px; } .comp-zero p { font-size: 14px; } }
+.case-more.c4 { grid-template-columns: repeat(4, 1fr); }
+.case-notes a { color: var(--sky-deep); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 1180px) { .case-more.c4 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 960px) { .case-more.c4 { grid-template-columns: 1fr; } }

@@ -231,6 +231,30 @@ PAGES = {
           "포항 오천읍 1인 진료 정형외과 개원 사례. 상권분석으로 입지를 정하고 개원 준비와 사전마케팅을 함께 진행해 2025년 2월 개원, 4주차 일환자 121명을 기록한 과정을 정리했습니다.",
           "정형외과 개원 컨설팅 사례, 포항 병원 개원, 병원 입지분석 사례, 개원 사전마케팅, 1인 정형외과 개원",
           "포항 정형외과 개원 컨설팅 사례 · 개원 첫 달 일환자 120명", "포항 O정형외과 사례", None),
+  "marketing-dermatology": ("피부과 마케팅 · 플레이스 · 인스타그램 · 숏폼 | 에이치메디솔루션",
+          "피부과 13곳과 함께하는 병원 전문 마케팅. 네이버 플레이스 · 블로그 · 리뷰 운영에 인스타그램 마케팅(피드 디자인 · 계정 관리 · CPC 광고), 이벤트 디자인, 숏폼 영상까지 한 팀이 맡습니다. 부산 H피부과 조회수 83.5% 증가 사례 수록.",
+          "피부과 마케팅, 피부과 마케팅 업체, 피부과 인스타그램 마케팅, 피부과 플레이스 마케팅, 피부과 블로그 마케팅, 피부과 이벤트 디자인, 피부과 숏폼, 피부과 개원 마케팅",
+          "피부과 마케팅 · 플레이스부터 인스타그램 · 숏폼까지",
+          "피부과 마케팅",
+          "피부과 마케팅"),
+  "marketing-internal": ("내과 · 가정의학과 마케팅 · 건강검진 · 예방접종 · 기능의학 | 에이치메디솔루션",
+          "내과 · 가정의학과 10곳과 함께하는 병원 전문 마케팅. 동네 생활권 키워드, 예방접종 · 건강검진 시즌, 네이버 예약, 카카오 채널을 중심으로 검진센터 · 인공신장실 · 기능의학 · 365일 진료 의원의 특색을 살리고 기본 진료와 균형을 맞춥니다.",
+          "내과 마케팅, 가정의학과 마케팅, 내과 가정의학과 마케팅, 내과 마케팅 업체, 건강검진 마케팅, 기능의학 마케팅, 예방접종 마케팅, 내과 플레이스 마케팅, 내과 블로그 마케팅, 내과 개원 마케팅",
+          "내과 · 가정의학과 마케팅 · 병원의 특색과 기본 진료의 균형",
+          "내과 · 가정의학과 마케팅",
+          "내과 · 가정의학과 마케팅"),
+  "marketing-orthopedics": ("정형외과 마케팅 · 개원 사전마케팅 · 플레이스 | 에이치메디솔루션",
+          "정형외과 · 통증의학과 · 재활의학과 6곳과 함께하는 병원 전문 마케팅. 개원 컨설팅 · 사전마케팅부터 네이버 플레이스 · 블로그 · 리뷰 운영까지. 포항 O정형외과 개원 첫 달 일환자 120명 사례 수록.",
+          "정형외과 마케팅, 정형외과 마케팅 업체, 정형외과 개원 마케팅, 정형외과 플레이스 마케팅, 통증의학과 마케팅, 재활의학과 마케팅, 정형외과 개원 컨설팅, 정형외과 블로그 마케팅",
+          "정형외과 마케팅 · 개원 사전마케팅부터 운영까지",
+          "정형외과 마케팅",
+          "정형외과 마케팅"),
+  "marketing-ent-surgery-dental": ("보험 진료과 마케팅 · 이비인후과 · 수술병원 · 치과 | 에이치메디솔루션",
+          "이비인후과 · 수술병원 · 치과 등 보험 진료과 전문 마케팅. 이비인후과는 유행 한 달 전 콘텐츠 준비와 비수기 특색 진료, 항문외과 · 외과 등 수술병원은 치질 수술 · 하지정맥류 수술의 전 과정 콘텐츠와 원거리 환자 유입, 치과는 세부 키워드 · 플레이스 최적화 · CPC 광고를 중심으로 진행합니다.",
+          "보험 진료과 마케팅, 이비인후과 마케팅, 수술병원 마케팅, 외과 마케팅, 항문외과 마케팅, 치질 수술 병원 마케팅, 하지정맥류 병원 마케팅, 유방외과 마케팅, 치과 마케팅, 치과 개원 마케팅, 임플란트 마케팅, 이비인후과 플레이스 마케팅, 치과 플레이스 마케팅, 치과 CPC 광고",
+          "보험 진료과 마케팅 · 이비인후과 · 수술병원 · 치과",
+          "보험 진료과 마케팅",
+          "보험 진료과 마케팅"),
   "case-busan": ("부산 서면 피부과 플레이스 마케팅 사례 · 조회수 83.5% 증가 | 에이치메디솔루션",
           "부산 H피부과 네이버 플레이스 마케팅 사례. 저품질 블로그를 정리하고 콘텐츠를 다시 쌓아 8개월 동안 플레이스 월 조회수가 5,690회에서 10,443회로 늘고, 20위권에서 부산피부과 4위 · 서면피부과 3위까지 오른 과정입니다.",
           "피부과 마케팅 사례, 부산 피부과 마케팅, 서면 피부과 플레이스, 네이버 플레이스 마케팅 사례, 병원 블로그 저품질",
@@ -554,7 +578,7 @@ def main():
     """ % SITE_URL).replace("\n    ", "\n").rstrip() + "\n")
 
     json.dump(LASTMOD, open(lm_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1, sort_keys=True)
-    prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3", "privacy": "0.2", "ceo": "0.7", "case-pohang": "0.7", "case-busan": "0.7", "case-incheon": "0.7", "case-gwanggyo": "0.7", "marketing-dermatology": "0.8", "marketing-internal": "0.8", "marketing-orthopedics": "0.8"}
+    prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3", "privacy": "0.2", "ceo": "0.7", "case-pohang": "0.7", "case-busan": "0.7", "case-incheon": "0.7", "case-gwanggyo": "0.7", "marketing-dermatology": "0.8", "marketing-internal": "0.8", "marketing-orthopedics": "0.8", "marketing-ent-surgery-dental": "0.8"}
     urls = "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%s</priority></url>\n" % (page_url(p), LASTMOD.get(p, {}).get("date", TODAY), "weekly" if p in ("index", "marketing", "insights") else "monthly", prio[p]) for p in PAGES if p != "post")
     urls += "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>\n" % (post_url(p), (p.get("updated_at") or p.get("published_at") or TODAY)[:10]) for p in POSTS)
     open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
