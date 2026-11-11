@@ -533,7 +533,7 @@ def clients_html():
     k1 = max(0, (n + 1) // 2 - len(g1))
     order = g1 + rest[:k1] + g2 + rest[k1:]
     def card(c, clone=False):
-        return ('<a class="logo-card" href="%s" target="_blank" rel="noopener"%s><img src="assets/img/clients/white/%s.png?v={ver}" alt="" width="150" height="52" loading="lazy" decoding="async"><span>%s</span></a>'
+        return ('<a class="logo-card" href="%s" target="_blank" rel="noopener"%s><img src="assets/img/clients/white/%s.png?v={ver}" alt="" width="150" height="76" loading="lazy" decoding="async"><span>%s</span></a>'
                 % (e(c["place"], quote=True), ' aria-hidden="true" tabindex="-1"' if clone else '', c["slug"], e(c["name"])))
     def row(items, cls=""):
         return '<div class="logo-row%s"><div class="logo-track">%s%s</div></div>' % (cls, "".join(card(c) for c in items), "".join(card(c, True) for c in items))

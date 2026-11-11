@@ -1749,8 +1749,8 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 .logo-row.slow .logo-track { animation-duration: 116s; }
 .logo-marquee:hover .logo-track, .logo-marquee:focus-within .logo-track { animation-play-state: paused; }
 @keyframes logo-flow { to { transform: translateX(-50%); } }
-.logo-card { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; width: 226px; height: 132px; margin: 0 7px; padding: 0 16px; border-radius: 18px; background: linear-gradient(150deg, #14265a, var(--navy) 60%, #0b1430); box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); transition: transform .4s var(--ease), background .3s, box-shadow .3s; }
-.logo-card img { display: block; width: 150px; height: 52px; }
+.logo-card { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; width: 226px; height: 132px; margin: 0 7px; padding: 0 16px; border-radius: 18px; background: linear-gradient(150deg, #14265a, var(--navy) 60%, #0b1430); box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); transition: transform .4s var(--ease), background .3s, box-shadow .3s; }
+.logo-card img { display: block; width: 150px; height: 76px; }
 .logo-card span { max-width: 100%; font-size: 12.5px; font-weight: 600; letter-spacing: -.02em; color: rgba(255,255,255,.78); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .logo-card:hover, .logo-card:focus-visible { transform: translateY(-4px); background: linear-gradient(150deg, var(--sky), var(--sky-deep)); box-shadow: var(--shadow-sky); outline: none; }
 .logo-card:hover span, .logo-card:focus-visible span { color: #fff; }
@@ -1765,8 +1765,8 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
   .logo-row { padding: 4px 0; }
   .logo-track { animation-duration: 66s; }
   .logo-row.slow .logo-track { animation-duration: 84s; }
-  .logo-card { width: 168px; height: 104px; margin: 0 5px; gap: 8px; padding: 0 10px; border-radius: 14px; }
-  .logo-card img { width: 120px; height: 42px; }
+  .logo-card { width: 168px; height: 104px; margin: 0 5px; gap: 1px; padding: 0 10px; border-radius: 14px; }
+  .logo-card img { width: 120px; height: 61px; }
   .logo-card span { font-size: 11px; }
   .client-stats { display: grid; grid-template-columns: repeat(3, 1fr); row-gap: 18px; }
   .client-stats li { justify-content: center; padding: 2px 4px; }
