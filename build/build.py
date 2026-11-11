@@ -448,6 +448,8 @@ def inject_posts(body, posts):
     body = body.replace('<div class="ins-tags" id="insTags"></div>', '<div class="ins-tags" id="insTags">%s</div>' % tag_html)
     return body.replace('<div class="ins-grid" id="insGrid"><div class="ins-empty">불러오는 중…</div></div>', '<div class="ins-grid" id="insGrid">%s</div>' % "".join(post_card(p) for p in posts))
 
+CLIENT_STYLE = os.environ.get("CLIENT_STYLE", "logos")   # "logos": 컬러 로고 / "cards": 진한 카드 + 흰색 로고
+
 def client_count():
     try: return len(json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "clients.json"), encoding="utf-8")))
     except Exception: return 0
@@ -475,9 +477,13 @@ def clients_html():
     k1 = max(0, (n + 1) // 2 - len(g1))
     order = g1 + rest[:k1] + g2 + rest[k1:]
     def item(c, clone=False):
+        attr = ' aria-hidden="true" tabindex="-1"' if clone else ''
+        if CLIENT_STYLE == "cards":   # 같은 크기의 진한 카드 + 흰색 로고 + 병원명
+            return ('<a class="logo-card" href="%s" target="_blank" rel="noopener"%s><img src="assets/img/clients/white/%s.png?v={ver}" alt="" width="150" height="52" loading="lazy" decoding="async"><span>%s</span></a>'
+                    % (e(c["place"], quote=True), attr, c["slug"], e(c["name"])))
         w, h = size(c["slug"])
         return ('<a class="logo-item" href="%s" target="_blank" rel="noopener"%s><img src="assets/img/clients/%s.png?v={ver}" alt="%s" width="%d" height="%d" loading="lazy" decoding="async"><span>%s</span></a>'
-                % (e(c["place"], quote=True), ' aria-hidden="true" tabindex="-1"' if clone else '', c["slug"], "" if clone else e(c["name"], quote=True), w, h, e(c["name"])))
+                % (e(c["place"], quote=True), attr, c["slug"], "" if clone else e(c["name"], quote=True), w, h, e(c["name"])))
     def row(items, cls=""):
         return '<div class="logo-row%s"><div class="logo-track">%s%s</div></div>' % (cls, "".join(item(c) for c in items), "".join(item(c, True) for c in items))
     half = (n + 1) // 2
@@ -487,8 +493,8 @@ def clients_html():
         if not g: g = (c["group"], []); groups.append(g)
         g[1].append(c)
     lst = "".join('<div class="cg"><dt>%s <b>%d</b></dt><dd>%s</dd></div>' % (e(g), len(v), "".join('<span>%s <i>%s</i></span>' % (e(c["name"]), e(c["region"])) for c in v)) for g, v in groups)
-    return ('<div class="logo-marquee" aria-label="함께하고 있는 병의원 로고">%s%s</div>\n  <div class="wrap client-wrap"><input type="checkbox" id="clAll" class="cl-toggle" hidden><div class="client-clip"><dl class="client-list" data-reveal>%s</dl></div><label for="clAll" class="cl-more"><span class="more">병의원 전체 보기</span><span class="less">접기</span></label></div>'
-            % (row(order[:half]), row(order[half:], " slow"), lst)).replace("{ver}", VER)
+    return ('<div class="logo-marquee%s" aria-label="함께하고 있는 병의원 로고">%s%s</div>\n  <div class="wrap client-wrap"><input type="checkbox" id="clAll" class="cl-toggle" hidden><div class="client-clip"><dl class="client-list" data-reveal>%s</dl></div><label for="clAll" class="cl-more"><span class="more">병의원 전체 보기</span><span class="less">접기</span></label></div>'
+            % (" cards" if CLIENT_STYLE == "cards" else "", row(order[:half]), row(order[half:], " slow"), lst)).replace("{ver}", VER)
 
 def main():
     POSTS = load_posts_index()
