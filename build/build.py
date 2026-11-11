@@ -459,11 +459,25 @@ def clients_html():
     except Exception: return ""
     e = htmlmod.escape
     n = len(cl)
-    step = next(k for k in (7, 5, 3, 1) if n % k)  # 같은 브랜드 지점이 붙어 나오지 않게 섞는다
-    order = [cl[(i * step) % n] for i in range(n)]
+    img_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "img", "clients")
+    def size(slug):
+        try:
+            with open(os.path.join(img_dir, slug + ".png"), "rb") as f: head = f.read(24)
+            w, h = int.from_bytes(head[16:20], "big"), int.from_bytes(head[20:24], "big")
+            return round(w * 60 / h), 60
+        except Exception: return 120, 60
+    # 지점이 여러 곳인 브랜드(갤러리아 · 더힐)는 붙여서 보여 주고, 나머지는 진료과목이 섞이게 흩는다
+    brand = lambda c: c["slug"].split("-")[0] if c["slug"].split("-")[0] in ("galleria", "theheal") else ""
+    rest = [c for c in cl if not brand(c)]
+    step = next(k for k in (7, 5, 3, 1) if len(rest) % k)
+    rest = [rest[(i * step) % len(rest)] for i in range(len(rest))]
+    g1 = [c for c in cl if brand(c) == "galleria"]; g2 = [c for c in cl if brand(c) == "theheal"]
+    k1 = max(0, (n + 1) // 2 - len(g1))
+    order = g1 + rest[:k1] + g2 + rest[k1:]
     def item(c, clone=False):
-        return ('<a class="logo-item" href="%s" target="_blank" rel="noopener"%s><img src="assets/img/clients/%s.png?v={ver}" alt="%s" width="480" height="280" loading="lazy" decoding="async"><span>%s</span></a>'
-                % (e(c["place"], quote=True), ' aria-hidden="true" tabindex="-1"' if clone else '', c["slug"], "" if clone else e(c["name"], quote=True), e(c["name"])))
+        w, h = size(c["slug"])
+        return ('<a class="logo-item" href="%s" target="_blank" rel="noopener"%s><img src="assets/img/clients/%s.png?v={ver}" alt="%s" width="%d" height="%d" loading="lazy" decoding="async"><span>%s</span></a>'
+                % (e(c["place"], quote=True), ' aria-hidden="true" tabindex="-1"' if clone else '', c["slug"], "" if clone else e(c["name"], quote=True), w, h, e(c["name"])))
     def row(items, cls=""):
         return '<div class="logo-row%s"><div class="logo-track">%s%s</div></div>' % (cls, "".join(item(c) for c in items), "".join(item(c, True) for c in items))
     half = (n + 1) // 2
