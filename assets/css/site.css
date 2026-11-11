@@ -1802,3 +1802,12 @@ body.menu-open .menu-links a:nth-child(5) { transition-delay: .43s; }
 .dept-nav a:hover { border-color: var(--sky); color: var(--sky-deep); }
 @media (max-width: 1080px) { .dept-pillars.c3 { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 760px) { .dept-pillars.c3 { grid-template-columns: 1fr; } .dept-nav a { font-size: 13px; padding: 8px 13px; } }
+/* ===== 의료법 대응 (온라인 마케팅) ===== */
+.comp-zero { display: flex; align-items: center; gap: 34px; margin-bottom: 18px; padding: 34px 40px; border-radius: 22px; background: linear-gradient(120deg, rgba(6,144,252,.22), rgba(6,144,252,.06)); border: 1px solid rgba(111,191,255,.28); }
+.comp-zero b { flex: none; font-family: var(--font-display); font-size: clamp(64px, 7vw, 96px); font-weight: 700; line-height: 1; letter-spacing: -.04em; color: #fff; }
+.comp-zero b small { font-family: var(--font-body); font-size: 24px; font-weight: 700; margin-left: 6px; color: #8fd0ff; }
+.comp-zero strong { display: block; font-size: 20px; font-weight: 800; letter-spacing: -.02em; color: #fff; }
+.comp-zero p { margin-top: 8px; font-size: 15.5px; line-height: 1.7; color: rgba(255,255,255,.82); max-width: 720px; }
+.comp-zero span { display: block; margin-top: 8px; font-size: 12.5px; color: rgba(255,255,255,.5); }
+#compliance .svc .no { letter-spacing: .04em; font-family: var(--font-body); font-weight: 700; }
+@media (max-width: 760px) { .comp-zero { flex-direction: column; align-items: flex-start; gap: 14px; padding: 26px 22px; } .comp-zero strong { font-size: 17px; } .comp-zero p { font-size: 14px; } }
