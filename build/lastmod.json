@@ -4,20 +4,20 @@
   "sig": "2480208478afdd363440f4270f3e0723fdded53a"
  },
  "case-busan": {
-  "date": "2026-11-10",
-  "sig": "d5c9a7d10123dc3d25910288631d6bab9e6d6468"
+  "date": "2026-11-11",
+  "sig": "a694998b8a9eab787e20972d8aad5c1d276d5eae"
  },
  "case-gwanggyo": {
-  "date": "2026-11-10",
-  "sig": "6ea01eafc928ce156393e72be79be28668784c39"
+  "date": "2026-11-11",
+  "sig": "c5c589fa864413955755f1357373ebfbce8a9448"
  },
  "case-incheon": {
-  "date": "2026-11-10",
-  "sig": "6bcfda13133666e4a4ce74993b4f6f78d88dc1aa"
+  "date": "2026-11-11",
+  "sig": "780f4ee1d855e0eb131fe178d4ec11d5f0cb10a9"
  },
  "case-pohang": {
-  "date": "2026-11-10",
-  "sig": "e1f12b16cd9472772f044e0c9047ae95099fd47e"
+  "date": "2026-11-11",
+  "sig": "12b38dc4de10b4d9932aed575c2e2219c2f609ab"
  },
  "ceo": {
   "date": "2026-11-10",
@@ -40,8 +40,8 @@
   "sig": "562a8fe6bc9b3967b83f71f9e873657da4a21e4a"
  },
  "insights": {
-  "date": "2026-11-10",
-  "sig": "d07212c9e834b446555730cd59030a83298d63e0"
+  "date": "2026-11-11",
+  "sig": "18ef82e3a9ccc21ce4e37f255bae0acbbf2c9d2f"
  },
  "marketing": {
   "date": "2026-11-10",
