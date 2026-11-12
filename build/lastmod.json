@@ -1,78 +1,78 @@
 {
  "ai": {
-  "date": "2026-11-11",
-  "sig": "0840326117e50f92b3b49a76be322cf8fa405f51"
+  "date": "2026-11-12",
+  "sig": "3045dbf5b72754a6d5eeb5f25cde177cc60155eb"
  },
  "case-busan": {
-  "date": "2026-11-11",
-  "sig": "8847b1a193cab4e636be5e782439c3a31f2b5297"
+  "date": "2026-11-12",
+  "sig": "b5a4796cb6fa83688d84ad1043436d6970103e75"
  },
  "case-gwanggyo": {
-  "date": "2026-11-11",
-  "sig": "0548a4be49663338a8530c0ee814833d20d01da0"
+  "date": "2026-11-12",
+  "sig": "bed6c71a8dfcbaab451e97f2bcc435cdbd541cc2"
  },
  "case-incheon": {
-  "date": "2026-11-11",
-  "sig": "91d108fabbebcee04da02f4459ba4a812b7b9493"
+  "date": "2026-11-12",
+  "sig": "019d0e512120a7c26282f3c3814cfb15fe295bb8"
  },
  "case-pohang": {
-  "date": "2026-11-11",
-  "sig": "a2b0941af188517be60935216812935e710578fb"
+  "date": "2026-11-12",
+  "sig": "a75565fd4ec4cfd15dff0b634a063536a49fc593"
  },
  "ceo": {
-  "date": "2026-11-11",
-  "sig": "7f5420230448d80f5cda9ae9b6052614fe7ec2a8"
+  "date": "2026-11-12",
+  "sig": "e4dc6acbacfd8569774e9886faa13dec562a3cad"
  },
  "company": {
-  "date": "2026-11-11",
-  "sig": "13ed611aacdd87b4dd87b504da0604984b4b5349"
+  "date": "2026-11-12",
+  "sig": "54749aaefadf78e0e19a8eb580831a892fd73abd"
  },
  "consulting": {
-  "date": "2026-11-11",
-  "sig": "27333fd439cc85c0319258e3f0fc5599326d1e4f"
+  "date": "2026-11-12",
+  "sig": "b88f9fb5d995a28853331c3e2ff2047d967d40b5"
  },
  "contact": {
-  "date": "2026-11-11",
-  "sig": "03c8cfbbd061b527072642916ab6da12533cbf3f"
+  "date": "2026-11-12",
+  "sig": "5977c0382b1bec54ffb43cf46b109d6a853cf80f"
  },
  "index": {
-  "date": "2026-11-11",
-  "sig": "86a3080a3810742dbd0819082c3678d9a88d908a"
+  "date": "2026-11-12",
+  "sig": "15b4d7fce10729e4efbecd4e67e965788e806c5f"
  },
  "insights": {
-  "date": "2026-11-11",
-  "sig": "487dcbfade4a303f5511e794cfa84945becdbf02"
+  "date": "2026-11-12",
+  "sig": "1fc59b88b3331aa7295f5f849c4ebd5d20fe6afd"
  },
  "marketing": {
-  "date": "2026-11-11",
-  "sig": "2927fab99f2b7edffaa1d3ba4f2b710720636bd5"
+  "date": "2026-11-12",
+  "sig": "9c9cdb42e4ed9e855481b3b6170295c57b81c107"
  },
  "marketing-dermatology": {
-  "date": "2026-11-11",
-  "sig": "be5d478fe10d18763c6e4e16773751dbc3316794"
+  "date": "2026-11-12",
+  "sig": "0a15762c03d19ca8389998cd4b917fb2ea029159"
  },
  "marketing-ent-surgery-dental": {
-  "date": "2026-11-11",
-  "sig": "75894127b81a2267eba233b2742898c887e1e35b"
+  "date": "2026-11-12",
+  "sig": "19292873aabca98fc7217c4f2228727efc11d91c"
  },
  "marketing-internal": {
-  "date": "2026-11-11",
-  "sig": "54ed7940c5ac1af99e02cc488a87532ffc438607"
+  "date": "2026-11-12",
+  "sig": "5aa6a066ea4fa8c80a928ce98501dde61652caad"
  },
  "marketing-orthopedics": {
-  "date": "2026-11-11",
-  "sig": "3f9c79304a0a1ce7253f368af09ebb26b340c08b"
+  "date": "2026-11-12",
+  "sig": "2a04fd72f38f3008d5b115c5482590bf8039c477"
  },
  "portfolio": {
-  "date": "2026-11-11",
-  "sig": "4b88c46b6deae201b17b7bd50a027d136882e86a"
+  "date": "2026-11-12",
+  "sig": "444d6f2904a678782aa77b168bc44cfa9a69aabe"
  },
  "post": {
-  "date": "2026-11-11",
-  "sig": "29f2479dd564013c8ee76bf0afba1d7e367e99d1"
+  "date": "2026-11-12",
+  "sig": "1e3d3ca50a764ebe6c9827ca144965f647f9d538"
  },
  "privacy": {
-  "date": "2026-11-11",
-  "sig": "fae7010905bcc32b60621364e5a61ab3720c3c4d"
+  "date": "2026-11-12",
+  "sig": "9e14d10f7dfaeedc856d43061bdae0e0261a8490"
  }
 }
