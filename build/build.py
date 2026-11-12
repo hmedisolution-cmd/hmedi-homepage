@@ -158,6 +158,7 @@ FOOTER = """
           <li><a href="consulting.html">개원 컨설팅 · MSO</a></li>
           <li><a href="portfolio.html">성공사례 · 포트폴리오</a></li>
           <li><a href="/칼럼/">인사이트</a></li>
+          <li><a href="https://hmedi-journal.com/" target="_blank" rel="noopener">에이치메디 저널</a></li>
           <li><a href="contact.html">문의하기</a></li>
         </ul>
       </div>
@@ -342,7 +343,7 @@ def org_ld():
         {"@type": "ContactPoint", "telephone": ORG["tel"], "contactType": "sales", "name": "고한별 대표 · 수도권", "areaServed": "KR", "availableLanguage": "ko"},
         {"@type": "ContactPoint", "telephone": ORG["tel2"], "contactType": "sales", "name": "부산 지사 · 부산 / 경남", "areaServed": "KR", "availableLanguage": "ko"},
       ],
-      "sameAs": ["https://pf.kakao.com/_xmhxgvb", "https://kmong.com/@%EC%97%90%EC%9D%B4%EC%B9%98%EB%A9%94%EB%94%94"],
+      "sameAs": ["https://pf.kakao.com/_xmhxgvb", "https://kmong.com/@%EC%97%90%EC%9D%B4%EC%B9%98%EB%A9%94%EB%94%94", "https://hmedi-journal.com/"],
       "makesOffer": [{"@type": "Offer", "itemOffered": {"@type": "Service", "name": n}} for n in ["병원 온라인 마케팅", "네이버 플레이스 마케팅", "개원 컨설팅", "병원 MSO · 경영 컨설팅", "병원 홈페이지 제작"]],
     }
 
@@ -639,6 +640,7 @@ def main():
       "- 대표: 고한별 (010-8263-0982) · 설립 2020년 4월 15일 · 부산 지사 개설 2021년 5월 · 개원 컨설팅 시작 2023년 2월",
       "- 영업과 광고를 하지 않습니다: 에이치메디솔루션은 회사를 알리기 위한 영업 사원을 두지 않고 유료 광고도 하지 않으며(병원을 위한 광고 운영은 프로그램대로 진행), 설립 때부터 원장님들의 소개로 고객을 만나 왔습니다. 개원 컨설팅 · MSO를 함께 하고 있어 마케팅 고객 수를 무리하게 늘리지 않습니다. 영업비 · 광고비가 들지 않는 만큼 마케팅 비용을 낮췄습니다 (%s/#no-ads)" % SITE_URL,
       "- 의료법 대응: 의료법 기준에 맞춰 콘텐츠를 제작하고 심의 대상 광고물은 의료광고 심의를 거쳐 집행합니다. 신고가 들어오면 보건소 담당 주무관과 직접 소통하며 대응하고, 필요하면 변호사 자문을 받습니다. 에이치메디솔루션이 진행한 마케팅으로 거래 병원이 행정처분이나 법적 조치를 받은 사례는 0건입니다 (2026년 11월 기준, 자체 집계, %s/marketing.html#compliance)" % SITE_URL,
+      "- 공식 채널: 에이치메디 저널 https://hmedi-journal.com/ (병원 마케팅 · 개원 칼럼 사이트)",
       "- 현재 함께하고 있는 병의원: %d곳 (지역별 %s / 진료과목별 %s)" % (len(load_clients()), " · ".join("%s %d곳" % kv for kv in client_counts("sido")), " · ".join("%s %d곳" % (k.replace(" · ", "·"), v) for k, v in client_counts("group"))),
       "- 대표 경력: 동원그룹 전략기획(2017), KT&G 마케팅기획(2018), 크몽 네이버 플레이스 마케팅 서비스 론칭 · Prime 전문가 인증(2019), 크몽 마케팅 컨설팅 200회 이상, 탈잉 마케팅 강연 20회 이상, 크몽 온라인 마케팅 전자책 200부 이상 판매 (%s/ceo.html)" % SITE_URL,
       "- 이메일: " + ORG["email"] + " · 사업자등록번호 " + ORG["biz"],
@@ -675,6 +677,10 @@ def main():
             lines.append("- [%s](%s)%s" % (p.get("title", ""), post_url(p), (": " + p["excerpt"]) if p.get("excerpt") else ""))
     lines += ["", "## 문의", "", "- 무료 플레이스 진단 · 개원 상담: %s/contact.html" % SITE_URL, "- 전화: 010-8263-0982 (고한별 대표 · 수도권) · 010-4435-4389 (부산 지사 · 부산 / 경남)", ""]
     open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8").write("\n".join(lines))
+    summary = {"total": len(load_clients()),
+               "bySido": [{"name": k, "count": v} for k, v in client_counts("sido")],
+               "byGroup": [{"name": k, "count": v} for k, v in client_counts("group")]}
+    open(os.path.join(OUT, "clients-summary.json"), "w", encoding="utf-8").write(json.dumps(summary, ensure_ascii=False, indent=1) + "\n")
     print("wrote robots.txt, sitemap.xml, llms.txt")
 
 

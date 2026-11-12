@@ -1921,3 +1921,4 @@ p, li, dd, td, th, figcaption, blockquote, .sn, .ccard small, .logo-card span { 
   .noads-band strong { font-size: 17.5px; } .noads-band p { font-size: 14px; } .noads-band .go { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .ref-loop li::before { animation: none; } }
+.ins-more { margin-top: 44px; display: flex; justify-content: center; }
