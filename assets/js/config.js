@@ -13,6 +13,9 @@ window.HMEDI_CONFIG = {
   /* 상담 신청 이메일 알림 (Web3Forms, 무료 · 서버 불필요)
      web3forms.com 에서 받을 이메일을 입력해 발급받은 Access Key 를 넣으면, 문의 폼 접수 시 그 이메일로 바로 알림이 갑니다. */
   notifyKey: "53f46932-f0d7-4e8f-8159-dd4611344316",
+  /* AI 노출 무료 진단 신청(/diagnosis)을 AI 매니저로도 보낼 주소. 비워 두면 상담 신청과 같은 길(관리자 페이지 · 문자 · 이메일 알림)로만 받는다.
+     AI 매니저에 받는 주소가 생기면 여기에 적는다 — { role, name, url, tel, question[], agree, source, page } 를 JSON 으로 POST 한다. */
+  diagnosisEndpoint: "",
   /* 기본 팝업: 데모 모드에서 팝업이 하나도 없을 때 처음 한 번 채워집니다.
      관리자 페이지에서 수정 · 삭제할 수 있습니다. (서버 연결 후에는 사용되지 않음) */
   defaultPopups: [

@@ -159,6 +159,7 @@ FOOTER = """
           <li><a href="portfolio.html">성공사례 · 포트폴리오</a></li>
           <li><a href="/칼럼/">인사이트</a></li>
           <li><a href="https://hmedi-journal.com/" target="_blank" rel="noopener">에이치메디 저널</a></li>
+          <li><a href="diagnosis">AI 노출 무료 진단</a></li>
           <li><a href="contact.html">문의하기</a></li>
         </ul>
       </div>
@@ -200,6 +201,7 @@ FOOTER = """
 <script src="assets/js/site.js?v={ver}"></script>
 <script src="assets/js/track.js?v={ver}"></script>
 <script src="assets/js/popup.js?v={ver}"></script>
+<script src="assets/js/diag-popup.js?v={ver}"></script>
 </body>
 </html>
 """
@@ -286,8 +288,12 @@ PAGES = {
           "광교 G피부과 개원 사전마케팅 사례. 신규 개원 피부과가 많은 경쟁 지역에서 개원 1개월 전부터 플레이스 · 블로그를 준비해, 7개월 동안 월 조회수가 6,085회에서 9,409회로 늘고 광교피부과 5위(최대 1위)에 오른 과정입니다.",
           "피부과 개원 마케팅 사례, 광교 피부과 마케팅, 개원 사전마케팅, 네이버 플레이스 마케팅 사례, 신규 개원 병원 마케팅",
           "광교 피부과 개원 사전마케팅 사례 · 조회수 54% 증가", "광교 G피부과 사례", None),
+  "diagnosis": ("AI 노출 무료 진단 신청 | 에이치메디솔루션",
+                "우리 병원이 ChatGPT · 제미나이 · 네이버 AI 답변에 추천되고 있는지, 홈페이지 SEO · GEO 점수는 몇 점인지 무료로 진단하여 드립니다. 신청 후 영업일 기준 3일 이내 결과 안내.",
+                "AI 노출 진단, 병원 AI 검색 진단, AEO 진단, GEO 진단, 병원 홈페이지 SEO 진단, ChatGPT 병원 추천",
+                None, "AI 노출 무료 진단", None),
   "privacy": ("개인정보 처리방침 | 에이치메디솔루션",
-              "에이치메디솔루션 홈페이지 상담 신청 과정에서 수집하는 개인정보 항목, 이용 목적, 보유 기간(3년), 처리 위탁, 이용자 권리와 개인정보 보호책임자 안내.",
+              "에이치메디솔루션 홈페이지 상담 신청 · AI 노출 무료 진단 신청 과정에서 수집하는 개인정보 항목, 이용 목적, 보유 기간, 처리 위탁, 이용자 권리와 개인정보 보호책임자 안내.",
               "에이치메디솔루션 개인정보 처리방침",
               "개인정보 처리방침", "개인정보 처리방침", None),
 }
@@ -327,7 +333,10 @@ def load_programs():
     except Exception as e:
         print("programs.js 읽기 실패 (node 필요):", e); return []
 
+BARE_PAGES = {"diagnosis"}   # 머리 · 바닥 없이 따로 서는 페이지 (자기 css · js 를 쓴다). 주소도 .html 없이 낸다
+
 def page_url(page):
+    if page in BARE_PAGES: return "%s/%s" % (SITE_URL, page)
     return SITE_URL + "/" if page == "index" else "%s/%s.html" % (SITE_URL, page)
 
 def org_ld():
@@ -419,6 +428,10 @@ def render_page(page, title, desc, keywords, canonical, jsonld, body, robots=ROB
     verify = "".join('  <meta name="%s" content="%s">\n' % (k, v) for k, v in VERIFY.items() if v) + "".join("  %s\n" % x for x in VERIFY_EXTRA)
     html = HEAD.format(title=title, desc=desc, keywords=keywords, canonical=canonical, site=SITE_URL, verify=verify, jsonld=jsonld, page=page, ver=VER,
                        og_title=og_title or title, robots=robots, og_type=og_type, og_image=og_image or DEFAULT_OG)
+    if page in BARE_PAGES:
+        html = html.split('<svg width="0" height="0"')[0].replace('assets/css/site.css?v=', 'assets/css/%s.css?v=' % page)
+        assert 'assets/css/%s.css' % page in html
+        return html + body + "".join('\n<script src="assets/js/%s.js?v=%s"></script>' % (js, VER) for js in ("config", "store", "track", page)) + "\n</body>\n</html>\n"
     html += wrap_sentences(HEADER) + '<main id="top">\n' + body + '\n</main>\n' + wrap_sentences(FOOTER).replace('{ver}', VER)
     return absolutize(html) if root_abs else html
 
@@ -560,8 +573,9 @@ def main():
         body = korean_h1(body, h1)
         ALL_FAQ[page] = extract_faq(body)
         jsonld = build_jsonld(page, title, desc, body, crumb, service)
-        body = wrap_sentences(body)
-        body = tidy_breaks(body)
+        if page not in BARE_PAGES:
+            body = wrap_sentences(body)
+            body = tidy_breaks(body)
         if page == "insights": body = inject_posts(body, POSTS)
         if "{{CLIENTS}}" in body: body = body.replace("{{CLIENTS}}", clients_html()).replace("{{CLIENT_COUNT}}", str(len(load_clients())))
         og_title = ("%s | 에이치메디솔루션" % crumb) if crumb else "에이치메디솔루션 | 마케팅 잘하는 개원 컨설턴트"
@@ -620,7 +634,7 @@ def main():
     """ % SITE_URL).replace("\n    ", "\n").rstrip() + "\n")
 
     json.dump(LASTMOD, open(lm_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1, sort_keys=True)
-    prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3", "privacy": "0.2", "ceo": "0.7", "case-pohang": "0.7", "case-busan": "0.7", "case-incheon": "0.7", "case-gwanggyo": "0.7", "marketing-dermatology": "0.8", "marketing-internal": "0.8", "marketing-orthopedics": "0.8", "marketing-ent-surgery-dental": "0.8"}
+    prio = {"index": "1.0", "ai": "0.9", "marketing": "0.9", "consulting": "0.9", "insights": "0.8", "contact": "0.8", "company": "0.7", "portfolio": "0.7", "post": "0.3", "privacy": "0.2", "diagnosis": "0.8", "ceo": "0.7", "case-pohang": "0.7", "case-busan": "0.7", "case-incheon": "0.7", "case-gwanggyo": "0.7", "marketing-dermatology": "0.8", "marketing-internal": "0.8", "marketing-orthopedics": "0.8", "marketing-ent-surgery-dental": "0.8"}
     urls = "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%s</priority></url>\n" % (page_url(p), LASTMOD.get(p, {}).get("date", TODAY), "weekly" if p in ("index", "marketing", "insights") else "monthly", prio[p]) for p in PAGES if p != "post")
     urls += "".join("  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>\n" % (post_url(p), (p.get("updated_at") or p.get("published_at") or TODAY)[:10]) for p in POSTS)
     open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
@@ -675,7 +689,7 @@ def main():
         lines += ["", "## 인사이트 칼럼 (insights.html)", ""]
         for p in POSTS[:50]:
             lines.append("- [%s](%s)%s" % (p.get("title", ""), post_url(p), (": " + p["excerpt"]) if p.get("excerpt") else ""))
-    lines += ["", "## 문의", "", "- 무료 플레이스 진단 · 개원 상담: %s/contact.html" % SITE_URL, "- 전화: 010-8263-0982 (고한별 대표 · 수도권) · 010-4435-4389 (부산 지사 · 부산 / 경남)", ""]
+    lines += ["", "## 문의", "", "- 무료 플레이스 진단 · 개원 상담: %s/contact.html" % SITE_URL, "- AI 노출 무료 진단 신청(AI 추천 현황 · 홈페이지 SEO · GEO 점수): %s/diagnosis" % SITE_URL, "- 전화: 010-8263-0982 (고한별 대표 · 수도권) · 010-4435-4389 (부산 지사 · 부산 / 경남)", ""]
     open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8").write("\n".join(lines))
     summary = {"total": len(load_clients()),
                "bySido": [{"name": k, "count": v} for k, v in client_counts("sido")],

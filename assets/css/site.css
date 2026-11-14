@@ -1922,3 +1922,37 @@ p, li, dd, td, th, figcaption, blockquote, .sn, .ccard small, .logo-card span { 
 }
 @media (prefers-reduced-motion: reduce) { .ref-loop li::before { animation: none; } }
 .ins-more { margin-top: 44px; display: flex; justify-content: center; }
+
+/* ===== AI 노출 무료 진단 팝업 · 단추 (assets/js/diag-popup.js) — 신청폼과 같은 결: 흰 바탕 · 검정 글자 · 보라→파랑→하늘 단추 ===== */
+.dgp { position: fixed; inset: 0; z-index: 390; display: flex; align-items: flex-end; justify-content: center; pointer-events: none; }
+.dgp-bg { position: absolute; inset: 0; background: rgba(11,11,13,.52); opacity: 0; transition: opacity .32s ease; }
+.dgp-card { position: relative; width: 100%; padding: 12px 24px calc(14px + env(safe-area-inset-bottom)); border-radius: 26px 26px 0 0; background: #fff; color: #0b0b0d; letter-spacing: -.02em; box-shadow: 0 -18px 60px -18px rgba(11,11,13,.4); transform: translateY(105%); transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+.dgp-card::before { content: ""; display: block; width: 40px; height: 4px; margin: 0 auto 22px; border-radius: 2px; background: #dcdce3; }
+.dgp.is-open { pointer-events: auto; }
+.dgp.is-open .dgp-bg { opacity: 1; }
+.dgp.is-open .dgp-card { transform: none; }
+.dgp-tag { display: inline-flex; align-items: center; height: 27px; padding: 0 12px; border-radius: 999px; background: #f4f4f7; font-size: 12.5px; font-weight: 800; color: #3B6CFF; }
+.dgp-title { display: block; margin-top: 14px; font-size: 25px; font-weight: 800; line-height: 1.3; letter-spacing: -.045em; color: #0b0b0d; }
+.dgp-title span { white-space: nowrap; }
+.dgp-desc { margin-top: 10px; font-size: 15px; line-height: 1.55; color: #6b6b76; }
+.dgp-go { display: flex; align-items: center; justify-content: center; height: 56px; margin-top: 22px; border-radius: 16px; background: linear-gradient(90deg,#6D3DF5,#3B6CFF 55%,#12B5D6); color: #fff; font-size: 17px; font-weight: 800; letter-spacing: -.03em; box-shadow: 0 14px 30px -14px rgba(59,108,255,.75); transition: transform .12s; }
+.dgp-go:active { transform: scale(.985); }
+.dgp-go:focus-visible, .dgp-bar button:focus-visible, .dgp-pill:focus-visible { outline: 2px solid #3B6CFF; outline-offset: 3px; }
+.dgp-bar { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 10px; }
+.dgp-bar button { padding: 10px 6px; border: 0; background: none; font: inherit; font-size: 13px; font-weight: 500; color: #8a8a95; cursor: pointer; }
+.dgp-bar button:hover { color: #0b0b0d; }
+.dgp-bar i { width: 1px; height: 11px; background: #dcdce3; }
+.dgp-pill { position: fixed; right: 86px; bottom: 25px; z-index: 80; display: inline-flex; align-items: center; height: 44px; padding: 0 18px; border-radius: 999px; background: linear-gradient(90deg,#6D3DF5,#3B6CFF 55%,#12B5D6); color: #fff; font-size: 14.5px; font-weight: 800; letter-spacing: -.03em; white-space: nowrap; box-shadow: 0 12px 28px -10px rgba(59,108,255,.7); opacity: 0; transform: translateY(10px); transition: opacity .35s ease, transform .35s cubic-bezier(.2,.8,.2,1); }
+.dgp-pill.is-in { opacity: 1; transform: none; }
+.dgp-pill.is-in:hover { transform: translateY(-3px); }
+body.menu-open .dgp-pill, body.is-locked .dgp-pill { opacity: 0; pointer-events: none; }
+@media (min-width: 721px) {
+  .dgp { align-items: center; padding: 20px; }
+  .dgp-card { width: 400px; padding: 30px 28px 16px; border-radius: 26px; box-shadow: 0 30px 80px -20px rgba(11,11,13,.5); opacity: 0; transform: translateY(18px) scale(.97); transition: transform .4s cubic-bezier(.2,.8,.2,1), opacity .3s ease; }
+  .dgp-card::before { display: none; }
+  .dgp.is-open .dgp-card { opacity: 1; }
+}
+@media (max-width: 720px) {
+  .dgp-pill { right: 74px; bottom: 18px; height: 42px; padding: 0 16px; font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { .dgp-bg, .dgp-card, .dgp-pill { transition: none; } }
