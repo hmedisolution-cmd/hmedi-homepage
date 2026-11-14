@@ -128,6 +128,10 @@ body{overflow-x:clip}
 a{color:inherit;text-decoration:none}
 .brand .home{margin-left:auto;font-size:12.5px;font-weight:600;letter-spacing:-.02em;color:var(--faint)}
 .brand .home:hover{color:var(--muted)}
+.nosite{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;user-select:none}
+.nosite .box{width:19px;height:19px;border-radius:6px}
+.nosite .box:checked::after{width:8.5px;height:4.5px;border-width:0 0 2px 2px}
+.in:disabled{color:var(--faint);cursor:not-allowed;opacity:.75}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .agree.bad+.err{display:block}
 .terms a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}

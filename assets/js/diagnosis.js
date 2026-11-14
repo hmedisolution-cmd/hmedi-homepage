@@ -26,6 +26,14 @@
   q.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.isComposing && q.value.split("\n").length >= 6) { e.preventDefault(); 꽉참(); } });
   q.addEventListener("input", () => { 줄세기(); 높이(); });
 
+  /* 홈페이지 없음 — 체크하면 주소 칸을 잠그고, 주소 없이 신청할 수 있다 (AI 추천 현황만 진단) */
+  const url = $("#url"), 없음 = $("#nosite");
+  없음.addEventListener("change", () => {
+    url.disabled = 없음.checked;
+    if (없음.checked) { url.dataset.v = url.value; url.value = ""; url.placeholder = "홈페이지 없음"; }
+    else { url.value = url.dataset.v || ""; url.placeholder = "https://"; }
+  });
+
   /* 개인정보 동의 [보기] */
   $("#more").addEventListener("click", (e) => { e.preventDefault(); const o = $("#terms").classList.toggle("open"); e.target.textContent = o ? "접기" : "보기"; e.target.setAttribute("aria-expanded", String(o)); });
   form.addEventListener("input", (e) => { const f = e.target.closest(".f"); if (f) f.classList.remove("bad"); });
@@ -66,20 +74,20 @@
   const 맞나 = {
     role: () => !!form.querySelector("[name=who]:checked"),
     name: () => $("#name").value.trim() !== "",
-    url: () => /^(https?:\/\/)?[^\s.]+\.[^\s]{2,}$/i.test($("#url").value.trim()),
+    url: () => 없음.checked || /^(https?:\/\/)?[^\s.]+\.[^\s]{2,}$/i.test(url.value.trim()),
     tel: () => /^0\d{1,2}-?\d{3,4}-?\d{4}$/.test(tel.value),
   };
 
   /* 보내기 — 한 곳이라도 받으면 접수된 것으로 본다 */
   const 보내기 = async (d) => {
-    const 글 = ["홈페이지: " + d.url, d.question.length ? "궁금한 질문\n" + d.question.map((x, i) => `${i + 1}. ${x}`).join("\n") : "궁금한 질문: 없음"].join("\n");
+    const 글 = ["홈페이지: " + (d.url || "없음"), d.question.length ? "궁금한 질문\n" + d.question.map((x, i) => `${i + 1}. ${x}`).join("\n") : "궁금한 질문: 없음"].join("\n");
     const row = { type: "AI 노출 무료 진단", name: d.role, phone: d.tel, hospital: d.name, region: "", program: "AI 노출 무료 진단", situation: d.source ? "들어온 경로: " + d.source : "", message: 글, page: "diagnosis" };
     const 일 = [];
     // ① 상담 신청과 같은 저장소 — 관리자 페이지에 쌓이고, 문자 · 이메일 알림이 나간다
     일.push((async () => { const S = window.HmediStore; if (!S) throw new Error("no store"); await S.ready(); await S.saveInquiry(row); })());
     // ② 이메일 알림 (Web3Forms)
     if (cfg.notifyKey) 일.push(fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({ access_key: cfg.notifyKey, subject: `[무료 진단 신청] ${d.name} · ${d.role}`, from_name: "에이치메디솔루션 홈페이지", "신청하시는 분": d.role, "병원 이름": d.name, "홈페이지 주소": d.url, "연락처": d.tel, "궁금한 질문": d.question.length ? d.question.join("\n") : "없음", "들어온 경로": d.source || "-", "관리자 페이지": location.origin + "/admin.html", botcheck: "" }) })
+      body: JSON.stringify({ access_key: cfg.notifyKey, subject: `[무료 진단 신청] ${d.name} · ${d.role}`, from_name: "에이치메디솔루션 홈페이지", "신청하시는 분": d.role, "병원 이름": d.name, "홈페이지 주소": d.url || "없음", "연락처": d.tel, "궁금한 질문": d.question.length ? d.question.join("\n") : "없음", "들어온 경로": d.source || "-", "관리자 페이지": location.origin + "/admin.html", botcheck: "" }) })
       .then((r) => { if (!r.ok) throw new Error("mail " + r.status); }));
     // ③ AI 매니저 (받는 주소가 정해지면)
     if (cfg.diagnosisEndpoint) 일.push(fetch(cfg.diagnosisEndpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(d) }).then((r) => { if (!r.ok) throw new Error("endpoint " + r.status); }));
@@ -105,7 +113,7 @@
     // 스팸: 사람 눈에 안 보이는 칸이 채워졌거나, 열자마자 보낸 신청은 받은 척만 한다
     if ($("#company").value || Date.now() - 열린때 < 2500) return 끝();
     보내는중 = true; btn.disabled = true; btn.textContent = "보내는 중…"; 오류.classList.remove("show");
-    const d = { role: form.querySelector("[name=who]:checked").value, name: $("#name").value.trim(), url: 주소다듬기($("#url").value), tel: tel.value, question: 질문들(), agree: true, source: 들어온길(), page: location.origin + location.pathname };
+    const d = { role: form.querySelector("[name=who]:checked").value, name: $("#name").value.trim(), url: 없음.checked ? "" : 주소다듬기(url.value), noSite: 없음.checked, tel: tel.value, question: 질문들(), agree: true, source: 들어온길(), page: location.origin + location.pathname };
     let 됐나 = false;
     try { 됐나 = await 보내기(d); } catch (err) { console.error(err); }
     if (됐나) {
