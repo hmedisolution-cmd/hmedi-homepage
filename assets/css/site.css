@@ -1944,19 +1944,19 @@ p, li, dd, td, th, figcaption, blockquote, .sn, .ccard small, .logo-card span { 
 .dgp-bar i { width: 1px; height: 11px; background: #dcdce3; }
 
 /* 미리보기 — 진단 보고서 예시 카드가 오른쪽에서 왼쪽으로 흐른다 (--s = 카드 배율) */
-.dgp-prev { --s: .8; --ink: #0b0b0d; --muted: #6b6b76; --faint: #a3a3ad; --field: #f4f4f7; --grad: linear-gradient(90deg,#6D3DF5,#3B6CFF 55%,#12B5D6);
-  position: relative; padding: 12px 0 14px; background: linear-gradient(180deg,#eef0f8,#f6f6fa); color: var(--ink); overflow: hidden; }
-.dgp-prev::before { content: ""; display: block; width: 40px; height: 4px; margin: 0 auto 12px; border-radius: 2px; background: #cfcfd9; }
+.dgp-prev { --s: .5; --ink: #0b0b0d; --muted: #6b6b76; --faint: #a3a3ad; --field: #f4f4f7; --grad: linear-gradient(90deg,#6D3DF5,#3B6CFF 55%,#12B5D6);
+  position: relative; padding: 12px 0 8px; background: linear-gradient(180deg,#eef0f8,#f6f6fa); color: var(--ink); overflow: hidden; }
+.dgp-prev::before { content: ""; display: block; width: 40px; height: 4px; margin: 0 auto 10px; border-radius: 2px; background: #cfcfd9; }
 .dgp-prev * { margin: 0; padding: 0; box-sizing: border-box; text-wrap: wrap; }
 .dgp-prev-h { display: flex; align-items: center; justify-content: space-between; padding: 0 24px !important; font-size: 12.5px; font-weight: 700; color: var(--muted); }
 .dgp-prev-h small { font-size: 11px; font-weight: 600; color: var(--faint); }
-.dgp-flow { margin-top: 10px !important; -webkit-mask-image: linear-gradient(90deg,transparent,#000 7%,#000 90%,transparent); mask-image: linear-gradient(90deg,transparent,#000 7%,#000 90%,transparent); }
-.dgp-track { display: flex; width: max-content; padding: 2px 0 12px !important; animation: dgp-flow 44s linear infinite; will-change: transform; }
+.dgp-flow { margin-top: 8px !important; -webkit-mask-image: linear-gradient(90deg,transparent,#000 7%,#000 90%,transparent); mask-image: linear-gradient(90deg,transparent,#000 7%,#000 90%,transparent); }
+.dgp-track { display: flex; width: max-content; padding: 2px 0 8px !important; animation: dgp-flow 36s linear infinite; will-change: transform; }
 @keyframes dgp-flow { from { transform: translateX(24px); } to { transform: translateX(calc(24px - 50%)); } }
-.dgp-prev .pg { flex: none; width: calc(210px * var(--s)); margin-right: 12px; }
+.dgp-prev .pg { flex: none; width: calc(210px * var(--s)); margin-right: 9px; }
 .dgp-prev .pg-in { height: calc(276px * var(--s)); }
 .dgp-prev .sheet { width: 210px; height: 276px; padding: 14px 13px; border-radius: 14px; background: #fff; overflow: hidden; font-size: 9.5px; line-height: 1.45; letter-spacing: -.02em; text-align: left; box-shadow: 0 1px 2px rgba(11,11,13,.06), 0 10px 22px -12px rgba(11,11,13,.28), 0 0 0 1px #e6e6ee; transform: scale(var(--s)); transform-origin: 0 0; }
-.dgp-prev .pg figcaption { margin-top: 8px; text-align: center; font-size: 11.5px; font-weight: 700; color: var(--ink); }
+.dgp-prev .pg figcaption { margin-top: 6px; text-align: center; font-size: 10.5px; white-space: nowrap; font-weight: 700; color: var(--ink); }
 .dgp-prev .qq-h { font-size: 9.5px; font-weight: 800; margin-bottom: 4px; }
 .dgp-prev svg { display: block; max-width: none; }
 .dgp-prev .sh-top {display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:7px;border-bottom:1.5px solid var(--ink);margin-bottom:9px}
@@ -2025,15 +2025,14 @@ p, li, dd, td, th, figcaption, blockquote, .sn, .ccard small, .logo-card span { 
 body.menu-open .dgp-pill, body.is-locked .dgp-pill { opacity: 0; pointer-events: none; }
 @media (min-width: 721px) {
   .dgp { align-items: center; padding: 20px; }
-  .dgp-card { width: 420px; max-height: calc(100dvh - 40px); border-radius: 26px; box-shadow: 0 30px 80px -20px rgba(11,11,13,.5); opacity: 0; transform: translateY(18px) scale(.97); transition: transform .4s cubic-bezier(.2,.8,.2,1), opacity .3s ease; }
+  .dgp-card { width: 380px; max-height: calc(100dvh - 40px); border-radius: 26px; box-shadow: 0 30px 80px -20px rgba(11,11,13,.5); opacity: 0; transform: translateY(18px) scale(.97); transition: transform .4s cubic-bezier(.2,.8,.2,1), opacity .3s ease; }
   .dgp.is-open .dgp-card { opacity: 1; }
-  .dgp-prev { --s: .86; padding-top: 18px; }
+  .dgp-prev { --s: .5; padding-top: 16px; }
   .dgp-prev::before { display: none; }
-  .dgp-body { padding: 20px 28px 12px; }
+  .dgp-body { padding: 18px 26px 10px; }
 }
 @media (max-width: 720px) {
   .dgp-pill { right: 74px; bottom: 18px; height: 42px; padding: 0 16px; font-size: 14px; }
 }
-@media (max-height: 760px) { .dgp-prev { --s: .68; } }
-@media (max-height: 620px) { .dgp-prev { --s: .52; } .dgp-desc { display: none; } .dgp-prev .pg figcaption { display: none; } }
+@media (max-height: 560px) { .dgp-prev { --s: .4; } .dgp-prev .pg figcaption { display: none; } }
 @media (prefers-reduced-motion: reduce) { .dgp-bg, .dgp-card, .dgp-pill { transition: none; } .dgp-track { animation: none; transform: translateX(24px); } }
