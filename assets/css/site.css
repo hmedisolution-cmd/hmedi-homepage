@@ -1925,34 +1925,115 @@ p, li, dd, td, th, figcaption, blockquote, .sn, .ccard small, .logo-card span { 
 
 /* ===== AI 노출 무료 진단 팝업 · 단추 (assets/js/diag-popup.js) — 신청폼과 같은 결: 흰 바탕 · 검정 글자 · 보라→파랑→하늘 단추 ===== */
 .dgp { position: fixed; inset: 0; z-index: 390; display: flex; align-items: flex-end; justify-content: center; pointer-events: none; }
-.dgp-bg { position: absolute; inset: 0; background: rgba(11,11,13,.52); opacity: 0; transition: opacity .32s ease; }
-.dgp-card { position: relative; width: 100%; padding: 12px 24px calc(14px + env(safe-area-inset-bottom)); border-radius: 26px 26px 0 0; background: #fff; color: #0b0b0d; letter-spacing: -.02em; box-shadow: 0 -18px 60px -18px rgba(11,11,13,.4); transform: translateY(105%); transition: transform .45s cubic-bezier(.2,.8,.2,1); }
-.dgp-card::before { content: ""; display: block; width: 40px; height: 4px; margin: 0 auto 22px; border-radius: 2px; background: #dcdce3; }
+.dgp-bg { position: absolute; inset: 0; background: rgba(11,11,13,.56); opacity: 0; transition: opacity .32s ease; }
+.dgp-card { position: relative; width: 100%; max-height: calc(100dvh - 12px); overflow: hidden auto; overscroll-behavior: contain; border-radius: 26px 26px 0 0; background: #fff; color: #0b0b0d; letter-spacing: -.02em; box-shadow: 0 -18px 60px -18px rgba(11,11,13,.4); transform: translateY(105%); transition: transform .5s cubic-bezier(.2,.8,.2,1); }
 .dgp.is-open { pointer-events: auto; }
 .dgp.is-open .dgp-bg { opacity: 1; }
 .dgp.is-open .dgp-card { transform: none; }
+.dgp-body { padding: 18px 24px calc(10px + env(safe-area-inset-bottom)); }
 .dgp-tag { display: inline-flex; align-items: center; height: 27px; padding: 0 12px; border-radius: 999px; background: #f4f4f7; font-size: 12.5px; font-weight: 800; color: #3B6CFF; }
-.dgp-title { display: block; margin-top: 14px; font-size: 25px; font-weight: 800; line-height: 1.3; letter-spacing: -.045em; color: #0b0b0d; }
+.dgp-title { display: block; margin-top: 12px; font-size: 25px; font-weight: 800; line-height: 1.3; letter-spacing: -.045em; color: #0b0b0d; }
 .dgp-title span { white-space: nowrap; }
-.dgp-desc { margin-top: 10px; font-size: 15px; line-height: 1.55; color: #6b6b76; }
-.dgp-go { display: flex; align-items: center; justify-content: center; height: 56px; margin-top: 22px; border-radius: 16px; background: linear-gradient(90deg,#6D3DF5,#3B6CFF 55%,#12B5D6); color: #fff; font-size: 17px; font-weight: 800; letter-spacing: -.03em; box-shadow: 0 14px 30px -14px rgba(59,108,255,.75); transition: transform .12s; }
+.dgp-desc { margin-top: 8px; font-size: 15px; line-height: 1.55; color: #6b6b76; }
+.dgp-go { display: flex; align-items: center; justify-content: center; height: 56px; margin-top: 18px; border-radius: 16px; background: linear-gradient(90deg,#6D3DF5,#3B6CFF 55%,#12B5D6); color: #fff; font-size: 17px; font-weight: 800; letter-spacing: -.03em; box-shadow: 0 14px 30px -14px rgba(59,108,255,.75); transition: transform .12s; }
 .dgp-go:active { transform: scale(.985); }
 .dgp-go:focus-visible, .dgp-bar button:focus-visible, .dgp-pill:focus-visible { outline: 2px solid #3B6CFF; outline-offset: 3px; }
-.dgp-bar { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 10px; }
+.dgp-bar { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 8px; }
 .dgp-bar button { padding: 10px 6px; border: 0; background: none; font: inherit; font-size: 13px; font-weight: 500; color: #8a8a95; cursor: pointer; }
 .dgp-bar button:hover { color: #0b0b0d; }
 .dgp-bar i { width: 1px; height: 11px; background: #dcdce3; }
+
+/* 미리보기 — 진단 보고서 예시 카드가 오른쪽에서 왼쪽으로 흐른다 (--s = 카드 배율) */
+.dgp-prev { --s: .8; --ink: #0b0b0d; --muted: #6b6b76; --faint: #a3a3ad; --field: #f4f4f7; --grad: linear-gradient(90deg,#6D3DF5,#3B6CFF 55%,#12B5D6);
+  position: relative; padding: 12px 0 14px; background: linear-gradient(180deg,#eef0f8,#f6f6fa); color: var(--ink); overflow: hidden; }
+.dgp-prev::before { content: ""; display: block; width: 40px; height: 4px; margin: 0 auto 12px; border-radius: 2px; background: #cfcfd9; }
+.dgp-prev * { margin: 0; padding: 0; box-sizing: border-box; text-wrap: wrap; }
+.dgp-prev-h { display: flex; align-items: center; justify-content: space-between; padding: 0 24px !important; font-size: 12.5px; font-weight: 700; color: var(--muted); }
+.dgp-prev-h small { font-size: 11px; font-weight: 600; color: var(--faint); }
+.dgp-flow { margin-top: 10px !important; -webkit-mask-image: linear-gradient(90deg,transparent,#000 7%,#000 90%,transparent); mask-image: linear-gradient(90deg,transparent,#000 7%,#000 90%,transparent); }
+.dgp-track { display: flex; width: max-content; padding: 2px 0 12px !important; animation: dgp-flow 44s linear infinite; will-change: transform; }
+@keyframes dgp-flow { from { transform: translateX(24px); } to { transform: translateX(calc(24px - 50%)); } }
+.dgp-prev .pg { flex: none; width: calc(210px * var(--s)); margin-right: 12px; }
+.dgp-prev .pg-in { height: calc(276px * var(--s)); }
+.dgp-prev .sheet { width: 210px; height: 276px; padding: 14px 13px; border-radius: 14px; background: #fff; overflow: hidden; font-size: 9.5px; line-height: 1.45; letter-spacing: -.02em; text-align: left; box-shadow: 0 1px 2px rgba(11,11,13,.06), 0 10px 22px -12px rgba(11,11,13,.28), 0 0 0 1px #e6e6ee; transform: scale(var(--s)); transform-origin: 0 0; }
+.dgp-prev .pg figcaption { margin-top: 8px; text-align: center; font-size: 11.5px; font-weight: 700; color: var(--ink); }
+.dgp-prev .qq-h { font-size: 9.5px; font-weight: 800; margin-bottom: 4px; }
+.dgp-prev svg { display: block; max-width: none; }
+.dgp-prev .sh-top {display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:7px;border-bottom:1.5px solid var(--ink);margin-bottom:9px}
+.dgp-prev .sh-top b {display:block;font-size:11.5px;font-weight:800;letter-spacing:-.03em}
+.dgp-prev .sh-top span {font-size:7.5px;font-weight:700;color:var(--faint);letter-spacing:.04em}
+.dgp-prev .sh-top em {font-style:normal;font-size:7.5px;color:var(--faint)}
+.dgp-prev .tl {display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.dgp-prev .tl div {border-radius:8px;background:var(--field);padding:8px 8px 7px}
+.dgp-prev .tl p {font-size:8px;font-weight:700;color:var(--muted)}
+.dgp-prev .tl b {display:block;margin-top:3px;font-size:19px;font-weight:800;letter-spacing:-.04em;line-height:1.1}
+.dgp-prev .tl b small {font-size:8.5px;font-weight:600;color:var(--muted);margin-left:2px}
+.dgp-prev .tl i {display:block;margin-top:2px;font-style:normal;font-size:7px;color:var(--faint)}
+.dgp-prev .bar2 {margin-top:8px;border-radius:8px;background:var(--field);padding:8px}
+.dgp-prev .bar2 p {font-size:8px;font-weight:700;color:var(--muted);margin-bottom:5px}
+.dgp-prev .ln {display:block;height:5px;border-radius:3px;background:#dedee5;margin-top:5px}
+.dgp-prev .mx {width:100%;border-collapse:collapse}
+.dgp-prev .mx th {font-size:7.5px;font-weight:700;color:var(--muted);padding:0 0 5px;text-align:center}
+.dgp-prev .mx th:first-child {text-align:left}
+.dgp-prev .mx td {padding:4px 0;border-top:1px solid #ededf2;font-size:8.5px;font-weight:600}
+.dgp-prev .mx td:not(:first-child) {text-align:center}
+.dgp-prev .j {display:inline-block;width:23px;height:13px;border-radius:7px;font-size:7px;font-weight:800;line-height:13px;text-align:center}
+.dgp-prev .j.r {background:var(--ink);color:#fff}
+.dgp-prev .j.m {background:#fff;box-shadow:inset 0 0 0 1.2px var(--ink)}
+.dgp-prev .j.n {background:#ececf1;color:#a3a3ad}
+.dgp-prev .dgp-lg {display:flex;gap:8px;margin-top:8px;font-size:7.5px;color:var(--muted)}
+.dgp-prev .dgp-ring {position:relative;width:74px;height:74px;margin:0 auto 2px}
+.dgp-prev .dgp-ring svg {width:100%;height:100%}
+.dgp-prev .dgp-ring b {position:absolute;inset:0;display:grid;place-items:center;padding-bottom:6px;font-size:23px;font-weight:800;letter-spacing:-.04em}
+.dgp-prev .dgp-ring small {position:absolute;left:0;right:0;bottom:18px;text-align:center;font-size:7.5px;color:var(--faint)}
+.dgp-prev .sc {display:flex;align-items:center;gap:7px;margin-top:5px;font-size:9px;font-weight:700}
+.dgp-prev .sc span {width:52px}
+.dgp-prev .sc i {flex:1;height:6px;border-radius:3px;background:#ececf1;overflow:hidden}
+.dgp-prev .sc i u {display:block;height:100%;border-radius:3px;background:var(--grad)}
+.dgp-prev .sc em {width:18px;text-align:right;font-style:normal}
+.dgp-prev .tk {display:flex;align-items:flex-start;gap:7px;padding:6px 0;border-top:1px solid #ededf2;font-size:9px;font-weight:700}
+.dgp-prev .tk:first-of-type {border-top:0}
+.dgp-prev .tk>b {flex:none;display:grid;place-items:center;width:15px;height:15px;border-radius:50%;background:var(--ink);color:#fff;font-size:7.5px}
+.dgp-prev .tk span {flex:1}
+.dgp-prev .tk span i {display:block;font-style:normal;font-weight:500;font-size:7.5px;color:var(--muted);margin-top:1px}
+.dgp-prev .tk em {flex:none;font-style:normal;font-size:7px;font-weight:800;padding:1px 5px;border-radius:5px;background:#ffe9ea;color:#d9363e}
+.dgp-prev .tk em.mid {background:#fff3e0;color:#c76a00}
+.dgp-prev .qq {padding:6px 0;border-top:1px solid #ededf2}
+.dgp-prev .qq:first-of-type {border-top:0}
+.dgp-prev .qq p {font-size:9px;font-weight:700}
+.dgp-prev .qq p small {color:var(--faint);font-weight:700;margin-right:4px;font-size:7.5px}
+.dgp-prev .qq span {display:block;margin-top:1px;font-size:7.5px;color:var(--muted)}
+.dgp-prev .rk-h {display:flex;justify-content:space-between;align-items:baseline;font-size:10px;font-weight:800;margin-bottom:5px}
+.dgp-prev .rk-h small {font-size:7.5px;font-weight:600;color:var(--faint)}
+.dgp-prev .rk {display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border-radius:6px;font-size:9px;font-weight:600}
+.dgp-prev .rk b {width:9px;font-size:9px;font-weight:800}
+.dgp-prev .rk span {flex:1}
+.dgp-prev .rk span small {font-size:7px;opacity:.7;margin-left:3px}
+.dgp-prev .rk i {width:44px;height:4px;border-radius:2px;background:#ececf1;overflow:hidden}
+.dgp-prev .rk i u {display:block;height:100%;background:#9a9aa5;border-radius:2px}
+.dgp-prev .rk em {width:22px;text-align:right;font-style:normal;font-size:8px;color:var(--muted)}
+.dgp-prev .rk.me {background:var(--ink);color:#fff}
+.dgp-prev .rk.me i {background:#3a3a40}
+.dgp-prev .rk.me i u {background:#fff}
+.dgp-prev .rk.me em {color:#fff;font-weight:800}
+.dgp-prev .op {font-size:9px;line-height:1.6;color:#33333a}
+.dgp-prev .op b {font-weight:800}
+
 .dgp-pill { position: fixed; right: 86px; bottom: 25px; z-index: 80; display: inline-flex; align-items: center; height: 44px; padding: 0 18px; border-radius: 999px; background: linear-gradient(90deg,#6D3DF5,#3B6CFF 55%,#12B5D6); color: #fff; font-size: 14.5px; font-weight: 800; letter-spacing: -.03em; white-space: nowrap; box-shadow: 0 12px 28px -10px rgba(59,108,255,.7); opacity: 0; transform: translateY(10px); transition: opacity .35s ease, transform .35s cubic-bezier(.2,.8,.2,1); }
 .dgp-pill.is-in { opacity: 1; transform: none; }
 .dgp-pill.is-in:hover { transform: translateY(-3px); }
 body.menu-open .dgp-pill, body.is-locked .dgp-pill { opacity: 0; pointer-events: none; }
 @media (min-width: 721px) {
   .dgp { align-items: center; padding: 20px; }
-  .dgp-card { width: 400px; padding: 30px 28px 16px; border-radius: 26px; box-shadow: 0 30px 80px -20px rgba(11,11,13,.5); opacity: 0; transform: translateY(18px) scale(.97); transition: transform .4s cubic-bezier(.2,.8,.2,1), opacity .3s ease; }
-  .dgp-card::before { display: none; }
+  .dgp-card { width: 420px; max-height: calc(100dvh - 40px); border-radius: 26px; box-shadow: 0 30px 80px -20px rgba(11,11,13,.5); opacity: 0; transform: translateY(18px) scale(.97); transition: transform .4s cubic-bezier(.2,.8,.2,1), opacity .3s ease; }
   .dgp.is-open .dgp-card { opacity: 1; }
+  .dgp-prev { --s: .86; padding-top: 18px; }
+  .dgp-prev::before { display: none; }
+  .dgp-body { padding: 20px 28px 12px; }
 }
 @media (max-width: 720px) {
   .dgp-pill { right: 74px; bottom: 18px; height: 42px; padding: 0 16px; font-size: 14px; }
 }
-@media (prefers-reduced-motion: reduce) { .dgp-bg, .dgp-card, .dgp-pill { transition: none; } }
+@media (max-height: 760px) { .dgp-prev { --s: .68; } }
+@media (max-height: 620px) { .dgp-prev { --s: .52; } .dgp-desc { display: none; } .dgp-prev .pg figcaption { display: none; } }
+@media (prefers-reduced-motion: reduce) { .dgp-bg, .dgp-card, .dgp-pill { transition: none; } .dgp-track { animation: none; transform: translateX(24px); } }

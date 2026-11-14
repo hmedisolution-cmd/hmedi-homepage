@@ -54,7 +54,7 @@
       const all = await S.listPopups();
       const now = Date.now();
       const list = all.filter((p) => p.active && !hidden(p.id) && (!p.starts_at || +new Date(p.starts_at) <= now) && (!p.ends_at || +new Date(p.ends_at) >= now));
-      if (list.length) render(list);
+      if (list.length && !document.querySelector(".dgp")) render(list);   // 무료 진단 팝업(diag-popup.js)이 떠 있으면 겹치지 않게 이 화면에서는 쉰다
     } catch (e) { /* 팝업 실패는 사이트 이용에 영향 없음 */ }
   };
   if (document.readyState === "complete") setTimeout(run, 400); else window.addEventListener("load", () => setTimeout(run, 400));
