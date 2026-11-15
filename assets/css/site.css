@@ -2022,7 +2022,7 @@ p, li, dd, td, th, figcaption, blockquote, .sn, .ccard small, .logo-card span { 
 .dgp-pill { position: fixed; right: 86px; bottom: 25px; z-index: 80; display: inline-flex; align-items: center; height: 44px; padding: 0 18px; border-radius: 999px; background: linear-gradient(90deg,#6D3DF5,#3B6CFF 55%,#12B5D6); color: #fff; font-size: 14.5px; font-weight: 800; letter-spacing: -.03em; white-space: nowrap; box-shadow: 0 12px 28px -10px rgba(59,108,255,.7); opacity: 0; transform: translateY(10px); transition: opacity .35s ease, transform .35s cubic-bezier(.2,.8,.2,1); }
 .dgp-pill.is-in { opacity: 1; transform: none; }
 .dgp-pill.is-in:hover { transform: translateY(-3px); }
-body.menu-open .dgp-pill, body.is-locked .dgp-pill { opacity: 0; pointer-events: none; }
+body.menu-open .dgp-pill, body.is-locked .dgp-pill, .dgp-pill.is-low { opacity: 0; pointer-events: none; }
 @media (min-width: 721px) {
   .dgp { align-items: center; padding: 20px; }
   .dgp-card { width: 380px; max-height: calc(100dvh - 40px); border-radius: 26px; box-shadow: 0 30px 80px -20px rgba(11,11,13,.5); opacity: 0; transform: translateY(18px) scale(.97); transition: transform .4s cubic-bezier(.2,.8,.2,1), opacity .3s ease; }
@@ -2036,3 +2036,41 @@ body.menu-open .dgp-pill, body.is-locked .dgp-pill { opacity: 0; pointer-events:
 }
 @media (max-height: 560px) { .dgp-prev { --s: .4; } .dgp-prev .pg figcaption { display: none; } }
 @media (prefers-reduced-motion: reduce) { .dgp-bg, .dgp-card, .dgp-pill { transition: none; } .dgp-track { animation: none; transform: translateX(24px); } }
+
+/* ===== AI 마케팅(ai.html) 가격표 — 스타터 카드 · 공통 항목 · 첫 달 예시 · 계약 조건 (2026-11 가격표) ===== */
+.aeo-starter { margin-top: 18px; padding: 30px 32px; border-radius: 22px; background: var(--ink); color: #fff; display: grid; grid-template-columns: 1fr 1fr 1.35fr; gap: 20px 36px; align-items: start; }
+.aeo-starter .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--sky); color: #fff; font-size: 12px; font-weight: 700; }
+.aeo-starter h3 { margin-top: 14px; font-size: 24px; font-weight: 800; letter-spacing: -.03em; }
+.aeo-starter .for { margin-top: 4px; font-size: 13.5px; color: rgba(255,255,255,.62); }
+.aeo-starter .pr { margin-top: 16px; }
+.aeo-starter .pr small { display: block; font-size: 12.5px; color: rgba(255,255,255,.6); }
+.aeo-starter .pr b { font-size: 34px; font-weight: 900; letter-spacing: -.04em; white-space: nowrap; }
+.aeo-starter .pr b span { margin-left: 6px; font-size: 14px; font-weight: 700; color: #8fd0ff; letter-spacing: 0; }
+.aeo-starter dl { margin: 0; padding: 18px 20px; border-radius: 16px; background: rgba(255,255,255,.07); display: grid; grid-template-columns: 1fr auto; gap: 9px 12px; font-size: 14.5px; }
+.aeo-starter dt { color: rgba(255,255,255,.72); }
+.aeo-starter dd { margin: 0; font-weight: 800; text-align: right; }
+.aeo-starter .sum { padding-top: 10px; border-top: 1px solid rgba(255,255,255,.16); color: #fff; font-weight: 800; }
+.aeo-starter dd.sum { color: #8fd0ff; }
+.aeo-starter ul { display: grid; gap: 10px; font-size: 14.5px; }
+.aeo-starter li { display: grid; grid-template-columns: 76px 1fr; gap: 10px; text-wrap: pretty; }
+.aeo-starter li span:first-child { padding-top: 2px; font-size: 12.5px; color: rgba(255,255,255,.55); }
+.aeo-common { margin-top: 18px; padding: 26px 28px; border-radius: 20px; background: var(--paper-2); }
+.aeo-common > b { display: block; font-size: 15.5px; font-weight: 800; }
+.aeo-common ul { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 9px 32px; }
+.aeo-common li { position: relative; padding-left: 15px; font-size: 14.5px; line-height: 1.6; text-wrap: pretty; }
+.aeo-common li::before { content: ""; position: absolute; left: 0; top: .72em; width: 5px; height: 5px; border-radius: 50%; background: var(--sky); }
+.aeo-common a { color: var(--sky-deep); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.aeo-ex-head { margin: 34px 0 12px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.aeo-ex-head b { font-size: 18px; font-weight: 800; letter-spacing: -.02em; }
+.aeo-ex-head span { font-size: 13px; color: var(--muted); }
+.aeo-first .compare { background: #fff; }
+.aeo-first .compare td small { display: block; margin-top: 2px; font-size: 12px; font-weight: 500; color: var(--muted); }
+.aeo-first .compare thead th.hl { border-radius: 0; }
+.aeo-terms { margin-top: 18px; }
+.aeo-terms .aw i { letter-spacing: 0; }
+@media (max-width: 960px) { .aeo-starter { grid-template-columns: 1fr 1fr; } .aeo-starter ul { grid-column: 1 / -1; } }
+@media (max-width: 720px) {
+  .aeo-starter { grid-template-columns: 1fr; padding: 24px 20px; gap: 18px; }
+  .aeo-common { padding: 22px 20px; } .aeo-common ul { grid-template-columns: 1fr; }
+  .aeo-first .compare td small { font-size: 10.5px; }
+}

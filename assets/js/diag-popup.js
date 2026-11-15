@@ -25,6 +25,8 @@
     const a = document.createElement("a"); a.className = "dgp-pill"; a.href = 링크("button"); a.textContent = "무료 진단"; a.setAttribute("aria-label", "AI 노출 무료 진단 신청");
     a.addEventListener("click", () => 기록("button"));
     document.body.appendChild(a);
+    // 메인 첫 화면에서는 슬라이드 넘김 단추 · 쪽수와 겹치므로, 조금 내려간 뒤에 보인다
+    if (document.body.getAttribute("data-page") === "index") { const 낮춤 = () => a.classList.toggle("is-low", window.scrollY < 320); 낮춤(); addEventListener("scroll", 낮춤, { passive: true }); }
     requestAnimationFrame(() => requestAnimationFrame(() => a.classList.add("is-in")));
   };
 
