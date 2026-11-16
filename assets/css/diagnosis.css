@@ -67,7 +67,9 @@ textarea#q{overflow:hidden}
 .show-h{display:flex;align-items:center;justify-content:space-between;margin-top:28px;font-size:13px;font-weight:700;color:var(--muted)}
 .show-h small{font-size:11.5px;font-weight:600;color:var(--faint)}
 .gal::-webkit-scrollbar{display:none}
-.gal.drag{cursor:grabbing;user-select:none}
+.gal.is-js{overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.gal.is-drag{cursor:grabbing}
+.gal .track{will-change:transform}
 .track{display:flex;gap:14px;width:max-content;padding:6px 0 18px}
 .pg{flex:none;width:210px}
 .sheet{height:276px;border-radius:14px;background:#fff;padding:14px 13px;box-shadow:0 1px 2px rgba(11,11,13,.06),0 10px 26px -12px rgba(11,11,13,.22),0 0 0 1px #ececf1;overflow:hidden;font-size:9.5px;line-height:1.45;letter-spacing:-.02em}

@@ -40,32 +40,43 @@
   form.addEventListener("change", (e) => { const f = e.target.closest(".f"); if (f) f.classList.remove("bad"); });
   ok.addEventListener("change", () => $("#agree").classList.remove("bad"));
 
-  /* 보고서 예시 — 저절로 흐르고, 손가락(PC 는 마우스)으로 잡아 옮길 수도 있다 */
-  const gal = $(".gal");
-  if (gal) {
-    const 반 = () => gal.scrollWidth / 2;                      // 같은 카드 묶음이 두 벌이라 반 바퀴마다 제자리로 감는다
-    const 감기 = () => { if (gal.scrollLeft >= 반()) gal.scrollLeft -= 반(); else if (gal.scrollLeft <= 0) gal.scrollLeft += 반(); };
-    const 멈춤 = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let 쉼 = 0, 앞 = 0, 남은 = 0, 끌기 = null;
-    const 흐르기 = (t) => {
-      const 틈 = 앞 ? Math.min(t - 앞, 50) : 0; 앞 = t;
-      if (!멈춤 && t > 쉼) { 남은 += 틈 * 0.035; const n = Math.floor(남은); if (n) { gal.scrollLeft += n; 남은 -= n; 감기(); } }
-      requestAnimationFrame(흐르기);
+  /* 보고서 예시 — 저절로 흐르고, 손가락(PC 는 마우스)으로 잡아 옮길 수도 있다.
+     transform 으로 흘린다 — scrollLeft 로 옮기면 한 프레임에 1px 씩만 움직여 끊겨 보인다 (site.js 의 flowRow 와 같은 코드) */
+  const flowRow = (row, track, speed) => {
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const n = track.children.length / 2;                // 한 벌의 카드 수 (같은 묶음이 두 벌 들어 있다)
+    let period = 0, pos = 0, last = 0, hold = false, hover = false, inView = true, timer = 0, drag = null;
+    const measure = () => {
+      period = track.children[n].offsetLeft - track.children[0].offsetLeft;   // 한 벌의 너비 = 되감는 거리
+      let guard = 0;                                    // 넓은 화면에서 오른쪽이 비지 않게 묶음을 더 붙인다
+      while (period && track.scrollWidth < period + row.clientWidth + 40 && guard++ < 6) for (let i = 0; i < n; i++) { const c = track.children[i].cloneNode(true); c.setAttribute("aria-hidden", "true"); track.appendChild(c); }
     };
-    requestAnimationFrame(흐르기);
-    const 잠깐쉼 = () => { 쉼 = performance.now() + 2500; };
-    gal.addEventListener("touchstart", () => { 쉼 = Infinity; }, { passive: true });
-    gal.addEventListener("touchend", 잠깐쉼, { passive: true });
-    gal.addEventListener("touchcancel", 잠깐쉼, { passive: true });
-    gal.addEventListener("scroll", () => { if (쉼 === Infinity || performance.now() < 쉼) 감기(); }, { passive: true });
-    gal.addEventListener("mouseenter", () => { 쉼 = Infinity; });
-    gal.addEventListener("mouseleave", () => { if (!끌기) 잠깐쉼(); });
-    // PC 마우스로 끌기
-    gal.addEventListener("mousedown", (e) => { 끌기 = { x: e.clientX, l: gal.scrollLeft }; gal.classList.add("drag"); e.preventDefault(); });
-    addEventListener("mousemove", (e) => { if (!끌기) return; const 갈곳 = 끌기.l - (e.clientX - 끌기.x); gal.scrollLeft = 갈곳; 감기(); if (gal.scrollLeft !== 갈곳) 끌기 = { x: e.clientX, l: gal.scrollLeft }; });
-    addEventListener("mouseup", () => { if (!끌기) return; 끌기 = null; gal.classList.remove("drag"); if (!gal.matches(":hover")) 잠깐쉼(); });
-    gal.scrollLeft = 1;
-  }
+    const put = () => { if (period) pos = ((pos % period) + period) % period; track.style.transform = "translate3d(" + (-pos).toFixed(2) + "px,0,0)"; };
+    const release = (ms) => { clearTimeout(timer); timer = setTimeout(() => { hold = false; }, ms); };
+    row.classList.add("is-js"); measure(); put();
+    window.addEventListener("resize", measure); window.addEventListener("load", measure);
+    // 손가락 · 마우스로 잡아 끌기 (세로로 미는 것은 브라우저가 페이지를 스크롤한다 — CSS touch-action: pan-y)
+    row.addEventListener("pointerdown", (e) => { if (e.pointerType === "mouse" && e.button !== 0) return; drag = { x: e.clientX, p: pos, on: false, id: e.pointerId }; hold = true; clearTimeout(timer); });
+    row.addEventListener("pointermove", (e) => {
+      if (!drag) return; const dx = e.clientX - drag.x;
+      if (!drag.on) { if (Math.abs(dx) < 4) return; drag.on = true; row.classList.add("is-drag"); try { row.setPointerCapture(drag.id); } catch (err) {} }
+      pos = drag.p - dx; put();
+    });
+    const end = () => { if (!drag) return; drag = null; row.classList.remove("is-drag"); release(1500); };
+    row.addEventListener("pointerup", end); row.addEventListener("pointercancel", end);
+    row.addEventListener("wheel", (e) => { if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return; e.preventDefault(); pos += e.deltaX; put(); hold = true; release(1200); }, { passive: false });
+    row.addEventListener("mouseenter", () => { hover = true; });
+    row.addEventListener("mouseleave", () => { hover = false; });
+    if ("IntersectionObserver" in window) new IntersectionObserver((es) => es.forEach((e) => { inView = e.isIntersecting; }), { threshold: 0 }).observe(row);
+    const tick = (now) => {
+      const dt = Math.min(64, now - (last || now)); last = now;
+      if (!still && !hold && !hover && inView && !document.hidden) { pos += speed * dt / 1000; put(); }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  const gal = $(".gal");
+  if (gal && gal.querySelector(".track")) flowRow(gal, gal.querySelector(".track"), 35);
 
   /* 들어온 경로 — 주소의 utm 값 (예: homepage / popup) */
   const 들어온길 = () => { const p = new URLSearchParams(location.search); return ["utm_source", "utm_medium", "utm_campaign"].map((k) => p.get(k)).filter(Boolean).join(" / "); };

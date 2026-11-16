@@ -82,12 +82,11 @@
 
   /* ---------- 고객사 카드: 자동으로 흐르고, 손가락 · 트랙패드로 좌우로 넘길 수 있다 ---------- */
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    $$(".logo-row, .rep-row").forEach((row, i) => {
-      const track = row.querySelector(".logo-track, .rep-track");
+    $$(".logo-row").forEach((row, i) => {
+      const track = row.querySelector(".logo-track");
       if (!track) return;
       row.classList.add("is-js");
-      const rep = row.classList.contains("rep-row");   // 진단 보고서 예시 줄 (ai.html)
-      const speed = rep ? 36 : i ? 39 : 50; // 초당 px (아랫줄이 조금 느리다)
+      const speed = i ? 39 : 50;            // 초당 px (아랫줄이 조금 느리다)
       let pos = 0, last = 0, hold = false, hover = false, inView = true, timer = 0;
       const half = () => track.scrollWidth / 2;
       const wrap = () => {                  // 같은 카드가 두 번 이어져 있어 절반 지점에서 이어 붙인다
@@ -105,12 +104,6 @@
       row.addEventListener("mouseleave", () => { hover = false; pos = row.scrollLeft; });
       row.addEventListener("focusin", () => { hover = true; });
       row.addEventListener("focusout", () => { hover = false; pos = row.scrollLeft; });
-      if (rep) {                            // PC 에서는 마우스로 잡아 끌 수 있다
-        let drag = null;
-        row.addEventListener("mousedown", (e) => { drag = { x: e.clientX, l: row.scrollLeft }; pause(0); row.classList.add("is-drag"); e.preventDefault(); });
-        window.addEventListener("mousemove", (e) => { if (!drag) return; const to = drag.l - (e.clientX - drag.x); row.scrollLeft = to; wrap(); if (row.scrollLeft !== to) drag = { x: e.clientX, l: row.scrollLeft }; });
-        window.addEventListener("mouseup", () => { if (!drag) return; drag = null; row.classList.remove("is-drag"); pause(1200); });
-      }
       if ("IntersectionObserver" in window) new IntersectionObserver((es) => es.forEach((e) => { inView = e.isIntersecting; }), { threshold: 0 }).observe(row);
       requestAnimationFrame(() => { row.scrollLeft = pos = 1; });
       const tick = (now) => {
@@ -125,6 +118,42 @@
       requestAnimationFrame(tick);
     });
   }
+
+  /* ---------- 진단 보고서 예시 줄 (ai.html) — transform 으로 흘린다. scrollLeft 로 옮기면 한 프레임에 1px 씩만 움직여 끊겨 보인다 ---------- */
+  const flowRow = (row, track, speed) => {
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const n = track.children.length / 2;                // 한 벌의 카드 수 (같은 묶음이 두 벌 들어 있다)
+    let period = 0, pos = 0, last = 0, hold = false, hover = false, inView = true, timer = 0, drag = null;
+    const measure = () => {
+      period = track.children[n].offsetLeft - track.children[0].offsetLeft;   // 한 벌의 너비 = 되감는 거리
+      let guard = 0;                                    // 넓은 화면에서 오른쪽이 비지 않게 묶음을 더 붙인다
+      while (period && track.scrollWidth < period + row.clientWidth + 40 && guard++ < 6) for (let i = 0; i < n; i++) { const c = track.children[i].cloneNode(true); c.setAttribute("aria-hidden", "true"); track.appendChild(c); }
+    };
+    const put = () => { if (period) pos = ((pos % period) + period) % period; track.style.transform = "translate3d(" + (-pos).toFixed(2) + "px,0,0)"; };
+    const release = (ms) => { clearTimeout(timer); timer = setTimeout(() => { hold = false; }, ms); };
+    row.classList.add("is-js"); measure(); put();
+    window.addEventListener("resize", measure); window.addEventListener("load", measure);
+    // 손가락 · 마우스로 잡아 끌기 (세로로 미는 것은 브라우저가 페이지를 스크롤한다 — CSS touch-action: pan-y)
+    row.addEventListener("pointerdown", (e) => { if (e.pointerType === "mouse" && e.button !== 0) return; drag = { x: e.clientX, p: pos, on: false, id: e.pointerId }; hold = true; clearTimeout(timer); });
+    row.addEventListener("pointermove", (e) => {
+      if (!drag) return; const dx = e.clientX - drag.x;
+      if (!drag.on) { if (Math.abs(dx) < 4) return; drag.on = true; row.classList.add("is-drag"); try { row.setPointerCapture(drag.id); } catch (err) {} }
+      pos = drag.p - dx; put();
+    });
+    const end = () => { if (!drag) return; drag = null; row.classList.remove("is-drag"); release(1500); };
+    row.addEventListener("pointerup", end); row.addEventListener("pointercancel", end);
+    row.addEventListener("wheel", (e) => { if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return; e.preventDefault(); pos += e.deltaX; put(); hold = true; release(1200); }, { passive: false });
+    row.addEventListener("mouseenter", () => { hover = true; });
+    row.addEventListener("mouseleave", () => { hover = false; });
+    if ("IntersectionObserver" in window) new IntersectionObserver((es) => es.forEach((e) => { inView = e.isIntersecting; }), { threshold: 0 }).observe(row);
+    const tick = (now) => {
+      const dt = Math.min(64, now - (last || now)); last = now;
+      if (!still && !hold && !hover && inView && !document.hidden) { pos += speed * dt / 1000; put(); }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  $$(".rep-row").forEach((row) => { const t = row.querySelector(".rep-track"); if (t && t.children.length > 1) flowRow(row, t, 36); });
 
   /* ---------- Reveal ---------- */
   const splitWords = (el) => {
