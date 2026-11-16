@@ -24,12 +24,12 @@
   "sig": "727837ed1a157cd87f48f9e2bc9d4406f360b2f3"
  },
  "company": {
-  "date": "2026-11-14",
-  "sig": "bffd4b00ddb90fab9eb107d496ad8344834225bf"
+  "date": "2026-11-16",
+  "sig": "e6ae7409c76562c898bb020c974f509a1e022239"
  },
  "consulting": {
-  "date": "2026-11-14",
-  "sig": "aaa82167de23fcae4aee6d2f7a13dbf8ed2f28b7"
+  "date": "2026-11-16",
+  "sig": "e0c9c15b3fda74a42b7a1b3367d0e5a8fbc5f961"
  },
  "contact": {
   "date": "2026-11-16",
@@ -41,7 +41,7 @@
  },
  "index": {
   "date": "2026-11-16",
-  "sig": "db9cff64868f0b586e3ebb2d1ab448df9a706424"
+  "sig": "e146752cc28ba867e5d43a754a85036005bb184e"
  },
  "insights": {
   "date": "2026-11-14",
@@ -49,27 +49,27 @@
  },
  "marketing": {
   "date": "2026-11-16",
-  "sig": "940a7049916b98c0c90bf1cc0c6daee93340b4b0"
+  "sig": "09ffbed3bca51bcdd72cd4b01a94b2cbc13cfd60"
  },
  "marketing-dermatology": {
-  "date": "2026-11-14",
-  "sig": "31a8083aaee33fa33ef563eba96d951b47d3f9ad"
+  "date": "2026-11-16",
+  "sig": "ea7af89095f76fd7dfe5c266abc3f68bbc346f4d"
  },
  "marketing-ent-surgery-dental": {
-  "date": "2026-11-14",
-  "sig": "0e3c70f3f1a7671b1832b56bc5518130f6080ecc"
+  "date": "2026-11-16",
+  "sig": "0fccd8cf61025dab2b558c5c2d921e0dd02daf72"
  },
  "marketing-internal": {
-  "date": "2026-11-14",
-  "sig": "5636a313d7b2357675e34c1ae127940065f56742"
+  "date": "2026-11-16",
+  "sig": "879804e954577d3e7b24e495dbc779569806b27d"
  },
  "marketing-orthopedics": {
-  "date": "2026-11-14",
-  "sig": "c5805e64af98e8c150258c75f5d400bb15f2c693"
+  "date": "2026-11-16",
+  "sig": "4645475a786289bb2c3084222027a78947aaac83"
  },
  "portfolio": {
-  "date": "2026-11-14",
-  "sig": "e64302196732dd19e3ab50437c026904046e270d"
+  "date": "2026-11-16",
+  "sig": "9fd36beb05f5faec36d33f6bd9194d5fb76ae851"
  },
  "post": {
   "date": "2026-11-14",
