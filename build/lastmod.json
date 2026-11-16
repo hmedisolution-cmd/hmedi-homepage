@@ -33,7 +33,7 @@
  },
  "contact": {
   "date": "2026-11-16",
-  "sig": "4cdb27c08e2d63d501e41f5a48ce912e4758f383"
+  "sig": "4a1e10c18cd0dd5a572968b40a600aaf47d7f8fc"
  },
  "diagnosis": {
   "date": "2026-11-14",
@@ -48,8 +48,8 @@
   "sig": "d618071daa80d775499f454b5a291cb625f8becc"
  },
  "marketing": {
-  "date": "2026-11-14",
-  "sig": "c8e439f44e9aad0903f93e054038f64e2ea7454b"
+  "date": "2026-11-16",
+  "sig": "2ffbbee4d72c1abb7767ccd5b09371e7b90ab9a6"
  },
  "marketing-dermatology": {
   "date": "2026-11-14",
