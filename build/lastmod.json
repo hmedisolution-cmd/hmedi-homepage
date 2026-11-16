@@ -1,7 +1,7 @@
 {
  "ai": {
   "date": "2026-11-16",
-  "sig": "5b4af190e23a6084a6e14f919a0f42fe809c8b79"
+  "sig": "bd4d89ff7694e09450335d79aa7a6b33ad22e603"
  },
  "case-busan": {
   "date": "2026-11-14",
@@ -32,16 +32,16 @@
   "sig": "aaa82167de23fcae4aee6d2f7a13dbf8ed2f28b7"
  },
  "contact": {
-  "date": "2026-11-14",
-  "sig": "2293397d572ec7a8dcd3b4691ab4851a8b6b57f5"
+  "date": "2026-11-16",
+  "sig": "4cdb27c08e2d63d501e41f5a48ce912e4758f383"
  },
  "diagnosis": {
   "date": "2026-11-14",
   "sig": "d619c8b3828f73cbb6d25b0604390200cc938750"
  },
  "index": {
-  "date": "2026-11-15",
-  "sig": "af6b7e330d543fb2774a5ffb9e54114c78cbc36d"
+  "date": "2026-11-16",
+  "sig": "db9cff64868f0b586e3ebb2d1ab448df9a706424"
  },
  "insights": {
   "date": "2026-11-14",
