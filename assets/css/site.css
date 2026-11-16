@@ -2102,5 +2102,6 @@ body.menu-open .dgp-pill, body.is-locked .dgp-pill, .dgp-pill.is-low { opacity: 
 .aeo-notes a { color: var(--sky-deep); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
 .aeo-webtable .compare td b { font-size: 16.5px; }
 .aeo-webtable + .aeo-notes { margin-bottom: 4px; }
+.aeo-benefit .compare td small { display: block; margin-top: 2px; font-size: 12px; font-weight: 500; color: var(--muted); }
 .br-m { display: none; }
-@media (max-width: 720px) { .aeo-webtable .compare td b { font-size: 13.5px; } .br-m { display: inline; } .aeo-webtable .compare th, .aeo-webtable .compare td { padding-left: 4px; padding-right: 4px; } .aeo-webtable .compare th:first-child, .aeo-webtable .compare td:first-child { width: 30%; padding-left: 10px; } }
+@media (max-width: 720px) { .aeo-webtable .compare td b { font-size: 13.5px; } .br-m { display: inline; } .aeo-benefit .compare td small { font-size: 10.5px; } .aeo-webtable .compare th, .aeo-webtable .compare td { padding-left: 4px; padding-right: 4px; } .aeo-webtable .compare th:first-child, .aeo-webtable .compare td:first-child { width: 30%; padding-left: 10px; } }
