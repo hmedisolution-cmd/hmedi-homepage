@@ -8,7 +8,7 @@
 ```
 index.html                 # 메인 (히어로 슬라이더 · 요약)
 company.html               # 회사소개 · 플레이스 로직 · 자가진단 · 오시는 길
-ai.html                    # AI 마케팅 · AEO 마스터 (서비스 소개 · 월 플랜 · 초기 세팅 · FAQ)
+ai.html                    # AI 마케팅 · AI 매니저 (서비스 소개 · 월 플랜 · 초기 세팅 · FAQ)
 insights.html / post.html  # 인사이트(칼럼) 목록 · 글 보기 (관리자 페이지에서 작성, posts 테이블)
 marketing.html             # 온라인 마케팅 (프로그램 카드 + 상세 모달 · 비교표 · 프로세스 · FAQ)
 consulting.html            # 개원 컨설팅 · MSO
