@@ -82,11 +82,12 @@
 
   /* ---------- 고객사 카드: 자동으로 흐르고, 손가락 · 트랙패드로 좌우로 넘길 수 있다 ---------- */
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    $$(".logo-row").forEach((row, i) => {
-      const track = row.querySelector(".logo-track");
+    $$(".logo-row, .rep-row").forEach((row, i) => {
+      const track = row.querySelector(".logo-track, .rep-track");
       if (!track) return;
       row.classList.add("is-js");
-      const speed = i ? 39 : 50;            // 초당 px (아랫줄이 조금 느리다)
+      const rep = row.classList.contains("rep-row");   // 진단 보고서 예시 줄 (ai.html)
+      const speed = rep ? 36 : i ? 39 : 50; // 초당 px (아랫줄이 조금 느리다)
       let pos = 0, last = 0, hold = false, hover = false, inView = true, timer = 0;
       const half = () => track.scrollWidth / 2;
       const wrap = () => {                  // 같은 카드가 두 번 이어져 있어 절반 지점에서 이어 붙인다
@@ -104,6 +105,12 @@
       row.addEventListener("mouseleave", () => { hover = false; pos = row.scrollLeft; });
       row.addEventListener("focusin", () => { hover = true; });
       row.addEventListener("focusout", () => { hover = false; pos = row.scrollLeft; });
+      if (rep) {                            // PC 에서는 마우스로 잡아 끌 수 있다
+        let drag = null;
+        row.addEventListener("mousedown", (e) => { drag = { x: e.clientX, l: row.scrollLeft }; pause(0); row.classList.add("is-drag"); e.preventDefault(); });
+        window.addEventListener("mousemove", (e) => { if (!drag) return; const to = drag.l - (e.clientX - drag.x); row.scrollLeft = to; wrap(); if (row.scrollLeft !== to) drag = { x: e.clientX, l: row.scrollLeft }; });
+        window.addEventListener("mouseup", () => { if (!drag) return; drag = null; row.classList.remove("is-drag"); pause(1200); });
+      }
       if ("IntersectionObserver" in window) new IntersectionObserver((es) => es.forEach((e) => { inView = e.isIntersecting; }), { threshold: 0 }).observe(row);
       requestAnimationFrame(() => { row.scrollLeft = pos = 1; });
       const tick = (now) => {

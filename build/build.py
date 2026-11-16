@@ -561,6 +561,18 @@ def clients_html():
     return ('<div class="logo-marquee" aria-label="함께하고 있는 병의원">%s%s</div>\n  <div class="wrap"><ul class="client-stats" data-reveal aria-label="지역별 병의원 수">%s</ul></div>'
             % (row(order[:half]), row(order[half:], " slow"), stats)).replace("{ver}", VER)
 
+def report_cards():
+    """진단 보고서 예시 카드 7장 두 벌 — 신청폼(build/src/diagnosis.html)의 카드를 가져와 site.css 의 .dgp-prev 모양에 맞춘다 (팝업 diag-popup.js 와 같은 손질)."""
+    src = open(os.path.join(SRC, "diagnosis.html"), encoding="utf-8").read()
+    figs = re.findall(r'<figure class="pg">.*?</figure>', src, re.S)
+    assert len(figs) == 7, len(figs)
+    html = "".join(figs).replace('<div class="sheet">', '<div class="pg-in"><div class="sheet">').replace('</div><figcaption>', '</div></div><figcaption>')
+    html = html.replace('class="ring"', 'class="dgp-ring"').replace('class="lg"', 'class="dgp-lg"')
+    html = re.sub(r' style="font-size:9\.5px;font-weight:800;margin-bottom:4px"', ' class="qq-h"', html)
+    one = html.replace('id="rg"', 'id="repRg"').replace('url(#rg)', 'url(#repRg)')
+    two = html.replace('<figure class="pg">', '<figure class="pg" aria-hidden="true">').replace('id="rg"', 'id="repRg2"').replace('url(#rg)', 'url(#repRg2)')
+    return one + two
+
 def main():
     POSTS = load_posts_index()
     ALL_FAQ = {}
@@ -577,6 +589,7 @@ def main():
             body = wrap_sentences(body)
             body = tidy_breaks(body)
         if page == "insights": body = inject_posts(body, POSTS)
+        if "{{REPORT_CARDS}}" in body: body = body.replace("{{REPORT_CARDS}}", report_cards())
         if "{{CLIENTS}}" in body: body = body.replace("{{CLIENTS}}", clients_html()).replace("{{CLIENT_COUNT}}", str(len(load_clients())))
         og_title = ("%s | 에이치메디솔루션" % crumb) if crumb else "에이치메디솔루션 | 마케팅 잘하는 개원 컨설턴트"
         html = render_page(page, title, desc, keywords, page_url(page), jsonld, body, robots=("noindex, follow" if page == "post" else ROBOTS_INDEX), og_title=og_title)

@@ -2081,3 +2081,18 @@ body.menu-open .dgp-pill, body.is-locked .dgp-pill, .dgp-pill.is-low { opacity: 
   .ch-set { gap: 4px; } .ch-set svg { width: 14px; height: 14px; }
   .aeo-table .th-in { flex-direction: column; gap: 4px; } .aeo-table .th-in .best { height: 15px; padding: 0 5px; }
 }
+
+/* ===== AI 마케팅(ai.html) 진단 보고서 예시 줄 — 카드 모양은 .dgp-prev 의 것, 흐름 · 넘기기는 site.js (고객사 카드 줄과 같은 코드) ===== */
+.ai-report .head { margin-bottom: 0; }
+.rep-row.dgp-prev { --s: 1; margin-top: 44px; padding: 0; background: none; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; cursor: grab;
+  -webkit-mask-image: linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent); mask-image: linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent); }
+.rep-row.dgp-prev::before { display: none; }
+.rep-row::-webkit-scrollbar { display: none; }
+.rep-row.is-drag { cursor: grabbing; user-select: none; }
+.rep-track { display: flex; width: max-content; padding: 6px 0 16px !important; }
+.rep-row.dgp-prev .pg { margin-right: 16px; }
+.rep-row.dgp-prev .pg figcaption { display: block; margin-top: 10px; font-size: 13px; color: #fff; }
+.rep-row.dgp-prev .sheet { box-shadow: 0 14px 34px -14px rgba(0,0,0,.6); }
+.rep-cta { margin-top: 30px; display: flex; align-items: center; gap: 14px 20px; flex-wrap: wrap; }
+.rep-cta span { font-size: 13px; color: var(--muted-dark); }
+@media (max-width: 720px) { .rep-row.dgp-prev { margin-top: 30px; } .rep-row.dgp-prev .pg { margin-right: 12px; } .rep-cta { margin-top: 22px; } .rep-cta .btn { width: 100%; justify-content: center; } }
