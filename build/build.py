@@ -597,6 +597,8 @@ def main():
         sig = hashlib.sha1(html.replace(VER, "").replace(TODAY, "").encode("utf-8")).hexdigest()
         if LASTMOD.get(page, {}).get("sig") != sig: LASTMOD[page] = {"sig": sig, "date": TODAY}
         html = html.replace('"dateModified":"%s"' % TODAY, '"dateModified":"%s"' % LASTMOD[page]["date"])
+        # 대표 소개(ProfilePage)의 dateModified 는 시각 · 시간대까지 적는다 — 날짜만 적으면 구글 서치콘솔이 「'dateModified'의 datetime 값이 잘못됨」 으로 알린다 (2026-11-22)
+        if page == "ceo": html = html.replace('"dateModified":"%s"' % LASTMOD[page]["date"], '"dateModified":"%sT00:00:00+09:00"' % LASTMOD[page]["date"])
         with open(os.path.join(OUT, page + ".html"), "w", encoding="utf-8") as f:
             f.write(html)
         print("wrote", page + ".html", len(html))
