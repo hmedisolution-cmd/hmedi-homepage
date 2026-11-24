@@ -48,7 +48,8 @@
     if (a.classList.contains("js-inquiry") || /contact\.html/.test(href)) return log("click", { meta: { kind: "contact_link", label: (a.textContent || "").trim().slice(0, 40) } });
     if (a.classList.contains("js-detail")) return log("click", { meta: { kind: "program_detail", label: (a.closest(".pcard") || {}).dataset ? a.closest(".pcard").dataset.id : "" } });
   }, true);
-  if (form) form.addEventListener("submit", () => { const d = new FormData(form); log("conversion", { meta: { kind: "form", type: d.get("type") || "", program: d.get("program") || "" } }); });
+  /* 폼 제출 전환은 접수에 성공했을 때 각 폼(site.js 상담 폼 · diagnosis.js 무료 진단)이 직접 남긴다.
+     여기서 submit 을 들으면 빈 칸 오류로 막힌 시도까지 「문의 폼 제출」로 세었다 (2026-11-24) */
 
   /* 체류 시간 (페이지 이탈 시) */
   const t0 = Date.now();
